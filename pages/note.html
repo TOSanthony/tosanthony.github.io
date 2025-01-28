@@ -105,9 +105,45 @@
             background-color: #f9f9f9;
             resize: none;
         }
+
+        .floating-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .floating-button:hover {
+            background-color: #333;
+            transform: scale(1.1);
+        }
+
+        .floating-button svg {
+            width: 24px;
+            height: 24px;
+        }
+
     </style>
 </head>
 <body>
+
+    <!-- Bouton Retour Accueil -->
+    <a href="../index.html" class="floating-button" title="Retour à l'accueil">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+    </a>
 
     <h1>Modification Dynamique</h1>
 
