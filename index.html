@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boutons en GridView</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f9f9f9;      
+            background: linear-gradient(90deg, #b9deed, #efefef);
+        }
+        .grid-container {
+            display: flex;
+            flex-wrap: wrap;  /* Permet aux items de se déplacer sur plusieurs lignes */
+            justify-content: center;  /* Centre les éléments horizontalement */
+            align-items: center;      /* Centre les éléments verticalement */
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;  /* Limite la largeur de la grille */
+            width: 100%;
+        }
+        .grid-item {
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 150px;  /* Fixe une largeur constante pour les éléments */
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+        }
+        .grid-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        .grid-item img {
+            width: 90%;
+            height: 140px;
+            object-fit: fit;
+        }
+        .grid-item button {
+            width: 100%;
+            padding: 10px;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 0 0 8px 8px;
+            font-size: 1em;
+            cursor: pointer;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .grid-item button:hover {
+            background-color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-container">
+        <!-- Item 1 -->
+        <div class="grid-item" onclick="openUrl('pages/note.html')">
+            <img src="icons/post-it.png" alt="Google">
+            <button>Note</button>
+        </div>
+        <!-- Item 2 -->
+        <div class="grid-item" onclick="openUrl('pages/Tracking Link Generator.html')">
+            <img src="icons/tracking.png" alt="YouTube">
+            <button>Tracking</button>
+        </div>
+        <!-- Item 3 -->
+        <div class="grid-item" onclick="openUrl('pages/etiquette.html')">
+            <img src="icons/labeling.png" alt="Facebook">
+            <button>Etiquette</button>
+        </div>
+    </div>
+
+    <script>
+        function openUrl(url) {
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
