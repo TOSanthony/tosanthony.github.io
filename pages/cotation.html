@@ -144,8 +144,6 @@
     </style>
 </head>
 <body>
-    <div class="container">
-
 
     <!-- Bouton Retour Accueil -->
     <a href="../index.html" class="floating-button" title="Retour à l'accueil">
@@ -156,93 +154,6 @@
 
 
 
-    </div>
 
-    <script>
-        function addTrackingItem() {
-            const trackingList = document.getElementById('trackingList');
-            const trackingItem = document.createElement('div');
-            trackingItem.className = 'tracking-item';
-            trackingItem.innerHTML = `
-                <input type="text" placeholder="Entrez le numéro de suivi">
-                <select>
-                    <option value="chronopost">Chronopost</option>
-                    <option value="colissimo">Colissimo</option>
-                    <option value="dbschenker">DB Schenker</option>
-                    <option value="geodis">Geodis</option>
-                </select>
-                <span class="remove-btn" onclick="removeTrackingItem(this)">×</span>
-            `;
-            trackingList.appendChild(trackingItem);
-        }
-
-        function removeTrackingItem(button) {
-            const trackingItem = button.closest('.tracking-item');
-            const inputField = trackingItem.querySelector('input');
-            const selectField = trackingItem.querySelector('select');
-
-            // Si c'est le seul champ rempli, on supprime l'élément complet
-            if (!inputField.value.trim() && selectField.value === 'chronopost') {
-                trackingItem.remove();
-            } else {
-                //inputField.value = ''; // Sinon, on vide le champ
-                //selectField.value = 'chronopost'; // Remet le transporteur par défaut
-                trackingItem.remove();
-            }
-        }
-
-        function generateTrackingLinks() {
-            const trackingItems = document.querySelectorAll('.tracking-item');
-            const output = document.getElementById('output');
-            output.innerHTML = '';
-
-            const links = [];
-            let hasError = false;
-
-            trackingItems.forEach(item => {
-                const inputField = item.querySelector('input');
-                const errorMessage = item.querySelector('.error-message');
-                let trackingNumber = inputField.value.trim();
-                const carrier = item.querySelector('select').value;
-
-                if (!trackingNumber) {
-                    hasError = true;
-                    return;
-                }
-
-                // Remove spaces from the tracking number
-                trackingNumber = trackingNumber.replace(/\s+/g, '');
-
-                let trackingUrl = '';
-
-                switch (carrier) {
-                    case 'chronopost':
-                        trackingUrl = `https://www.chronopost.fr/tracking-no-cms/suivi-page?listeNumerosLT=${trackingNumber}`;
-                        break;
-                    case 'dbschenker':
-                        trackingUrl = `https://www.dbschenker.com/app/tracking-public/?refNumber=${trackingNumber}&refType=WaybillNo&language_region=fr-FR_FR`;
-                        break;
-                    case 'colissimo':
-                        trackingUrl = `https://www.laposte.fr/outils/suivre-vos-envois?code=${trackingNumber}`;
-                        break;
-                    case 'geodis':
-                        trackingUrl = `https://espace-client.geodis.com/services/destinataires/#/fr/suivi/${trackingNumber}`;
-                        break;
-                    default:
-                        errorMessage.innerHTML = 'Transporteur non reconnu.';
-                        hasError = true;
-                        return;
-                }
-
-                links.push(`<code>&lt;a target=&quot;_blank&quot; href=&quot;${trackingUrl}&quot;&gt;${trackingNumber}&lt;/a&gt;</code>`);
-            });
-
-            if (hasError) {
-                output.innerHTML = '<p style="color: red;">Veuillez entrer un numéro de suivi.</p>';
-            } else {
-                output.innerHTML = links.join(' - ');
-            }
-        }
-    </script>
 </body>
 </html>
