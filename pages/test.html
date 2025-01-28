@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Récupérer les Pourcentages Chronopost</title>
+    <script>
+        function getSurchargeCarburant() {
+            // Créer une requête AJAX
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://tvstore.synology.me/chronopost/surcharge_carburant.php', true); // Remplace par l'URL correcte de ton fichier PHP
+
+            // Lorsque la requête est terminée
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // Parse la réponse JSON
+                    var data = JSON.parse(xhr.responseText);
+
+                    // Vérifie si des pourcentages ont été renvoyés
+                    if (data.routier_percentage && data.aerien_percentage) {
+                        // Afficher les pourcentages dans le HTML
+                        document.getElementById('routier').textContent = "Pourcentage Routier: " + data.routier_percentage;
+                        document.getElementById('aerien').textContent = "Pourcentage Aérien: " + data.aerien_percentage;
+                    } else {
+                        console.error("Erreur dans les données renvoyées.");
+                    }
+                } else {
+                    console.error("Erreur lors de la récupération des données.");
+                }
+            };
+
+            // Envoyer la requête
+            xhr.send();
+        }
+
+        // Charger les données lorsque la page est prête
+        window.onload = function() {
+            getSurchargeCarburant();
+        };
+    </script>
+</head>
+<body>
+    <h1>Récupérer les Pourcentages Chronopost</h1>
+    <p id="routier">Pourcentage Routier: Chargement...</p>
+    <p id="aerien">Pourcentage Aérien: Chargement...</p>
+</body>
+</html>
