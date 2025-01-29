@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <title>Calcul Chronopost</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(90deg, #b9deed, #efefef);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+        }
+        h1 {
+            text-align: center;
+            color: #0056b3;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-group input {
+            width: 93%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-group3 input {
+            width: 96%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Nouveau style pour aligner le type de Chronopost et la zone sur la même ligne */
+        .form-group-inline {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .form-group-inline .form-group {
+            flex: 1;
+        }
+
+        .form-group2 label {
+            display: block;
+            padding-left: 15px;
+            text-indent: -15px;
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .form-group2 input {
+            width: 13px;
+            height: 13px;
+            padding: 0;
+            margin: 0;
+            vertical-align: bottom;
+            position: relative;
+            top: 13px;
+            *overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .form-group.checkbox-group input {
+            margin-bottom: 5px;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .result p {
+            margin: 5px 0;
+            text-align: right;
+        }
+        .button {
+            background-color: #0056b3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+        .button:hover:not(:disabled) {
+            background-color: #007bff;
+        }
+
+        .floating-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .floating-button:hover {
+            background-color: #007bff;
+            transform: scale(1.1);
+        }
+
+        .floating-button svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        h1 {
+            color: #0056b3;
+            justify-content: center;
+            align: center;
+        }
+
+        /* Nouvelle classe pour aligner les 3 labels et inputs sur une seule ligne */
+        .form-group-inline-extended {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 0px;
+            margin-bottom: 10px;
+        }
+
+        .form-group-inline-extended .form-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-right: 15px;
+        }
+
+        .form-group-inline-extended .form-group input {
+            width: 80%; /* S'assurer que les inputs prennent toute la largeur de leur conteneur */
+        }
+
+        .form-group4 input {
+            width: 90%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-group4 label {
+            width: 90%;
+            font-size: 12px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .readonly-input {
+            background-color: #f0f0f0;
+            color: #555;
+            border: 1px solid #ddd;
+            cursor: not-allowed;
+        }
+
+button:disabled {
+    background-color: #d6d6d6;
+    color: #a0a0a0;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+    </style>
+</head>
+<body>
+
+    <!-- Bouton Retour Accueil -->
+    <a href="../index.html" class="floating-button" title="Retour à l'accueil">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+    </a>
+
+    <div align="center">
+       <h1>Cotation</h1>
+    </div>
+
+    <div class="container">
+        <form id="chronopostForm">
+            <div class="form-group-inline">
+                <div class="form-group">
+                    <label for="typeChronopost">Type de Chronopost :</label>
+                    <select id="typeChronopost" name="typeChronopost">
+                        <option value="classic">Classic</option>
+                        <option value="express">Express</option>
+                        <option value="corse">Corse</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="zone">Zone :</label>
+                    <select id="zone" name="zone">
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group-inline">
+                <div class="form-group">
+                    <label for="poids">Poids (kg) :</label>
+                    <input type="number" id="poids" name="poids" step="0.1" min="0" max="30">
+                </div>
+
+                <div class="form-group">
+                    <label for="colis">Nombre de colis :</label>
+                    <input type="number" id="colis" name="colis" min="1" value="1">
+                </div>
+            </div>
+
+            <div class="form-group-inline-extended">
+                <div class="form-group4">
+                    <label for="surchargeCarburant">Surcharge Carburant :</label>
+                    <input type="text" id="surchargeCarburant" name="surchargeCarburant" value="" class="readonly-input" readonly>
+                </div>
+
+                <div class="form-group4">
+                    <label for="surete">Sûreté :</label>
+                    <input type="text" id="participationSurete" name="participationSurete" value="0.00 €" class="readonly-input" readonly>
+                </div>
+
+                <div class="form-group4">
+                    <label for="participationEco">Participation Éco-Responsable :</label>
+                    <input type="text" id="participationEco" name="participationEco" value="0.00 €" class="readonly-input" readonly>
+                </div>
+            </div>
+
+
+            <!-- Modification de la structure pour le checkbox et le label -->
+            <div class="form-group2 checkbox-group">
+                <label for="inclureAssurance">Inclure une assurance
+                <input type="checkbox" id="inclureAssurance" name="inclureAssurance">
+                </label>
+            </div>
+
+
+
+            <div class="form-group-inline">
+
+            <div class="form-group" id="valeurCommandeGroup" style="display: none;">
+                <label for="assurance">Valeur en € :</label>
+                <input type="number" id="assurance" name="assurance" min="0" step="0.01">
+            </div>
+
+                <div class="form-group">
+                    <label for="proforma">Proforma n° :</label>
+                    <input type="texte" style="width:50%; justify-content: flex-end;" id="proforma" name="profroma" min="0" step="0.01">
+                </div>
+            </div>
+
+
+
+
+            <div class="form-group-inline-extended">
+
+
+
+            <button type="button" class="button" onclick="calculerFrais()">Calculer</button>
+
+            <button type="button" class="button" onclick="resetFields()" id="reset" disabled>Réinitialiser</button>
+
+            <button type="button" class="button" onclick="exporterEnImage()" id="print" disabled>Exporter</button>
+
+            </div>
+
+        </form>
+
+        <div class="result" id="resultat">
+            <p style="font-size:14px;" id="prixColis"></p>
+            <p style="font-size:14px;" id="prixExpedition"></p>
+            <p style="font-size:14px;display: none;" id="prixExpSupp"></p>
+            <p style="font-size:14px;" id="prixSurcharge"></p>
+            <p style="font-size:14px;" id="prixSurete"></p>
+            <p style="font-size:14px;" id="prixEco"></p>
+            <p style="font-size:14px;display: none;" id="prixAssurance"></p>
+            <p style="font-size:22px;color:red;" ><strong>Prix total HT : 0.00 €</strong></p>
+        </div>
+    </div>
+
+    <script>
+        const zones = {
+            classic: [1, 2, 3, 4],
+            express: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            corse: ['Corse']
+        };
+
+        document.addEventListener('DOMContentLoaded', function () {
+            function fetchSurchargeCarburant() {
+                fetch('https://tvstore.synology.me/chronopost/surcharge_carburant.php')
+                    .then(response => response.json()) // Assurez-vous que le serveur renvoie les données en JSON
+                    .then(data => {
+                        const routierPercentage = data.routier_percentage; // Valeur pour Chronopost Classic
+                        const aerienPercentage = data.aerien_percentage; // Valeur pour Chronopost Express
+
+                        // Mettez à jour la surcharge carburant selon le type de Chronopost
+                        const typeChronopost = document.getElementById('typeChronopost').value;
+                        if (typeChronopost === 'classic') {
+                            document.getElementById('surchargeCarburant').value = `${routierPercentage}`;
+                        } else if (typeChronopost === 'express') {
+                            document.getElementById('surchargeCarburant').value = `${aerienPercentage}`;
+                        } else {
+                            document.getElementById('surchargeCarburant').value = `0,00 €`;
+                        }
+
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors de la récupération de la surcharge carburant :', error);
+                    });
+            }
+
+            document.getElementById('typeChronopost').addEventListener('change', function () {
+                const type = this.value;
+                const zoneSelect = document.getElementById('zone');
+                zoneSelect.innerHTML = '';
+
+                zones[type].forEach(zone => {
+                    const option = document.createElement('option');
+                    option.value = zone;
+                    option.textContent = `Zone ${zone}`;
+                    zoneSelect.appendChild(option);
+                    //alert(option.textContent);
+                });
+            });
+
+            document.getElementById('inclureAssurance').addEventListener('change', function () {
+                const valeurCommandeGroup = document.getElementById('valeurCommandeGroup');
+                const prixAssurance = document.getElementById('prixAssurance');
+                valeurCommandeGroup.style.display = this.checked ? 'block' : 'none';
+                prixAssurance.style.display = this.checked ? 'block' : 'none';
+            });
+
+            // Appel initial pour récupérer la surcharge carburant au chargement de la page
+            fetchSurchargeCarburant();
+
+            // Met à jour la surcharge carburant lors du changement de type de Chronopost
+            document.getElementById('typeChronopost').addEventListener('change', fetchSurchargeCarburant);
+
+            // Simule le changement de type de Chronopost au chargement de la page
+            document.getElementById('typeChronopost').dispatchEvent(new Event('change'));
+            document.getElementById('inclureAssurance').dispatchEvent(new Event('change'));
+        });
+
+        document.getElementById('inclureAssurance').addEventListener('change', function () {
+            const valeurCommandeGroup = document.getElementById('valeurCommandeGroup');
+            const prixAssurance = document.getElementById('prixAssurance');
+            valeurCommandeGroup.style.display = this.checked ? 'block' : 'none';
+            prixAssurance.style.display = this.checked ? 'block' : 'none';
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+           document.getElementById('colis').addEventListener('change', function () {
+           const colis = parseInt(document.getElementById('colis').value);
+                if (!isNaN(colis) && colis > 0) {
+                    // Calcul des surcharges
+                    const prixSurete = colis * 0.8;
+                    const prixEco = colis * 0.09;
+
+                    // Mise à jour des valeurs des champs
+                    document.getElementById('participationSurete').value = `${prixSurete.toFixed(2)} €`;
+                    document.getElementById('participationEco').value = `${prixEco.toFixed(2)} €`;
+                } else {
+                    // Si le nombre de colis n'est pas valide, réinitialiser les champs
+                    document.getElementById('participationSurete').value = '0.00 €'; // Valeur par défaut
+                    document.getElementById('participationEco').value = '0.00 €'; // Valeur par défaut
+                }
+            });
+            // Simule le changement de type de Chronopost au chargement de la page
+            document.getElementById('colis').dispatchEvent(new Event('change'));
+        });
+
+
+
+        function calculerFrais() {
+            const type = document.getElementById('typeChronopost').value;
+            //const zone = parseInt(document.getElementById('zone').value);
+            const zone = document.getElementById('zone').value;
+            const poids = parseFloat(document.getElementById('poids').value);
+            const colis = parseInt(document.getElementById('colis').value);
+            const surete = document.getElementById('participationSurete').value;
+            const surcharge = document.getElementById('prixSurcharge').value;
+            const eco = document.getElementById('participationEco').value;
+            const nproforma = document.getElementById('proforma').value;
+            const inclureAssurance = document.getElementById('inclureAssurance').checked;
+            const valeurCommande = inclureAssurance ? parseFloat(document.getElementById('assurance').value || 0) : 0;
+
+            // Validation des champs
+            if (isNaN(poids) || poids <= 0) {
+                alert('Veuillez mettre le poids total de la commande.');
+                return;
+            } else if (isNaN(colis) || colis <= 0) {
+                alert('Veuillez mettre le nombre de colis.');
+                return;
+            } else if (nproforma === "") {
+                alert('Veuillez remplir le numéro de proforma.');
+                return;
+            } else if (zone === "") {
+                alert('Veuillez mettre une zone correct.');
+                return;
+            } else if (inclureAssurance && (isNaN(valeurCommande) || valeurCommande <= 0)) {
+                alert('Veuillez mettre un montant à assurer valide.');
+                return;
+            }
+
+            if (!tarifsChronopost[type] || !tarifsChronopost[type][zone]) {
+                alert("Données invalides, veuillez vérifier le type de Chronopost et la zone.");
+                return;
+            }
+
+            let prixExpedition = 0;
+            let prixColis = 0;
+            let prixAssurance = 0;
+            let prixSurcharge = 0;
+            let surchargePercentage = 0;
+
+            surchargePercentage = document.getElementById('surchargeCarburant').value;
+
+            if (type === 'classic') {
+                prixColis = colis * 9; // 9€ par colis pour Classic
+            } else if (type === 'express') {
+                prixColis = colis * 17; // 17€ par colis pour Express
+            } else if (type === 'corse') {
+                prixColis = colis * 25.60; // 25.60€ par colis pour Express
+            }
+
+
+            // Si le poids est supérieur à 30, on prend le tarif de 30 kg
+            if (poids > 30) {
+
+                // Prix pour 30 kg
+                let tarif = tarifsChronopost[type][zone].slice(-1)[0].prix;
+
+                // Calcul du surplus de poids
+                let surplusPoids = parseFloat((poids - 30).toFixed(2)); // Convertir le surplus en nombre avec 2 décimales
+
+                // Initialisation du tarif supplémentaire
+                let tarifSupplémentaire = 0;
+
+                // Logique des tarifs supplémentaires selon le type et la zone
+                if (type === 'classic') {
+                    switch (zone) {
+                        case '1': tarifSupplémentaire = surplusPoids * 1.47; break;
+                        case '2': tarifSupplémentaire = surplusPoids * 1.71; break;
+                        case '3': tarifSupplémentaire = surplusPoids * 1.90; break;
+                        case '4': tarifSupplémentaire = surplusPoids * 1.86; break;
+                    }
+                } else if (type === 'express') {
+                    switch (zone) {
+                        case '1': tarifSupplémentaire = surplusPoids * 2 * 2.60; break;
+                        case '2': tarifSupplémentaire = surplusPoids * 2 * 2.80; break;
+                        case '3': tarifSupplémentaire = surplusPoids * 2 * 2.80; break;
+                        case '4': tarifSupplémentaire = surplusPoids * 2 * 3.70; break;
+                        case '5': tarifSupplémentaire = surplusPoids * 2 * 3.00; break;
+                        case '6': tarifSupplémentaire = surplusPoids * 2 * 4.40; break;
+                        case '7': tarifSupplémentaire = surplusPoids * 2 * 4.40; break;
+                        case '8': tarifSupplémentaire = surplusPoids * 2 * 3.60; break;
+                        case '9': tarifSupplémentaire = surplusPoids * 2 * 5.20; break;
+                    }
+                } else if (type === 'corse') {
+                    tarifSupplémentaire = surplusPoids * 0.60;
+                }
+
+                // Afficher le supplément de poids
+                document.getElementById('prixExpSupp').innerText = `Supplément Poids > 30Kg : ${tarifSupplémentaire.toFixed(2)} €`;
+                document.getElementById('prixExpSupp').style.display = 'block';
+
+                tarifSupp = tarifSupplémentaire;
+
+                // Retourner le tarif total (prix de base + supplément)
+                //prixExpedition = tarif + tarifSupplémentaire;
+                prixExpedition = tarif;
+
+            } else {
+
+                // Pour les poids <= 30 kg, on choisit le tarif en fonction du poids arrondi
+                const tarifs = tarifsChronopost[type][zone];
+
+                tarifSupp = 0;
+                document.getElementById('prixExpSupp').style.display = 'none';
+
+                // Arrondir le poids à l'entier inférieur
+                const poidsArrondi = Math.floor(poids);
+
+                // Chercher le tarif correspondant au poids arrondi
+                for (let i = 0; i < tarifs.length; i++) {
+                    if (poidsArrondi <= tarifs[i].maxPoids) {
+                        prixExpedition = tarifs[i].prix.toFixed(2);
+                        break;
+                    }
+                }
+            }
+
+            //prixAssurance = document.getElementById('prixExpSupp');
+            //valeurCommandeGroup.style.display = this.checked ? 'block' : 'none';
+            //prixAssurance.style.display = 'block' ;
+
+            if (inclureAssurance && valeurCommande > 0) {
+                prixAssurance = Math.max((valeurCommande * 0.009).toFixed(2), 5);
+            }
+
+            document.getElementById('prixColis').innerText = `Montant pour les colis : ${prixColis.toFixed(2)} €`;
+            document.getElementById('prixExpedition').innerText = `Montant pour l'expédition : ${prixExpedition} €`;
+            document.getElementById('prixAssurance').innerText = `Montant de l'assurance : ${prixAssurance} €`;
+            document.getElementById('prixSurete').innerText = `Montant pour la sûreté : ${surete}`;
+            document.getElementById('prixEco').innerText = `Montant éco-participation : ${eco}`;
+
+            // Calculer le montant de la surcharge carburant
+            const montantSurcharge = prixExpedition * (parseFloat(surchargePercentage).toFixed(2) / 100);
+            document.getElementById('prixSurcharge').innerText = `Montant surcharge carburant : ${montantSurcharge.toFixed(2)} €`;
+
+            const prixTotal = (parseFloat(prixExpedition) + parseFloat(tarifSupp) + parseFloat(surete) + montantSurcharge + parseFloat(eco) + prixColis + parseFloat(prixAssurance)).toFixed(2);
+
+            document.getElementById('print').disabled = false;
+            document.getElementById('reset').disabled = false;
+
+            document.querySelector('#resultat p:last-child').innerHTML = `<strong>Prix total HT : ${prixTotal} €</strong>`;
+        }
+
+
+const tarifsChronopost = {
+    "classic": {
+        "1": [
+            { maxPoids: 1, prix: 9.12 },
+            { maxPoids: 2, prix: 10.59 },
+            { maxPoids: 3, prix: 12.06 },
+            { maxPoids: 4, prix: 13.53 },
+            { maxPoids: 5, prix: 15.00 },
+            { maxPoids: 6, prix: 16.47 },
+            { maxPoids: 7, prix: 17.94 },
+            { maxPoids: 8, prix: 19.41 },
+            { maxPoids: 9, prix: 20.88 },
+            { maxPoids: 10, prix: 22.35 },
+            { maxPoids: 11, prix: 23.82 },
+            { maxPoids: 12, prix: 25.29 },
+            { maxPoids: 13, prix: 26.76 },
+            { maxPoids: 14, prix: 28.23 },
+            { maxPoids: 15, prix: 29.70 },
+            { maxPoids: 16, prix: 31.17 },
+            { maxPoids: 17, prix: 32.64 },
+            { maxPoids: 18, prix: 34.11 },
+            { maxPoids: 19, prix: 33.58 },
+            { maxPoids: 20, prix: 37.05 },
+            { maxPoids: 21, prix: 38.52 },
+            { maxPoids: 22, prix: 39.99 },
+            { maxPoids: 23, prix: 41.46 },
+            { maxPoids: 24, prix: 42.93 },
+            { maxPoids: 25, prix: 44.40 },
+            { maxPoids: 26, prix: 45.87 },
+            { maxPoids: 27, prix: 47.34 },
+            { maxPoids: 28, prix: 48.81 },
+            { maxPoids: 29, prix: 50.28 },
+            { maxPoids: 30, prix: 51.75 }
+        ],
+        "2": [
+            { maxPoids: 1, prix: 9.60 },
+            { maxPoids: 2, prix: 11.31 },
+            { maxPoids: 3, prix: 13.02 },
+            { maxPoids: 4, prix: 14.73 },
+            { maxPoids: 5, prix: 16.44 },
+            { maxPoids: 6, prix: 18.15 },
+            { maxPoids: 7, prix: 19.86 },
+            { maxPoids: 8, prix: 21.57 },
+            { maxPoids: 9, prix: 23.28 },
+            { maxPoids: 10, prix: 24.99 },
+            { maxPoids: 11, prix: 26.70 },
+            { maxPoids: 12, prix: 28.41 },
+            { maxPoids: 13, prix: 30.12 },
+            { maxPoids: 14, prix: 31.83 },
+            { maxPoids: 15, prix: 33.54 },
+            { maxPoids: 16, prix: 35.25 },
+            { maxPoids: 17, prix: 36.96 },
+            { maxPoids: 18, prix: 38.67 },
+            { maxPoids: 19, prix: 40.38 },
+            { maxPoids: 20, prix: 42.09 },
+            { maxPoids: 21, prix: 43.80 },
+            { maxPoids: 22, prix: 45.51 },
+            { maxPoids: 23, prix: 47.22 },
+            { maxPoids: 24, prix: 48.93 },
+            { maxPoids: 25, prix: 50.64 },
+            { maxPoids: 26, prix: 52.35 },
+            { maxPoids: 27, prix: 54.06 },
+            { maxPoids: 28, prix: 55.77 },
+            { maxPoids: 29, prix: 57.48 },
+            { maxPoids: 30, prix: 59.19 }
+        ],
+        "3": [
+            { maxPoids: 1, prix: 11.78 },
+            { maxPoids: 2, prix: 13.68 },
+            { maxPoids: 3, prix: 15.58 },
+            { maxPoids: 4, prix: 17.48 },
+            { maxPoids: 5, prix: 19.38 },
+            { maxPoids: 6, prix: 21.28 },
+            { maxPoids: 7, prix: 23.18 },
+            { maxPoids: 8, prix: 25.08 },
+            { maxPoids: 9, prix: 26.98 },
+            { maxPoids: 10, prix: 28.88 },
+            { maxPoids: 11, prix: 30.78 },
+            { maxPoids: 12, prix: 32.68 },
+            { maxPoids: 13, prix: 34.58 },
+            { maxPoids: 14, prix: 36.48 },
+            { maxPoids: 15, prix: 38.38 },
+            { maxPoids: 16, prix: 40.28 },
+            { maxPoids: 17, prix: 42.18 },
+            { maxPoids: 18, prix: 44.08 },
+            { maxPoids: 19, prix: 45.98 },
+            { maxPoids: 20, prix: 47.88 },
+            { maxPoids: 21, prix: 49.78 },
+            { maxPoids: 22, prix: 51.68 },
+            { maxPoids: 23, prix: 53.58 },
+            { maxPoids: 24, prix: 55.48 },
+            { maxPoids: 25, prix: 57.38 },
+            { maxPoids: 26, prix: 59.28 },
+            { maxPoids: 27, prix: 61.18 },
+            { maxPoids: 28, prix: 63.08 },
+            { maxPoids: 29, prix: 64.98 },
+            { maxPoids: 30, prix: 66.88 }
+        ],
+        "4": [
+            { maxPoids: 1, prix: 10.64 },
+            { maxPoids: 2, prix: 12.50 },
+            { maxPoids: 3, prix: 14.36 },
+            { maxPoids: 4, prix: 16.22 },
+            { maxPoids: 5, prix: 18.08 },
+            { maxPoids: 6, prix: 19.94 },
+            { maxPoids: 7, prix: 21.80 },
+            { maxPoids: 8, prix: 23.66 },
+            { maxPoids: 9, prix: 25.52 },
+            { maxPoids: 10, prix: 27.38 },
+            { maxPoids: 11, prix: 29.24 },
+            { maxPoids: 12, prix: 31.10 },
+            { maxPoids: 13, prix: 32.96 },
+            { maxPoids: 14, prix: 34.82 },
+            { maxPoids: 15, prix: 36.68 },
+            { maxPoids: 16, prix: 38.54 },
+            { maxPoids: 17, prix: 40.40 },
+            { maxPoids: 18, prix: 42.26 },
+            { maxPoids: 19, prix: 44.12 },
+            { maxPoids: 20, prix: 45.98 },
+            { maxPoids: 21, prix: 47.84 },
+            { maxPoids: 22, prix: 49.70 },
+            { maxPoids: 23, prix: 51.56 },
+            { maxPoids: 24, prix: 53.42 },
+            { maxPoids: 25, prix: 55.28 },
+            { maxPoids: 26, prix: 57.14 },
+            { maxPoids: 27, prix: 59.00 },
+            { maxPoids: 28, prix: 60.86 },
+            { maxPoids: 29, prix: 62.72 },
+            { maxPoids: 30, prix: 64.58 }
+        ]
+    },
+    "express": {
+        "1": [
+            { "maxPoids": 0.50, "prix": 8.50 },
+            { "maxPoids": 1.00, "prix": 10.50 },
+            { "maxPoids": 1.50, "prix": 11.80 },
+            { "maxPoids": 2.00, "prix": 13.10 },
+            { "maxPoids": 2.50, "prix": 14.40 },
+            { "maxPoids": 3.00, "prix": 15.70 },
+            { "maxPoids": 3.50, "prix": 17.00 },
+            { "maxPoids": 4.00, "prix": 18.30 },
+            { "maxPoids": 4.50, "prix": 19.60 },
+            { "maxPoids": 5.00, "prix": 20.90 },
+            { "maxPoids": 5.50, "prix": 22.10 },
+            { "maxPoids": 6.00, "prix": 23.30 },
+            { "maxPoids": 6.50, "prix": 24.50 },
+            { "maxPoids": 7.00, "prix": 25.70 },
+            { "maxPoids": 7.50, "prix": 26.90 },
+            { "maxPoids": 8.00, "prix": 28.10 },
+            { "maxPoids": 8.50, "prix": 29.30 },
+            { "maxPoids": 9.00, "prix": 30.50 },
+            { "maxPoids": 9.50, "prix": 31.70 },
+            { "maxPoids": 10.00, "prix": 32.90 },
+            { "maxPoids": 10.50, "prix": 34.30 },
+            { "maxPoids": 11.00, "prix": 35.70 },
+            { "maxPoids": 11.50, "prix": 37.10 },
+            { "maxPoids": 12.00, "prix": 38.50 },
+            { "maxPoids": 12.50, "prix": 39.90 },
+            { "maxPoids": 13.00, "prix": 41.30 },
+            { "maxPoids": 13.50, "prix": 42.70 },
+            { "maxPoids": 14.00, "prix": 44.10 },
+            { "maxPoids": 14.50, "prix": 45.50 },
+            { "maxPoids": 15.00, "prix": 46.90 },
+            { "maxPoids": 15.50, "prix": 48.30 },
+            { "maxPoids": 16.00, "prix": 49.70 },
+            { "maxPoids": 16.50, "prix": 51.10 },
+            { "maxPoids": 17.00, "prix": 52.50 },
+            { "maxPoids": 17.50, "prix": 53.90 },
+            { "maxPoids": 18.00, "prix": 55.30 },
+            { "maxPoids": 18.50, "prix": 56.70 },
+            { "maxPoids": 19.00, "prix": 58.10 },
+            { "maxPoids": 19.50, "prix": 59.50 },
+            { "maxPoids": 20.00, "prix": 60.90 },
+            { "maxPoids": 20.50, "prix": 63.20 },
+            { "maxPoids": 21.00, "prix": 65.50 },
+            { "maxPoids": 21.50, "prix": 67.80 },
+            { "maxPoids": 22.00, "prix": 70.10 },
+            { "maxPoids": 22.50, "prix": 72.40 },
+            { "maxPoids": 23.00, "prix": 74.70 },
+            { "maxPoids": 23.50, "prix": 77.00 },
+            { "maxPoids": 24.00, "prix": 79.30 },
+            { "maxPoids": 24.50, "prix": 81.60 },
+            { "maxPoids": 25.00, "prix": 83.90 },
+            { "maxPoids": 25.50, "prix": 86.20 },
+            { "maxPoids": 26.00, "prix": 88.50 },
+            { "maxPoids": 26.50, "prix": 90.80 },
+            { "maxPoids": 27.00, "prix": 93.10 },
+            { "maxPoids": 27.50, "prix": 95.40 },
+            { "maxPoids": 28.00, "prix": 97.70 },
+            { "maxPoids": 28.50, "prix": 100.00 },
+            { "maxPoids": 29.00, "prix": 102.30 },
+            { "maxPoids": 29.50, "prix": 104.60 },
+            { "maxPoids": 30.00, "prix": 106.90 }
+        ],
+        "2": [
+            { "maxPoids": 0.50, "prix": 8.95 },
+            { "maxPoids": 1.00, "prix": 11.35 },
+            { "maxPoids": 1.50, "prix": 13.05 },
+            { "maxPoids": 2.00, "prix": 14.50 },
+            { "maxPoids": 2.50, "prix": 15.95 },
+            { "maxPoids": 3.00, "prix": 17.40 },
+            { "maxPoids": 3.50, "prix": 18.85 },
+            { "maxPoids": 4.00, "prix": 20.30 },
+            { "maxPoids": 4.50, "prix": 21.75 },
+            { "maxPoids": 5.00, "prix": 23.20 },
+            { "maxPoids": 5.50, "prix": 25.15 },
+            { "maxPoids": 6.00, "prix": 27.10 },
+            { "maxPoids": 6.50, "prix": 29.05 },
+            { "maxPoids": 7.00, "prix": 31.00 },
+            { "maxPoids": 7.50, "prix": 32.95 },
+            { "maxPoids": 8.00, "prix": 34.90 },
+            { "maxPoids": 8.50, "prix": 36.85 },
+            { "maxPoids": 9.00, "prix": 38.80 },
+            { "maxPoids": 9.50, "prix": 40.75 },
+            { "maxPoids": 10.00, "prix": 42.70 },
+            { "maxPoids": 10.50, "prix": 44.40 },
+            { "maxPoids": 11.00, "prix": 46.10 },
+            { "maxPoids": 11.50, "prix": 47.80 },
+            { "maxPoids": 12.00, "prix": 49.50 },
+            { "maxPoids": 12.50, "prix": 51.20 },
+            { "maxPoids": 13.00, "prix": 52.90 },
+            { "maxPoids": 13.50, "prix": 54.60 },
+            { "maxPoids": 14.00, "prix": 56.30 },
+            { "maxPoids": 14.50, "prix": 58.00 },
+            { "maxPoids": 15.00, "prix": 59.70 },
+            { "maxPoids": 15.50, "prix": 61.40 },
+            { "maxPoids": 16.00, "prix": 63.10 },
+            { "maxPoids": 16.50, "prix": 64.80 },
+            { "maxPoids": 17.00, "prix": 66.50 },
+            { "maxPoids": 17.50, "prix": 68.20 },
+            { "maxPoids": 18.00, "prix": 69.90 },
+            { "maxPoids": 18.50, "prix": 71.60 },
+            { "maxPoids": 19.00, "prix": 73.30 },
+            { "maxPoids": 19.50, "prix": 75.00 },
+            { "maxPoids": 20.00, "prix": 76.70 },
+            { "maxPoids": 20.50, "prix": 79.20 },
+            { "maxPoids": 21.00, "prix": 81.70 },
+            { "maxPoids": 21.50, "prix": 84.20 },
+            { "maxPoids": 22.00, "prix": 86.70 },
+            { "maxPoids": 22.50, "prix": 89.20 },
+            { "maxPoids": 23.00, "prix": 91.70 },
+            { "maxPoids": 23.50, "prix": 94.20 },
+            { "maxPoids": 24.00, "prix": 96.70 },
+            { "maxPoids": 24.50, "prix": 99.20 },
+            { "maxPoids": 25.00, "prix": 101.70 },
+            { "maxPoids": 25.50, "prix": 104.20 },
+            { "maxPoids": 26.00, "prix": 106.70 },
+            { "maxPoids": 26.50, "prix": 109.20 },
+            { "maxPoids": 27.00, "prix": 11.70 },
+            { "maxPoids": 27.50, "prix": 114.20 },
+            { "maxPoids": 28.00, "prix": 116.70 },
+            { "maxPoids": 28.50, "prix": 119.20 },
+            { "maxPoids": 29.00, "prix": 121.70 },
+            { "maxPoids": 29.50, "prix": 124.20 },
+            { "maxPoids": 30.00, "prix": 126.70 }
+        ],
+        "3": [
+            { "maxPoids": 0.50, "prix": 11.40 },
+            { "maxPoids": 1.00, "prix": 13.90 },
+            { "maxPoids": 1.50, "prix": 15.90 },
+            { "maxPoids": 2.00, "prix": 17.90 },
+            { "maxPoids": 2.50, "prix": 19.90 },
+            { "maxPoids": 3.00, "prix": 21.90 },
+            { "maxPoids": 3.50, "prix": 23.90 },
+            { "maxPoids": 4.00, "prix": 25.90 },
+            { "maxPoids": 4.50, "prix": 27.90 },
+            { "maxPoids": 5.00, "prix": 29.90 },
+            { "maxPoids": 5.50, "prix": 32.00 },
+            { "maxPoids": 6.00, "prix": 34.10 },
+            { "maxPoids": 6.50, "prix": 36.20 },
+            { "maxPoids": 7.00, "prix": 38.30 },
+            { "maxPoids": 7.50, "prix": 40.40 },
+            { "maxPoids": 8.00, "prix": 42.50 },
+            { "maxPoids": 8.50, "prix": 44.60 },
+            { "maxPoids": 9.00, "prix": 46.70 },
+            { "maxPoids": 9.50, "prix": 48.80 },
+            { "maxPoids": 10.00, "prix": 50.90 },
+            { "maxPoids": 10.50, "prix": 53.00 },
+            { "maxPoids": 11.00, "prix": 55.10 },
+            { "maxPoids": 11.50, "prix": 57.20 },
+            { "maxPoids": 12.00, "prix": 59.30 },
+            { "maxPoids": 12.50, "prix": 61.40 },
+            { "maxPoids": 13.00, "prix": 63.50 },
+            { "maxPoids": 13.50, "prix": 65.60 },
+            { "maxPoids": 14.00, "prix": 67.70 },
+            { "maxPoids": 14.50, "prix": 69.80 },
+            { "maxPoids": 15.00, "prix": 71.90 },
+            { "maxPoids": 15.50, "prix": 74.00 },
+            { "maxPoids": 16.00, "prix": 76.10 },
+            { "maxPoids": 16.50, "prix": 78.20 },
+            { "maxPoids": 17.00, "prix": 80.30 },
+            { "maxPoids": 17.50, "prix": 82.40 },
+            { "maxPoids": 18.00, "prix": 84.50 },
+            { "maxPoids": 18.50, "prix": 86.60 },
+            { "maxPoids": 19.00, "prix": 88.70 },
+            { "maxPoids": 19.50, "prix": 90.80 },
+            { "maxPoids": 20.00, "prix": 92.90 },
+            { "maxPoids": 20.50, "prix": 95.40 },
+            { "maxPoids": 21.00, "prix": 97.90 },
+            { "maxPoids": 21.50, "prix": 100.40 },
+            { "maxPoids": 22.00, "prix": 102.90 },
+            { "maxPoids": 22.50, "prix": 105.40 },
+            { "maxPoids": 23.00, "prix": 107.90 },
+            { "maxPoids": 23.50, "prix": 110.40 },
+            { "maxPoids": 24.00, "prix": 112.90 },
+            { "maxPoids": 24.50, "prix": 115.40 },
+            { "maxPoids": 25.00, "prix": 117.90 },
+            { "maxPoids": 25.50, "prix": 120.40 },
+            { "maxPoids": 26.00, "prix": 122.90 },
+            { "maxPoids": 26.50, "prix": 125.40 },
+            { "maxPoids": 27.00, "prix": 127.90 },
+            { "maxPoids": 27.50, "prix": 130.40 },
+            { "maxPoids": 28.00, "prix": 132.90 },
+            { "maxPoids": 28.50, "prix": 135.40 },
+            { "maxPoids": 29.00, "prix": 137.90 },
+            { "maxPoids": 29.50, "prix": 140.40 },
+            { "maxPoids": 30.00, "prix": 142.90 }
+        ],
+        "4": [
+            { "maxPoids": 0.50, "prix": 21.55 },
+            { "maxPoids": 1.00, "prix": 23.75 },
+            { "maxPoids": 1.50, "prix": 25.45 },
+            { "maxPoids": 2.00, "prix": 26.95 },
+            { "maxPoids": 2.50, "prix": 28.45 },
+            { "maxPoids": 3.00, "prix": 29.95 },
+            { "maxPoids": 3.50, "prix": 31.45 },
+            { "maxPoids": 4.00, "prix": 32.95 },
+            { "maxPoids": 4.50, "prix": 34.45 },
+            { "maxPoids": 5.00, "prix": 35.95 },
+            { "maxPoids": 5.50, "prix": 37.75 },
+            { "maxPoids": 6.00, "prix": 39.55 },
+            { "maxPoids": 6.50, "prix": 41.35 },
+            { "maxPoids": 7.00, "prix": 43.15 },
+            { "maxPoids": 7.50, "prix": 44.95 },
+            { "maxPoids": 8.00, "prix": 46.75 },
+            { "maxPoids": 8.50, "prix": 48.55 },
+            { "maxPoids": 9.00, "prix": 50.35 },
+            { "maxPoids": 9.50, "prix": 52.15 },
+            { "maxPoids": 10.00, "prix": 53.95 },
+            { "maxPoids": 10.50, "prix": 55.75 },
+            { "maxPoids": 11.00, "prix": 57.55 },
+            { "maxPoids": 11.50, "prix": 59.35 },
+            { "maxPoids": 12.00, "prix": 61.15 },
+            { "maxPoids": 12.50, "prix": 62.95 },
+            { "maxPoids": 13.00, "prix": 64.75 },
+            { "maxPoids": 13.50, "prix": 66.55 },
+            { "maxPoids": 14.00, "prix": 68.35 },
+            { "maxPoids": 14.50, "prix": 70.15 },
+            { "maxPoids": 15.00, "prix": 71.95 },
+            { "maxPoids": 15.50, "prix": 73.75 },
+            { "maxPoids": 16.00, "prix": 75.55 },
+            { "maxPoids": 16.50, "prix": 77.35 },
+            { "maxPoids": 17.00, "prix": 79.15 },
+            { "maxPoids": 17.50, "prix": 80.95 },
+            { "maxPoids": 18.00, "prix": 82.75 },
+            { "maxPoids": 18.50, "prix": 84.55 },
+            { "maxPoids": 19.00, "prix": 86.35 },
+            { "maxPoids": 19.50, "prix": 88.15 },
+            { "maxPoids": 20.00, "prix": 89.95 },
+            { "maxPoids": 20.50, "prix": 93.35 },
+            { "maxPoids": 21.00, "prix": 96.75 },
+            { "maxPoids": 21.50, "prix": 100.15 },
+            { "maxPoids": 22.00, "prix": 103.55 },
+            { "maxPoids": 22.50, "prix": 106.95 },
+            { "maxPoids": 23.00, "prix": 110.35 },
+            { "maxPoids": 23.50, "prix": 113.75 },
+            { "maxPoids": 24.00, "prix": 117.15 },
+            { "maxPoids": 24.50, "prix": 120.55 },
+            { "maxPoids": 25.00, "prix": 123.95 },
+            { "maxPoids": 25.50, "prix": 127.35 },
+            { "maxPoids": 26.00, "prix": 130.75 },
+            { "maxPoids": 26.50, "prix": 134.15 },
+            { "maxPoids": 27.00, "prix": 137.55 },
+            { "maxPoids": 27.50, "prix": 140.95 },
+            { "maxPoids": 28.00, "prix": 144.35 },
+            { "maxPoids": 28.50, "prix": 147.75 },
+            { "maxPoids": 29.00, "prix": 151.15 },
+            { "maxPoids": 29.50, "prix": 154.55 },
+            { "maxPoids": 30.00, "prix": 157.95 }
+        ],
+        "5": [
+            { "maxPoids": 0.50, "prix": 19.75 },
+            { "maxPoids": 1.00, "prix": 22.45 },
+            { "maxPoids": 1.50, "prix": 24.65 },
+            { "maxPoids": 2.00, "prix": 26.85 },
+            { "maxPoids": 2.50, "prix": 29.05 },
+            { "maxPoids": 3.00, "prix": 31.25 },
+            { "maxPoids": 3.50, "prix": 33.45 },
+            { "maxPoids": 4.00, "prix": 35.65 },
+            { "maxPoids": 4.50, "prix": 37.85 },
+            { "maxPoids": 5.00, "prix": 40.05 },
+            { "maxPoids": 5.50, "prix": 42.45 },
+            { "maxPoids": 6.00, "prix": 44.85 },
+            { "maxPoids": 6.50, "prix": 47.25 },
+            { "maxPoids": 7.00, "prix": 49.65 },
+            { "maxPoids": 7.50, "prix": 52.05 },
+            { "maxPoids": 8.00, "prix": 54.45 },
+            { "maxPoids": 8.50, "prix": 56.85 },
+            { "maxPoids": 9.00, "prix": 59.25 },
+            { "maxPoids": 9.50, "prix": 61.65 },
+            { "maxPoids": 10.00, "prix": 64.05 },
+            { "maxPoids": 10.50, "prix": 66.45 },
+            { "maxPoids": 11.00, "prix": 68.85 },
+            { "maxPoids": 11.50, "prix": 71.25 },
+            { "maxPoids": 12.00, "prix": 73.65 },
+            { "maxPoids": 12.50, "prix": 76.05 },
+            { "maxPoids": 13.00, "prix": 78.45 },
+            { "maxPoids": 13.50, "prix": 80.85 },
+            { "maxPoids": 14.00, "prix": 83.25 },
+            { "maxPoids": 14.50, "prix": 85.65 },
+            { "maxPoids": 15.00, "prix": 88.05 },
+            { "maxPoids": 15.50, "prix": 90.45 },
+            { "maxPoids": 16.00, "prix": 92.85 },
+            { "maxPoids": 16.50, "prix": 95.25 },
+            { "maxPoids": 17.00, "prix": 97.65 },
+            { "maxPoids": 17.50, "prix": 100.05 },
+            { "maxPoids": 18.00, "prix": 102.45 },
+            { "maxPoids": 18.50, "prix": 104.85 },
+            { "maxPoids": 19.00, "prix": 107.25 },
+            { "maxPoids": 19.50, "prix": 109.65 },
+            { "maxPoids": 20.00, "prix": 112.05 },
+            { "maxPoids": 20.50, "prix": 114.85 },
+            { "maxPoids": 21.00, "prix": 117.65 },
+            { "maxPoids": 21.50, "prix": 120.45 },
+            { "maxPoids": 22.00, "prix": 123.25 },
+            { "maxPoids": 22.50, "prix": 126.05 },
+            { "maxPoids": 23.00, "prix": 128.85 },
+            { "maxPoids": 23.50, "prix": 131.65 },
+            { "maxPoids": 24.00, "prix": 134.45 },
+            { "maxPoids": 24.50, "prix": 137.25 },
+            { "maxPoids": 25.00, "prix": 140.05 },
+            { "maxPoids": 25.50, "prix": 142.85 },
+            { "maxPoids": 26.00, "prix": 145.65 },
+            { "maxPoids": 26.50, "prix": 148.45 },
+            { "maxPoids": 27.00, "prix": 151.25 },
+            { "maxPoids": 27.50, "prix": 154.05 },
+            { "maxPoids": 28.00, "prix": 156.85 },
+            { "maxPoids": 28.50, "prix": 159.65 },
+            { "maxPoids": 29.00, "prix": 162.45 },
+            { "maxPoids": 29.50, "prix": 165.25 },
+            { "maxPoids": 30.00, "prix": 168.05 }
+        ],
+        "6": [
+            { "maxPoids": 0.50, "prix": 22.40 },
+            { "maxPoids": 1.00, "prix": 26.70 },
+            { "maxPoids": 1.50, "prix": 30.30 },
+            { "maxPoids": 2.00, "prix": 33.60 },
+            { "maxPoids": 2.50, "prix": 36.90 },
+            { "maxPoids": 3.00, "prix": 40.20 },
+            { "maxPoids": 3.50, "prix": 43.50 },
+            { "maxPoids": 4.00, "prix": 46.80 },
+            { "maxPoids": 4.50, "prix": 50.10 },
+            { "maxPoids": 5.00, "prix": 53.40 },
+            { "maxPoids": 5.50, "prix": 56.70 },
+            { "maxPoids": 6.00, "prix": 60.00 },
+            { "maxPoids": 6.50, "prix": 63.30 },
+            { "maxPoids": 7.00, "prix": 66.60 },
+            { "maxPoids": 7.50, "prix": 69.90 },
+            { "maxPoids": 8.00, "prix": 73.20 },
+            { "maxPoids": 8.50, "prix": 76.50 },
+            { "maxPoids": 9.00, "prix": 79.80 },
+            { "maxPoids": 9.50, "prix": 83.10 },
+            { "maxPoids": 10.00, "prix": 86.40 },
+            { "maxPoids": 10.50, "prix": 90.00 },
+            { "maxPoids": 11.00, "prix": 93.60 },
+            { "maxPoids": 11.50, "prix": 97.20 },
+            { "maxPoids": 12.00, "prix": 100.80 },
+            { "maxPoids": 12.50, "prix": 104.40 },
+            { "maxPoids": 13.00, "prix": 108.00 },
+            { "maxPoids": 13.50, "prix": 111.60 },
+            { "maxPoids": 14.00, "prix": 115.20 },
+            { "maxPoids": 14.50, "prix": 118.80 },
+            { "maxPoids": 15.00, "prix": 122.40 },
+            { "maxPoids": 15.50, "prix": 126.00 },
+            { "maxPoids": 16.00, "prix": 129.60 },
+            { "maxPoids": 16.50, "prix": 133.20 },
+            { "maxPoids": 17.00, "prix": 136.80 },
+            { "maxPoids": 17.50, "prix": 140.40 },
+            { "maxPoids": 18.00, "prix": 144.00 },
+            { "maxPoids": 18.50, "prix": 147.60 },
+            { "maxPoids": 19.00, "prix": 151.20 },
+            { "maxPoids": 19.50, "prix": 154.80 },
+            { "maxPoids": 20.00, "prix": 158.40 },
+            { "maxPoids": 20.50, "prix": 162.70 },
+            { "maxPoids": 21.00, "prix": 167.00 },
+            { "maxPoids": 21.50, "prix": 171.30 },
+            { "maxPoids": 22.00, "prix": 175.60 },
+            { "maxPoids": 22.50, "prix": 179.90 },
+            { "maxPoids": 23.00, "prix": 184.20 },
+            { "maxPoids": 23.50, "prix": 188.50 },
+            { "maxPoids": 24.00, "prix": 192.80 },
+            { "maxPoids": 24.50, "prix": 197.10 },
+            { "maxPoids": 25.00, "prix": 201.40 },
+            { "maxPoids": 25.50, "prix": 205.70 },
+            { "maxPoids": 26.00, "prix": 210.00 },
+            { "maxPoids": 26.50, "prix": 214.30 },
+            { "maxPoids": 27.00, "prix": 218.60 },
+            { "maxPoids": 27.50, "prix": 222.90 },
+            { "maxPoids": 28.00, "prix": 227.20 },
+            { "maxPoids": 28.50, "prix": 231.50 },
+            { "maxPoids": 29.00, "prix": 235.80 },
+            { "maxPoids": 29.50, "prix": 240.10 },
+            { "maxPoids": 30.00, "prix": 244.40 }
+        ],
+        "7": [
+            { "maxPoids": 0.50, "prix": 22.00 },
+            { "maxPoids": 1.00, "prix": 25.90 },
+            { "maxPoids": 1.50, "prix": 29.30 },
+            { "maxPoids": 2.00, "prix": 32.75 },
+            { "maxPoids": 2.50, "prix": 36.20 },
+            { "maxPoids": 3.00, "prix": 39.65 },
+            { "maxPoids": 3.50, "prix": 43.10 },
+            { "maxPoids": 4.00, "prix": 46.55 },
+            { "maxPoids": 4.50, "prix": 50.00 },
+            { "maxPoids": 5.00, "prix": 53.45 },
+            { "maxPoids": 5.50, "prix": 56.75 },
+            { "maxPoids": 6.00, "prix": 60.75 },
+            { "maxPoids": 6.50, "prix": 64.40 },
+            { "maxPoids": 7.00, "prix": 68.05 },
+            { "maxPoids": 7.50, "prix": 71.70 },
+            { "maxPoids": 8.00, "prix": 75.35 },
+            { "maxPoids": 8.50, "prix": 79.00 },
+            { "maxPoids": 9.00, "prix": 82.65 },
+            { "maxPoids": 9.50, "prix": 86.30 },
+            { "maxPoids": 10.00, "prix": 89.95 },
+            { "maxPoids": 10.50, "prix": 93.65 },
+            { "maxPoids": 11.00, "prix": 97.35 },
+            { "maxPoids": 11.50, "prix": 101.05 },
+            { "maxPoids": 12.00, "prix": 104.75 },
+            { "maxPoids": 12.50, "prix": 108.45 },
+            { "maxPoids": 13.00, "prix": 112.15 },
+            { "maxPoids": 13.50, "prix": 115.85 },
+            { "maxPoids": 14.00, "prix": 119.55 },
+            { "maxPoids": 14.50, "prix": 123.25 },
+            { "maxPoids": 15.00, "prix": 126.95 },
+            { "maxPoids": 15.50, "prix": 130.65 },
+            { "maxPoids": 16.00, "prix": 134.35 },
+            { "maxPoids": 16.50, "prix": 138.05 },
+            { "maxPoids": 17.00, "prix": 141.75 },
+            { "maxPoids": 17.50, "prix": 145.45 },
+            { "maxPoids": 18.00, "prix": 149.15 },
+            { "maxPoids": 18.50, "prix": 152.85 },
+            { "maxPoids": 19.00, "prix": 156.55 },
+            { "maxPoids": 19.50, "prix": 160.25 },
+            { "maxPoids": 20.00, "prix": 163.95 },
+            { "maxPoids": 20.50, "prix": 168.25 },
+            { "maxPoids": 21.00, "prix": 172.55 },
+            { "maxPoids": 21.50, "prix": 176.85 },
+            { "maxPoids": 22.00, "prix": 181.15 },
+            { "maxPoids": 22.50, "prix": 185.45 },
+            { "maxPoids": 23.00, "prix": 189.75 },
+            { "maxPoids": 23.50, "prix": 194.05 },
+            { "maxPoids": 24.00, "prix": 198.35 },
+            { "maxPoids": 24.50, "prix": 202.65 },
+            { "maxPoids": 25.00, "prix": 206.95 },
+            { "maxPoids": 25.50, "prix": 211.25 },
+            { "maxPoids": 26.00, "prix": 215.55 },
+            { "maxPoids": 26.50, "prix": 219.85 },
+            { "maxPoids": 27.00, "prix": 224.15 },
+            { "maxPoids": 27.50, "prix": 228.45 },
+            { "maxPoids": 28.00, "prix": 232.75 },
+            { "maxPoids": 28.50, "prix": 237.05 },
+            { "maxPoids": 29.00, "prix": 241.35 },
+            { "maxPoids": 29.50, "prix": 245.65 },
+            { "maxPoids": 30.00, "prix": 249.95 }
+        ],
+        "8": [
+            { "maxPoids": 0.50, "prix": 24.40 },
+            { "maxPoids": 1.00, "prix": 27.90 },
+            { "maxPoids": 1.50, "prix": 30.70 },
+            { "maxPoids": 2.00, "prix": 33.10 },
+            { "maxPoids": 2.50, "prix": 35.50 },
+            { "maxPoids": 3.00, "prix": 37.90 },
+            { "maxPoids": 3.50, "prix": 40.30 },
+            { "maxPoids": 4.00, "prix": 42.70 },
+            { "maxPoids": 4.50, "prix": 45.10 },
+            { "maxPoids": 5.00, "prix": 47.50 },
+            { "maxPoids": 5.50, "prix": 49.90 },
+            { "maxPoids": 6.00, "prix": 52.30 },
+            { "maxPoids": 6.50, "prix": 54.70 },
+            { "maxPoids": 7.00, "prix": 57.10 },
+            { "maxPoids": 7.50, "prix": 59.50 },
+            { "maxPoids": 8.00, "prix": 61.90 },
+            { "maxPoids": 8.50, "prix": 64.30 },
+            { "maxPoids": 9.00, "prix": 66.70 },
+            { "maxPoids": 9.50, "prix": 69.10 },
+            { "maxPoids": 10.00, "prix": 71.50 },
+            { "maxPoids": 10.50, "prix": 74.70 },
+            { "maxPoids": 11.00, "prix": 77.90 },
+            { "maxPoids": 11.50, "prix": 81.10 },
+            { "maxPoids": 12.00, "prix": 84.30 },
+            { "maxPoids": 12.50, "prix": 87.50 },
+            { "maxPoids": 13.00, "prix": 90.70 },
+            { "maxPoids": 13.50, "prix": 93.90 },
+            { "maxPoids": 14.00, "prix": 97.10 },
+            { "maxPoids": 14.50, "prix": 100.30 },
+            { "maxPoids": 15.00, "prix": 103.50 },
+            { "maxPoids": 15.50, "prix": 106.70 },
+            { "maxPoids": 16.00, "prix": 109.90 },
+            { "maxPoids": 16.50, "prix": 113.10 },
+            { "maxPoids": 17.00, "prix": 116.30 },
+            { "maxPoids": 17.50, "prix": 119.50 },
+            { "maxPoids": 18.00, "prix": 122.70 },
+            { "maxPoids": 18.50, "prix": 125.90 },
+            { "maxPoids": 19.00, "prix": 129.10 },
+            { "maxPoids": 19.50, "prix": 132.30 },
+            { "maxPoids": 20.00, "prix": 135.50 },
+            { "maxPoids": 20.50, "prix": 138.90 },
+            { "maxPoids": 21.00, "prix": 142.30 },
+            { "maxPoids": 21.50, "prix": 145.70 },
+            { "maxPoids": 22.00, "prix": 149.10 },
+            { "maxPoids": 22.50, "prix": 152.50 },
+            { "maxPoids": 23.00, "prix": 155.90 },
+            { "maxPoids": 23.50, "prix": 159.30 },
+            { "maxPoids": 24.00, "prix": 162.70 },
+            { "maxPoids": 24.50, "prix": 166.10 },
+            { "maxPoids": 25.00, "prix": 169.50 },
+            { "maxPoids": 25.50, "prix": 172.90 },
+            { "maxPoids": 26.00, "prix": 176.30 },
+            { "maxPoids": 26.50, "prix": 179.70 },
+            { "maxPoids": 27.00, "prix": 183.10 },
+            { "maxPoids": 27.50, "prix": 186.50 },
+            { "maxPoids": 28.00, "prix": 189.90 },
+            { "maxPoids": 28.50, "prix": 193.30 },
+            { "maxPoids": 29.00, "prix": 196.70 },
+            { "maxPoids": 29.50, "prix": 200.10 },
+            { "maxPoids": 30.00, "prix": 203.50 }
+        ],
+        "9": [
+            { "maxPoids": 0.50, "prix": 33.20 },
+            { "maxPoids": 1.00, "prix": 39.80 },
+            { "maxPoids": 1.50, "prix": 44.70 },
+            { "maxPoids": 2.00, "prix": 48.70 },
+            { "maxPoids": 2.50, "prix": 52.70 },
+            { "maxPoids": 3.00, "prix": 56.70 },
+            { "maxPoids": 3.50, "prix": 60.70 },
+            { "maxPoids": 4.00, "prix": 64.70 },
+            { "maxPoids": 4.50, "prix": 68.70 },
+            { "maxPoids": 5.00, "prix": 72.70 },
+            { "maxPoids": 5.50, "prix": 77.20 },
+            { "maxPoids": 6.00, "prix": 81.70 },
+            { "maxPoids": 6.50, "prix": 86.20 },
+            { "maxPoids": 7.00, "prix": 90.70 },
+            { "maxPoids": 7.50, "prix": 95.20 },
+            { "maxPoids": 8.00, "prix": 99.70 },
+            { "maxPoids": 8.50, "prix": 104.20 },
+            { "maxPoids": 9.00, "prix": 108.70 },
+            { "maxPoids": 9.50, "prix": 113.20 },
+            { "maxPoids": 10.00, "prix": 117.70 },
+            { "maxPoids": 10.50, "prix": 122.50 },
+            { "maxPoids": 11.00, "prix": 127.30 },
+            { "maxPoids": 11.50, "prix": 132.10 },
+            { "maxPoids": 12.00, "prix": 136.90 },
+            { "maxPoids": 12.50, "prix": 141.70 },
+            { "maxPoids": 13.00, "prix": 146.50 },
+            { "maxPoids": 13.50, "prix": 151.30 },
+            { "maxPoids": 14.00, "prix": 156.10 },
+            { "maxPoids": 14.50, "prix": 160.90 },
+            { "maxPoids": 15.00, "prix": 165.70 },
+            { "maxPoids": 15.50, "prix": 170.50 },
+            { "maxPoids": 16.00, "prix": 175.30 },
+            { "maxPoids": 16.50, "prix": 180.10 },
+            { "maxPoids": 17.00, "prix": 184.90 },
+            { "maxPoids": 17.50, "prix": 189.70 },
+            { "maxPoids": 18.00, "prix": 194.50 },
+            { "maxPoids": 18.50, "prix": 199.30 },
+            { "maxPoids": 19.00, "prix": 204.10 },
+            { "maxPoids": 19.50, "prix": 208.90 },
+            { "maxPoids": 20.00, "prix": 213.70 },
+            { "maxPoids": 20.50, "prix": 218.60 },
+            { "maxPoids": 21.00, "prix": 223.50 },
+            { "maxPoids": 21.50, "prix": 228.40 },
+            { "maxPoids": 22.00, "prix": 233.30 },
+            { "maxPoids": 22.50, "prix": 238.20 },
+            { "maxPoids": 23.00, "prix": 243.10 },
+            { "maxPoids": 23.50, "prix": 248.00 },
+            { "maxPoids": 24.00, "prix": 252.90 },
+            { "maxPoids": 24.50, "prix": 257.80 },
+            { "maxPoids": 25.00, "prix": 262.70 },
+            { "maxPoids": 25.50, "prix": 267.60 },
+            { "maxPoids": 26.00, "prix": 272.50 },
+            { "maxPoids": 26.50, "prix": 277.40 },
+            { "maxPoids": 27.00, "prix": 282.30 },
+            { "maxPoids": 27.50, "prix": 287.20 },
+            { "maxPoids": 28.00, "prix": 292.10 },
+            { "maxPoids": 28.50, "prix": 297.00 },
+            { "maxPoids": 29.00, "prix": 301.90 },
+            { "maxPoids": 29.50, "prix": 306.80 },
+            { "maxPoids": 30.00, "prix": 311.70 }
+        ]
+    },
+    "corse": {
+        "Corse": [
+            { "maxPoids": 1, "prix": 5.80 },
+            { "maxPoids": 2, "prix": 6.30 },
+            { "maxPoids": 3, "prix": 6.80 },
+            { "maxPoids": 4, "prix": 7.30 },
+            { "maxPoids": 5, "prix": 7.80 },
+            { "maxPoids": 6, "prix": 8.30 },
+            { "maxPoids": 7, "prix": 8.80 },
+            { "maxPoids": 8, "prix": 9.30 },
+            { "maxPoids": 9, "prix": 9.80 },
+            { "maxPoids": 10, "prix": 10.30 },
+            { "maxPoids": 11, "prix": 10.90 },
+            { "maxPoids": 12, "prix": 11.50 },
+            { "maxPoids": 13, "prix": 12.10 },
+            { "maxPoids": 14, "prix": 12.70 },
+            { "maxPoids": 15, "prix": 13.30 },
+            { "maxPoids": 16, "prix": 13.90 },
+            { "maxPoids": 17, "prix": 14.50 },
+            { "maxPoids": 18, "prix": 15.10 },
+            { "maxPoids": 19, "prix": 15.70 },
+            { "maxPoids": 20, "prix": 16.30 },
+            { "maxPoids": 21, "prix": 16.90 },
+            { "maxPoids": 22, "prix": 17.50 },
+            { "maxPoids": 23, "prix": 18.10 },
+            { "maxPoids": 24, "prix": 18.70 },
+            { "maxPoids": 25, "prix": 19.30 },
+            { "maxPoids": 26, "prix": 19.90 },
+            { "maxPoids": 27, "prix": 20.50 },
+            { "maxPoids": 28, "prix": 21.10 },
+            { "maxPoids": 29, "prix": 21.70 },
+            { "maxPoids": 30, "prix": 22.30 }
+        ]    }
+    };
+
+function exporterEnImage() {
+    let container = document.querySelector('.container'); // Sélection du div à capturer
+    let buttons = document.querySelectorAll('.button'); // Sélection des boutons à masquer
+
+    // Masquer les boutons
+    buttons.forEach(button => {
+        button.style.display = 'none';
+    });
+
+    // Capturer l'image
+    html2canvas(container, { scale: 2 }).then(canvas => {
+        let imgURL = canvas.toDataURL('image/jpeg', 1.0); // Convertir en JPG
+        let link = document.createElement('a');
+        link.href = imgURL;
+        number = document.getElementById("proforma").value;
+        link.download = 'PF' + number + '.jpg'; // Nom du fichier
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }).catch(error => console.error("Erreur de capture :", error))
+    .finally(() => {
+        // Réafficher les boutons après la capture
+        buttons.forEach(button => {
+            button.style.display = '';
+        });
+    });
+}
+
+        // Reset all fields
+        function resetFields() {
+            document.getElementById("proforma").value = '';
+            document.getElementById("poids").value = '';
+            document.getElementById("prixColis").innerText = '';
+            document.getElementById("prixExpedition").innerText = '';
+            document.getElementById("prixExpSupp").innerText = '';
+            document.getElementById("prixSurcharge").innerText = '';
+            document.getElementById("prixSurete").innerText = '';
+            document.getElementById("prixEco").innerText = '';
+            document.getElementById("prixAssurance").innerText = '';
+            document.getElementById("assurance").value = '';
+            document.getElementById("inclureAssurance").checked = false;
+            document.getElementById('print').disabled = true;
+            document.getElementById('reset').disabled = true;
+            document.querySelector('#resultat p:last-child').innerHTML = `<strong>Prix total HT : 0.00 €</strong>`;
+        }
+
+    </script>
+</body>
+</html>

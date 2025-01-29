@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modification Dynamique</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(90deg, #b9deed, #efefef);
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #4a90e2;
+        }
+
+        #title, #text, #button {
+            margin: 25px 0;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            align: center;
+            width: 50%;
+            margin-left: 25%;
+        }
+
+        .input-section, .code-section {
+            margin: 20px auto;
+            max-width: 600px;
+            width: 90%;
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        input[type="text"] {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            transition: border-color 0.3s;
+        }
+
+        select {
+            width: 93%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus, select:focus {
+            border-color: #4a90e2;
+            outline: none;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        .style-buttons {
+            display: inline-block;
+            margin: 10px 0;
+        }
+
+        .style-buttons label {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .icone {
+            cursor: pointer;
+            font-weight: bold;
+            color: #4a90e2;
+            text-decoration: underline;
+        }
+
+        .button {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .button:hover {
+            background-color: #007bff;
+        }
+
+        #codeOutput {
+            width: 90%;
+            height: 150px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+ 
+            background-color: #f9f9f9;
+            resize: none;
+        }
+
+        .floating-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .floating-button:hover {
+            background-color: #007bff;
+            transform: scale(1.1);
+        }
+
+        .floating-button svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        h1 {
+            color: #0056b3;
+            justify-content: center;
+            align: center;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Bouton Retour Accueil -->
+    <a href="../index.html" class="floating-button" title="Retour à l'accueil">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+    </a>
+
+    <h1>Note</h1>
+
+    <!-- Zone d'affichage -->
+    <div id="title" align="center">
+        <strong></strong>
+    </div>
+    
+    <div id="text" align="center">
+        <p style="color:green; font-weight:bold;"></p>
+    </div>
+
+    <div id="button" align="center">
+        <span class="icone"></span>
+    </div>
+
+    <!-- Zone de saisie pour modifier les valeurs -->
+    <div class="input-section">
+
+<hr />
+
+        <label for="inputTitle">Titre:</label>
+        <input type="text" id="inputTitle" placeholder="Modifier le titre" required>
+        
+        <label for="titleColor">Couleur du Titre:</label>
+        <select id="titleColor">
+            <option value="green">Vert</option>
+            <option value="black">Noir</option>
+            <option value="red">Rouge</option>
+            <option value="blue">Bleu</option>
+            <option value="purple">Violet</option>
+            <option value="orange">Orange</option>
+            <option value="pink">Rose</option>
+        </select>
+        
+        <div class="style-buttons">
+            <label>
+                <input type="checkbox" id="titleBold"> Gras
+            </label>
+            <label>
+                <input type="checkbox" id="titleItalic"> Italique
+            </label>
+            <label>
+                <input type="checkbox" id="titleUnderline"> Soulign 
+            </label>
+        </div>
+        
+<hr />
+
+        <label for="inputText">Texte:</label>
+        <input type="text" id="inputText" placeholder="Modifier le texte" required>
+        
+        <label for="textColor">Couleur du Texte:</label>
+        <select id="textColor">
+            <option value="green">Vert</option>
+            <option value="black">Noir</option>
+            <option value="red">Rouge</option>
+            <option value="blue">Bleu</option>
+            <option value="purple">Violet</option>
+            <option value="orange">Orange</option>
+            <option value="pink">Rose</option>
+        </select>
+        
+        <div class="style-buttons">
+            <label>
+                <input type="checkbox" id="textBold"> Gras
+            </label>
+            <label>
+                <input type="checkbox" id="textItalic"> Italique
+            </label>
+            <label>
+                <input type="checkbox" id="textUnderline"> Soulign 
+            </label>
+        </div>
+
+        </br>
+
+        <div class="style-buttons">
+            <label>
+                <input type="checkbox" id="useSecondText" onchange="toggleSecondInputs()"> Utiliser une deuxieme ligne de texte
+            </label>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+        <div id="secondInputs" style="display: none;">
+
+<hr />
+
+
+        <!-- Champs pour le second texte -->
+        <label for="inputSecondText">Deuxième Texte:</label>
+        <input type="text" id="inputSecondText" placeholder="Modifier le deuxième texte" required>
+
+        <label for="secondTextColor">Couleur du Deuxième Texte:</label>
+        <select id="secondTextColor">
+            <option value="green">Vert</option>
+            <option value="black">Noir</option>
+            <option value="red">Rouge</option>
+            <option value="blue">Bleu</option>
+            <option value="purple">Violet</option>
+            <option value="orange">Orange</option>
+            <option value="pink">Rose</option>
+        </select>
+
+        <div class="style-buttons">
+            <label>
+                <input type="checkbox" id="secondTextBold"> Gras
+            </label>
+            <label>
+                <input type="checkbox" id="secondTextItalic"> Italique
+            </label>
+            <label>
+                <input type="checkbox" id="secondTextUnderline"> Souligné
+            </label>
+        </div>
+        </div>
+
+
+
+
+
+<hr />
+
+
+
+
+
+
+
+
+
+        <label>
+            <input type="checkbox" id="useButton" onchange="toggleButtonInputs()"> Utiliser le premier bouton et numéro de proforma
+        </label>
+
+        <div id="buttonInputs" style="display: none;">
+            <label for="inputButton">Nom du premier bouton:</label>
+            <input type="text" id="inputButton" placeholder="Modifier le nom du bouton" required>
+            
+            <label for="inputProforma">Numéro de proforma du premier bouton:</label>
+            <input type="text" id="inputProforma" placeholder="Modifier le numéro de proforma" required>
+
+
+        <!-- Checkbox and fields for the second button -->
+        <label>
+            <input type="checkbox" id="useSecondButton" onchange="toggleSecondButtonInputs()"> Utiliser le deuxième bouton et numéro de proforma
+        </label>
+
+        </div>
+
+
+        <div id="secondButtonInputs" style="display: none;">
+            <label for="inputSecondButton">Nom du deuxième bouton:</label>
+            <input type="text" id="inputSecondButton" placeholder="Modifier le nom du deuxième bouton" required>
+            
+            <label for="inputSecondProforma">Numéro de proforma du deuxième bouton:</label>
+            <input type="text" id="inputSecondProforma" placeholder="Modifier le numéro de proforma" required>
+        </div>
+    </div>
+
+    <!-- Boutons pour afficher le code HTML g n r  -->
+    <div class="code-section">
+        <button class="button" onclick="afficherCodeHTML()">Afficher le code HTML complet</button>
+        <button class="button" onclick="resetFields()">Réinitialiser</button>
+        <textarea id="codeOutput" readonly placeholder="Le code s'affichera ici..."></textarea>
+    </div>
+
+    <script>
+
+        // Add listeners for button updates
+        document.getElementById("inputButton").addEventListener("input", updateButton);
+        document.getElementById("inputProforma").addEventListener("input", updateButton);
+        document.getElementById("inputSecondButton").addEventListener("input", updateButton);
+        document.getElementById("inputSecondProforma").addEventListener("input", updateButton);
+
+
+
+
+
+        // Fonction pour afficher la proforma avec le num ro saisi
+        function document_afficher() {
+            const proformaNum = document.getElementById("inputProforma").value || "120236";
+            alert("Affichage du proforma numéro: " + proformaNum);
+        }
+
+        // Fonction pour afficher ou masquer les champs du bouton et du num ro de proforma
+        function toggleButtonInputs() {
+            const useButton = document.getElementById("useButton").checked;
+            document.getElementById("buttonInputs").style.display = useButton ? "block" : "none";
+            if (!useButton) {
+                document.getElementById("inputButton").value = '';
+                document.getElementById("inputProforma").value = '';
+            }
+        }
+
+
+        function toggleSecondInputs() {
+            const useSecondText = document.getElementById("useSecondText").checked;
+            document.getElementById("secondInputs").style.display = useSecondText ? "block" : "none";
+            if (!useSecondText) {
+                document.getElementById("inputButton").value = '';
+                document.getElementById("inputProforma").value = '';
+            }
+        }
+
+
+        // Mise   jour du titre avec le texte et la couleur choisis
+        document.getElementById("inputTitle").addEventListener("input", function() {
+            updateTitle();
+        });
+        document.getElementById("titleColor").addEventListener("change", function() {
+            updateTitle();
+        });
+        document.getElementById("titleBold").addEventListener("change", function() {
+            updateTitle();
+        });
+        document.getElementById("titleItalic").addEventListener("change", function() {
+            updateTitle();
+        });
+        document.getElementById("titleUnderline").addEventListener("change", function() {
+            updateTitle();
+        });
+
+        function updateTitle() {
+            const title = document.getElementById("inputTitle").value;
+            const color = document.getElementById("titleColor").value;
+            const isBold = document.getElementById("titleBold").checked;
+            const isItalic = document.getElementById("titleItalic").checked;
+            const isUnderline = document.getElementById("titleUnderline").checked;
+
+            let titleStyle = `color:${color}; font-weight:${isBold ? 'bold' : 'normal'}; font-style:${isItalic ? 'italic' : 'normal'}; text-decoration:${isUnderline ? 'underline' : 'none'};`;
+            document.getElementById("title").innerHTML = `<strong style="${titleStyle}">${title}</strong>`;
+        }
+
+        // Mise   jour du texte avec le texte et la couleur choisis
+        document.getElementById("inputText").addEventListener("input", function() {
+            updateText();
+        });
+        document.getElementById("textColor").addEventListener("change", function() {
+            updateText();
+        });
+        document.getElementById("textBold").addEventListener("change", function() {
+            updateText();
+        });
+        document.getElementById("textItalic").addEventListener("change", function() {
+            updateText();
+        });
+        document.getElementById("textUnderline").addEventListener("change", function() {
+            updateText();
+        });
+
+        function updateText() {
+            const text = document.getElementById("inputText").value;
+            const color = document.getElementById("textColor").value;
+            const isBold = document.getElementById("textBold").checked;
+            const isItalic = document.getElementById("textItalic").checked;
+            const isUnderline = document.getElementById("textUnderline").checked;
+
+            let textStyle = `color:${color}; font-weight:${isBold ? 'bold' : 'normal'}; font-style:${isItalic ? 'italic' : 'normal'}; text-decoration:${isUnderline ? 'underline' : 'none'};`;
+            document.getElementById("text").innerHTML = `<p style="${textStyle}">${text}</p>`;
+        }
+
+        // Mise   jour du bouton avec le nom et num ro de proforma choisis
+        document.getElementById("inputButton").addEventListener("input", function() {
+            updateButton();
+        });
+        document.getElementById("inputProforma").addEventListener("input", function() {
+            updateButton();
+        });
+
+        // Update primary button
+        function updateButton() {
+            const buttonText = document.getElementById("inputButton").value || "RELIQUATS";
+            const proformaNum = document.getElementById("inputProforma").value || "120236";
+            const useButton = document.getElementById("useButton").checked;
+
+            const buttonHTML = useButton ? `<span class='icone' onclick='document_afficher("proforma","${proformaNum}")'>${buttonText}</span>` : '';
+            
+            const secondButtonText = document.getElementById("inputSecondButton").value || "AUTRE";
+            const secondProformaNum = document.getElementById("inputSecondProforma").value || "120237";
+            const useSecondButton = document.getElementById("useSecondButton").checked;
+
+            const secondButtonHTML = useSecondButton ? `<span class='icone' onclick='document_afficher("proforma","${secondProformaNum}")'>${secondButtonText}</span>` : '';
+
+            document.getElementById("button").innerHTML = `<div align='center'>${buttonHTML} ${secondButtonHTML}</div>`;
+        }
+
+
+        function toggleSecondButtonInputs() {
+            const useSecondButton = document.getElementById("useSecondButton").checked;
+            document.getElementById("secondButtonInputs").style.display = useSecondButton ? "block" : "none";
+            if (!useSecondButton) {
+                document.getElementById("inputSecondButton").value = '';
+                document.getElementById("inputSecondProforma").value = '';
+            }
+            updateButton();
+        }
+
+        // Show the full HTML code
+        function afficherCodeHTML() {
+            const titleHTML = document.getElementById("title").outerHTML;
+            const textHTML = document.getElementById("text").outerHTML;
+            const buttonHTML = document.getElementById("button").outerHTML;
+            const codeHTML = titleHTML + "\n\n" + textHTML + "\n\n" + buttonHTML;
+            document.getElementById("codeOutput").value = codeHTML;
+        }
+
+        // Reset all fields
+        function resetFields() {
+            document.getElementById("inputTitle").value = '';
+            document.getElementById("inputText").value = '';
+            document.getElementById("inputButton").value = '';
+            document.getElementById("inputProforma").value = '';
+            document.getElementById("inputSecondButton").value = '';
+            document.getElementById("inputSecondProforma").value = '';
+            document.getElementById("titleColor").value = 'green';
+            document.getElementById("textColor").value = 'green';
+            document.getElementById("titleBold").checked = false;
+            document.getElementById("titleItalic").checked = false;
+            document.getElementById("titleUnderline").checked = false;
+            document.getElementById("textBold").checked = false;
+            document.getElementById("textItalic").checked = false;
+            document.getElementById("textUnderline").checked = false;
+            document.getElementById("useButton").checked = false;
+            document.getElementById("useSecondButton").checked = false;
+            toggleButtonInputs();
+            toggleSecondButtonInputs();
+            updateTitle();
+            updateText();
+            updateButton();
+            document.getElementById("codeOutput").value = '';
+        }
+
+
+
+        document.getElementById("inputSecondText").addEventListener("input", function() {
+            updateSecondText();
+        });
+        document.getElementById("secondTextColor").addEventListener("change", function() {
+            updateSecondText();
+        });
+        document.getElementById("secondTextBold").addEventListener("change", function() {
+            updateSecondText();
+        });
+        document.getElementById("secondTextItalic").addEventListener("change", function() {
+            updateSecondText();
+        });
+        document.getElementById("secondTextUnderline").addEventListener("change", function() {
+            updateSecondText();
+        });
+
+        function updateSecondText() {
+            const text = document.getElementById("inputSecondText").value;
+            const color = document.getElementById("secondTextColor").value;
+            const isBold = document.getElementById("secondTextBold").checked;
+            const isItalic = document.getElementById("secondTextItalic").checked;
+            const isUnderline = document.getElementById("secondTextUnderline").checked;
+
+            let textStyle = `color:${color}; font-weight:${isBold ? 'bold' : 'normal'}; font-style:${isItalic ? 'italic' : 'normal'}; text-decoration:${isUnderline ? 'underline' : 'none'};`;
+            document.getElementById("secondText").innerHTML = `<p style="${textStyle}">${text}</p>`;
+        }
+
+
+    </script>
+
+</body>
+</html>
