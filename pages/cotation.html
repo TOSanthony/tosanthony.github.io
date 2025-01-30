@@ -1337,6 +1337,10 @@ function exporterEnImage() {
             document.querySelector('#resultat p:last-child').innerHTML = `<strong>Prix total HT : 0.00 €</strong>`;
         }
 
+        // Désactiver le zoom avec la molette
+        document.addEventListener('wheel', function(event) {
+            event.preventDefault();
+        }, { passive: false });
     </script>
 </body>
 </html>
