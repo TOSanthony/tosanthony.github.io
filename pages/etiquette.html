@@ -458,10 +458,12 @@ function exportToPDF() {
   }, 1000); // Attendre 1 seconde avant de prendre la capture d'écran
 }
 
-        // Désactiver le zoom avec la molette
-        document.addEventListener('wheel', function(event) {
-            event.preventDefault();
-        }, { passive: false });
+document.addEventListener('wheel', function(event) {
+    // Vérifie si la molette est utilisée pour zoomer (le zoom utilise un facteur de direction)
+    if (event.ctrlKey || event.metaKey) {
+        event.preventDefault(); // Empêche le zoom
+    }
+}, { passive: false });
   </script>
 
 </body>
