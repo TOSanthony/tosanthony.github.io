@@ -92,6 +92,11 @@
         function openUrl(url) {
             window.open(url, '_blank');
         }
+
+        // Désactiver le zoom avec la molette
+        document.addEventListener('wheel', function(event) {
+            event.preventDefault();
+        }, { passive: false });
     </script>
 </body>
 </html>
