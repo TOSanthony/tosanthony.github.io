@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="icon" type="image/x-icon" href="../icons/favicon.ico">
+    <title>Montages</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(90deg, #b9deed, #efefef);
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+table {
+    width: 100%;
+    border-collapse: separate; /* Permet aux bordures d’être bien dessinées */
+    border-spacing: 0; /* Évite les espaces entre les cellules */
+    border-radius: 10px; /* Arrondi du tableau */
+    overflow: hidden;
+    border: 1px solid black; /* Ajout d'une bordure principale */
+}
+
+th {
+    border: 0px solid black; /* Bordure fine */
+    padding: 8px;
+    text-align: center;
+    background: white; /* Évite l'effet visuel des bordures transparentes */
+}
+td {
+    border: 0px solid black; /* Bordure fine */
+    padding: 8px;
+    text-align: center;
+    background: white; /* Évite l'effet visuel des bordures transparentes */
+}
+tr {
+    border: 1px solid black; /* Bordure fine */
+    padding: 8px;
+    text-align: center;
+    background: white; /* Évite l'effet visuel des bordures transparentes */
+}
+/* Appliquer les coins arrondis correctement */
+thead tr:first-child th:first-child {
+    border-top-left-radius: 10px;
+}
+thead tr:first-child th:last-child {
+    border-top-right-radius: 10px;
+}
+tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}
+th:not(:last-child),
+td:not(:last-child) {
+    border-right: 1px solid black;
+}
+thead tr:first-child th {
+    border-bottom: 1px solid black;
+    background-color: #d6d6d6;
+    color: black;
+}
+        button {
+            margin: 10px;
+            padding: 10px;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #007bff;
+        }
+        .container {
+            max-width: 80%;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+        }
+        h1 {
+            text-align: center;
+            color: #0056b3;
+        }
+
+        .floating-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 75px;
+            height: 75px;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .floating-button:hover {
+            background-color: #007bff;
+            transform: scale(1.1);
+        }
+
+        .floating-button svg {
+            width: 35px;
+            height: 35px;
+        }
+
+        .floating-button img {
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+
+<a href="../index.html" class="floating-button" title="Retour à l'accueil">
+    <img src="../icons/ic_action_home.png" alt="Home" />
+</a>
+
+    <h1>Montages</h1>
+    
+    <button onclick="ajouterLigne()">Ajouter une ligne</button>
+    <button onclick="sauvegarderTableau()">Enregistrer</button>
+    <button onclick="document.getElementById('fileInput').click()">Charger un fichier</button>
+    <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="chargerFichier(event)">
+    
+
+    <div class="container">
+
+    <table id="tableau">
+        <thead>
+            <tr>
+                <th>Proforma</th>
+                <th>Machine</th>
+                <th>État</th>
+                <th>En Montage</th>
+                <th>Date</th>
+                <th>Expédié</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    </div>
+
+    <script>
+        function ajouterLigne(numProforma = '', nomMachine = '', etat = 'Complète', montage = 'Non', dateMontage = '', expedition = 'Non', dateExpedition = '') {
+            let tableau = document.getElementById("tableau").getElementsByTagName('tbody')[0];
+            let ligne = tableau.insertRow();
+            
+            let cell1 = ligne.insertCell(0);
+            cell1.innerHTML = `<input type="text" value="${numProforma}">`;
+
+            let cell2 = ligne.insertCell(1);
+            cell2.innerHTML = `<input type="text" value="${nomMachine}">`;
+
+            let cell3 = ligne.insertCell(2);
+            cell3.innerHTML = `
+                <select>
+                    <option value="Complète" ${etat === "Complète" ? "selected" : ""}>Complète</option>
+                    <option value="Reliquats" ${etat === "Reliquats" ? "selected" : ""}>Reliquats</option>
+                </select>
+            `;
+
+            let cell4 = ligne.insertCell(3);
+            cell4.innerHTML = `
+                <select>
+                    <option value="Oui" ${montage === "Oui" ? "selected" : ""}>Oui</option>
+                    <option value="Non" ${montage === "Non" ? "selected" : ""}>Non</option>
+                </select>
+            `;
+
+            let cell5 = ligne.insertCell(4);
+            cell5.innerHTML = `<input type="date" value="${dateMontage}">`;
+
+            let cell6 = ligne.insertCell(5);
+            cell6.innerHTML = `
+                <select>
+                    <option value="Oui" ${expedition === "Oui" ? "selected" : ""}>Oui</option>
+                    <option value="Non" ${expedition === "Non" ? "selected" : ""}>Non</option>
+                </select>
+            `;
+
+            let cell7 = ligne.insertCell(6);
+            cell7.innerHTML = `<input type="date" value="${dateExpedition}">`;
+
+            let cell8 = ligne.insertCell(7);
+            cell8.innerHTML = `<button onclick="supprimerLigne(this)">Supprimer</button>`;
+        }
+
+    function supprimerLigne(button) {
+        if (confirm("Êtes-vous sûr de vouloir supprimer cette ligne ?")) {
+            let row = button.closest("tr");
+            row.parentNode.removeChild(row);
+        }
+    }
+
+        function sauvegarderTableau() {
+            let tableau = document.getElementById("tableau").getElementsByTagName('tbody')[0];
+            let lignes = tableau.getElementsByTagName("tr");
+            let data = [];
+
+            for (let i = 0; i < lignes.length; i++) {
+                let colonnes = lignes[i].getElementsByTagName("td");
+                let entry = {
+                    numProforma: colonnes[0].getElementsByTagName("input")[0].value,
+                    nomMachine: colonnes[1].getElementsByTagName("input")[0].value,
+                    etat: colonnes[2].getElementsByTagName("select")[0].value,
+                    montage: colonnes[3].getElementsByTagName("select")[0].value,
+                    dateMontage: colonnes[4].getElementsByTagName("input")[0].value,
+                    expedition: colonnes[5].getElementsByTagName("select")[0].value,
+                    dateExpedition: colonnes[6].getElementsByTagName("input")[0].value
+                };
+                data.push(entry);
+            }
+
+            let jsonData = JSON.stringify(data);
+            let blob = new Blob([jsonData], { type: "application/json" });
+            let a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "montages_pc.json";
+            a.click();
+        }
+
+        function chargerFichier(event) {
+            let file = event.target.files[0];
+            if (!file) return;
+
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let contenu = JSON.parse(e.target.result);
+                let tableau = document.getElementById("tableau").getElementsByTagName('tbody')[0];
+                tableau.innerHTML = "";
+                
+                contenu.forEach(item => {
+                    ajouterLigne(item.numProforma, item.nomMachine, item.etat, item.montage, item.dateMontage, item.expedition, item.dateExpedition);
+                });
+            };
+            reader.readAsText(file);
+        }
+    </script>
+</body>
+</html>
