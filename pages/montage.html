@@ -371,6 +371,12 @@ function ajouterLigne(numProforma = '', nomMachine = '', etat = 'Complète', mon
             document.querySelector("#tableau tbody").innerHTML = "";
         }
 
+document.addEventListener('wheel', function(event) {
+    // Vérifie si la molette est utilisée pour zoomer (le zoom utilise un facteur de direction)
+    if (event.ctrlKey || event.metaKey) {
+        event.preventDefault(); // Empêche le zoom
+    }
+}, { passive: false });
     </script>
 </body>
 </html>
