@@ -98,51 +98,57 @@
             text-align: center;
             color: #0056b3;
         }
-.legend {
-    border-radius: 5px;
-    max-width: 50%;
-    margin: 20px auto;
+        .legend {
+            border-radius: 5px;
+            max-width: 50%;
+            margin: 20px auto;
+            justify-content: center;
+            align-items: center;
             zoom: 0.8;
             max-width: 50%;
-            background: #fff;
+            background: transparent;
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
             overflow: hidden;
-}
-
-.legend h2 {
-    color: #0056b3;
-}
-
-.legend-item {
-    display: flex;
-    align-items: center;
-    margin-top: 0px;
-    margin-bottom: 0px;
-}
-
-.legend-item .color-box {
-    width: 20px;
-    height: 20px;
-    display: inline-block;
-    margin-right: 10px;
-    border-radius: 5px;
-    border: 0px solid black;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
-}
-
-.legend p {
-    font-size: 14px;
-    color: #333;
-    align-items: left;
-}
-
-/* Couleurs des box */
-.green { background-color: #C3D0A8; }
-.orange { background-color: #F2D894; }
-.blue { background-color: #d4edda; }
-.default { background-color: #fff; }
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+        }
+        .legend h2 {
+            color: #0056b3;
+        }
+        .legend-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+        .legend-item .color-box {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            margin-right: 10px;
+            border-radius: 5px;
+            border: 0px solid black;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+        }
+        .legend p {
+            font-size: 14px;
+            color: #333;
+        }
+        .green {
+            background-color: #C3D0A8;
+        }
+        .orange {
+            background-color: #F2D894;
+        }
+        .blue {
+            background-color: #d4edda;
+        }
+        .default {
+            background-color: #fff;
+        }
     </style>
 </head>
 <body>
@@ -175,22 +181,21 @@
 
     <!-- Légende des couleurs -->
 <div class="legend" align="center">
-    <h2>Légende des couleurs des lignes :</h2>
     <div class="legend-item">
         <div class="color-box green"></div>
         <p>Ligne verte : Montage terminé et expédition effectuée</p>
     </div>
     <div class="legend-item">
         <div class="color-box orange"></div>
-        <p>Ligne orange : Montage en reliquats</p>
+        <p>Ligne orange : Montage avec des produits en reliquat </p>
     </div>
     <div class="legend-item">
         <div class="color-box blue"></div>
-        <p>Ligne bleu : Montage terminé et expédition non effectuée</p>
+        <p>Ligne bleu : Montage terminé mais expédition non fait</p>
     </div>
     <div class="legend-item">
         <div class="color-box default"></div>
-        <p>Ligne blanche : Montage ou expédition non effectuée</p>
+        <p>Ligne blanche : Montage ou expédition non effectuée  </p>
     </div>
 </div>
 
