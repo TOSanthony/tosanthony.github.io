@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="icon" type="image/x-icon" href="../icons/favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+      <link
+        rel="stylesheet"
+        href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css"
+      >
+
     <title>tracking</title>
     <style>
         body {
@@ -112,6 +119,7 @@
       border: none;
       border-radius: 10px;
       margin-top: 10px;
+      margin-right: 10px;
     }
 
         .floating-button {
@@ -188,8 +196,8 @@
                 </select>
             </div>
         </div>
-        <button onclick="addTrackingItem()">Ajouter un colis</button>
-        <button onclick="generateTrackingLinks()">Générer les liens</button>
+        <button onclick="addTrackingItem()"><i class="fa-solid fa-plus"></i> Ajouter un colis</button>
+        <button onclick="generateTrackingLinks()"><i class="fa-solid fa-circle-check"></i> Générer les liens</button>
 
         <h3>Liens générés :</h3>
         <div id="output" class="output">Les liens générés apparaîtront ici.</div>
@@ -208,7 +216,7 @@
                     <option value="dbschenker">DB Schenker</option>
                     <option value="geodis">Geodis</option>
                 </select>
-                <span class="remove-btn" onclick="removeTrackingItem(this)">×</span>
+                <span class="remove-btn" onclick="removeTrackingItem(this)"><i class="fa-solid fa-trash"></i></span>
             `;
             trackingList.appendChild(trackingItem);
         }

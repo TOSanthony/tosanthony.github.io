@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="icon" type="image/x-icon" href="../icons/favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Montages</title>
     <style>
         body {
@@ -160,10 +161,10 @@
         <img src="../icons/ic_action_home.png" alt="Home" />
     </a>
     <h1>Montages</h1>
-    <button onclick="ajouterLigne()">➕ Ajouter une ligne</button>
-    <button id="sauvegarder" onclick="sauvegarderTableau()">💾 Enregistrer</button>
-    <button onclick="chargerFichier()">📂 Charger un fichier</button>
-    <button id="supprimer" onclick="supprimerTout()">🗑️ Tout supprimer</button>
+    <button onclick="ajouterLigne()"><i class="fa-solid fa-plus"></i> Ajouter une ligne</button>
+    <button id="sauvegarder" onclick="sauvegarderTableau()"><i class="fa-solid fa-file-export"></i></i> Enregistrer</button>
+    <button onclick="chargerFichier()"><i class="fa-solid fa-file-import"></i> Charger un fichier</button>
+    <button id="supprimer" onclick="supprimerTout()"><i class="fa-solid fa-trash"></i> Tout supprimer</button>
     
     <div class="container">
         <table id="tableau">
@@ -288,7 +289,7 @@ function ajouterLigne(numProforma = '', nomMachine = '', etat = 'Complète', mon
         <td><input type="date" value="${dateMontage}"></td>
         <td><select><option ${expedition==='Oui'?'selected':''}>Oui</option><option ${expedition==='Non'?'selected':''}>Non</option></select></td>
         <td><input type="date" value="${dateExpedition}"></td>
-        <td><button onclick="supprimerLigne(this)">❌</button></td>
+        <td><button onclick="supprimerLigne(this)"><i class="fa-solid fa-trash"></i></button></td>
     `;
 
     // Maintenant, il faut s'assurer que la couleur est mise à jour immédiatement après l'ajout de la ligne
