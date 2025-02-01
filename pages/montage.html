@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <link rel="icon" type="image/x-icon" href="../icons/favicon.ico">
     <title>Montages</title>
     <style>
         body {
@@ -14,80 +13,54 @@
             margin: 0;
             padding: 20px;
         }
-table {
-    width: 100%;
-    border-collapse: separate; /* Permet aux bordures d’être bien dessinées */
-    border-spacing: 0; /* Évite les espaces entre les cellules */
-    border-radius: 10px; /* Arrondi du tableau */
-    overflow: hidden;
-    border: 1px solid black; /* Ajout d'une bordure principale */
-}
-
-th {
-    border: 0px solid black; /* Bordure fine */
-    padding: 8px;
-    text-align: center;
-    background: white; /* Évite l'effet visuel des bordures transparentes */
-}
-td {
-    border: 0px solid black; /* Bordure fine */
-    padding: 8px;
-    text-align: center;
-    background: white; /* Évite l'effet visuel des bordures transparentes */
-}
-tr {
-    border: 1px solid black; /* Bordure fine */
-    padding: 8px;
-    text-align: center;
-    background: white; /* Évite l'effet visuel des bordures transparentes */
-}
-/* Appliquer les coins arrondis correctement */
-thead tr:first-child th:first-child {
-    border-top-left-radius: 10px;
-}
-thead tr:first-child th:last-child {
-    border-top-right-radius: 10px;
-}
-tbody tr:last-child td:first-child {
-    border-bottom-left-radius: 10px;
-}
-tbody tr:last-child td:last-child {
-    border-bottom-right-radius: 10px;
-}
-th:not(:last-child),
-td:not(:last-child) {
-    border-right: 1px solid black;
-}
-thead tr:first-child th {
-    border-bottom: 1px solid black;
-    background-color: #d6d6d6;
-    color: black;
-}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid black;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        thead tr {
+            background-color: #d6d6d6;
+            color: black;
+        }
         button {
             margin: 10px;
+            margin-bottom: 20px;
             padding: 10px;
             background-color: #0056b3;
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 5px;
             cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.3s, box-shadow 0.3s;
         }
-        button:hover {
+        button:hover:not(:disabled) {
             background-color: #007bff;
         }
+        button:disabled {
+            background-color: #d6d6d6;
+            color: #a0a0a0;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
         .container {
-            max-width: 80%;
+            zoom: 0.8;
+            max-width: 85%;
             margin: auto;
             background: #fff;
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 15px;
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            overflow-x: auto;
         }
-        h1 {
-            text-align: center;
-            color: #0056b3;
-        }
-
         .floating-button {
             position: absolute;
             top: 20px;
@@ -120,94 +93,223 @@ thead tr:first-child th {
             width: 50px;
             height: 50px;
         }
+        h1 {
+            text-align: center;
+            color: #0056b3;
+        }
+.legend {
+    border-radius: 5px;
+    max-width: 50%;
+    margin: 20px auto;
+            zoom: 0.8;
+            max-width: 50%;
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+}
+
+.legend h2 {
+    color: #0056b3;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.legend-item .color-box {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    margin-right: 10px;
+    border-radius: 5px;
+    border: 0px solid black;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+}
+
+.legend p {
+    font-size: 14px;
+    color: #333;
+    align-items: left;
+}
+
+/* Couleurs des box */
+.green { background-color: #C3D0A8; }
+.orange { background-color: #F2D894; }
+.blue { background-color: #d4edda; }
+.default { background-color: #fff; }
     </style>
 </head>
 <body>
-
-<a href="../index.html" class="floating-button" title="Retour à l'accueil">
-    <img src="../icons/ic_action_home.png" alt="Home" />
-</a>
-
+    <a href="../index.html" class="floating-button" title="Retour à l'accueil">
+        <img src="../icons/ic_action_home.png" alt="Home" />
+    </a>
     <h1>Montages</h1>
+    <button onclick="ajouterLigne()">➕ Ajouter une ligne</button>
+    <button id="sauvegarder" onclick="sauvegarderTableau()">💾 Enregistrer</button>
+    <button onclick="chargerFichier()">📂 Charger un fichier</button>
+    <button id="supprimer" onclick="supprimerTout()">🗑️ Tout supprimer</button>
     
-    <button onclick="ajouterLigne()">Ajouter une ligne</button>
-    <button onclick="sauvegarderTableau()">Enregistrer</button>
-    <button onclick="document.getElementById('fileInput').click()">Charger un fichier</button>
-    <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="chargerFichier(event)">
-    
-
     <div class="container">
-
-    <table id="tableau">
-        <thead>
-            <tr>
-                <th>Proforma</th>
-                <th>Machine</th>
-                <th>État</th>
-                <th>En Montage</th>
-                <th>Date</th>
-                <th>Expédié</th>
-                <th>Date</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-
+        <table id="tableau">
+            <thead>
+                <tr>
+                    <th>Proforma</th>
+                    <th>Machine</th>
+                    <th>État</th>
+                    <th>En Montage</th>
+                    <th>Date Montage</th>
+                    <th>Expédié</th>
+                    <th>Date Expédition</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
     </div>
 
+    <!-- Légende des couleurs -->
+<div class="legend" align="center">
+    <h2>Légende des couleurs des lignes :</h2>
+    <div class="legend-item">
+        <div class="color-box green"></div>
+        <p>Ligne verte : Montage terminé et expédition effectuée</p>
+    </div>
+    <div class="legend-item">
+        <div class="color-box orange"></div>
+        <p>Ligne orange : Montage en reliquats</p>
+    </div>
+    <div class="legend-item">
+        <div class="color-box blue"></div>
+        <p>Ligne bleu : Montage terminé et expédition non effectuée</p>
+    </div>
+    <div class="legend-item">
+        <div class="color-box default"></div>
+        <p>Ligne blanche : Montage ou expédition non effectuée</p>
+    </div>
+</div>
+
     <script>
-        function ajouterLigne(numProforma = '', nomMachine = '', etat = 'Complète', montage = 'Non', dateMontage = '', expedition = 'Non', dateExpedition = '') {
-            let tableau = document.getElementById("tableau").getElementsByTagName('tbody')[0];
-            let ligne = tableau.insertRow();
-            
-            let cell1 = ligne.insertCell(0);
-            cell1.innerHTML = `<input type="text" value="${numProforma}">`;
+document.addEventListener("DOMContentLoaded", () => {
+    const sauvegarderButton = document.getElementById('sauvegarder');
+    const supprimerButton = document.getElementById('supprimer');
+    const tbody = document.getElementById("tableau").getElementsByTagName('tbody')[0];
 
-            let cell2 = ligne.insertCell(1);
-            cell2.innerHTML = `<input type="text" value="${nomMachine}">`;
+    // Désactive les boutons au chargement de la page
+    sauvegarderButton.disabled = true;
+    supprimerButton.disabled = true;
 
-            let cell3 = ligne.insertCell(2);
-            cell3.innerHTML = `
-                <select>
-                    <option value="Complète" ${etat === "Complète" ? "selected" : ""}>Complète</option>
-                    <option value="Reliquats" ${etat === "Reliquats" ? "selected" : ""}>Reliquats</option>
-                </select>
-            `;
+    // Fonction pour activer les boutons
+    function activerBoutons() {
+        sauvegarderButton.disabled = false;
+        supprimerButton.disabled = false;
+    }
 
-            let cell4 = ligne.insertCell(3);
-            cell4.innerHTML = `
-                <select>
-                    <option value="Oui" ${montage === "Oui" ? "selected" : ""}>Oui</option>
-                    <option value="Non" ${montage === "Non" ? "selected" : ""}>Non</option>
-                </select>
-            `;
+    // Fonction pour desactiver les boutons
+    function desactiverBoutons() {
+        sauvegarderButton.disabled = true;
+        supprimerButton.disabled = true;
+    }
 
-            let cell5 = ligne.insertCell(4);
-            cell5.innerHTML = `<input type="date" value="${dateMontage}">`;
-
-            let cell6 = ligne.insertCell(5);
-            cell6.innerHTML = `
-                <select>
-                    <option value="Oui" ${expedition === "Oui" ? "selected" : ""}>Oui</option>
-                    <option value="Non" ${expedition === "Non" ? "selected" : ""}>Non</option>
-                </select>
-            `;
-
-            let cell7 = ligne.insertCell(6);
-            cell7.innerHTML = `<input type="date" value="${dateExpedition}">`;
-
-            let cell8 = ligne.insertCell(7);
-            cell8.innerHTML = `<button onclick="supprimerLigne(this)">Supprimer</button>`;
+    // Créer un MutationObserver pour surveiller les changements dans le tbody
+    const observer = new MutationObserver(() => {
+        if (tbody.rows.length > 0) {
+            activerBoutons();
+        } else {
+            desactiverBoutons();
         }
 
-    function supprimerLigne(button) {
-        if (confirm("Êtes-vous sûr de vouloir supprimer cette ligne ?")) {
-            let row = button.closest("tr");
-            row.parentNode.removeChild(row);
+        // Pour chaque ligne ajoutée ou modifiée, ajouter les écouteurs d'événements
+        Array.from(tbody.rows).forEach(row => {
+            const selectMontage = row.cells[3].getElementsByTagName('select')[0];
+            const selectEtat = row.cells[2].getElementsByTagName('select')[0];
+            const selectExpedition = row.cells[5].getElementsByTagName('select')[0];
+
+            // Fonction pour mettre à jour la couleur de la ligne
+            function updateRowColor() {
+                if (selectMontage.value === 'Oui' && selectExpedition.value === 'Oui') {
+
+                    row.style.backgroundColor = "#C3D0A8"; // Vert clair (indique que le montage est fait et expédié)
+
+                } else if (selectEtat.value === 'Complète' && selectMontage.value === 'Oui') {
+
+                    row.style.backgroundColor = "#d4edda"; // Bleu clair (indique que le montage est en courts)
+
+                } else if (selectEtat.value === 'Reliquats') {
+
+                    row.style.backgroundColor = "#F2D894"; // Orange clair (indique que le montage est en reliquats)
+
+                } else {
+                    row.style.backgroundColor = ""; // Remettre la couleur par défaut
+                }
+            }
+
+            // Ajouter un événement de changement pour chaque sélecteur
+            selectMontage.addEventListener('change', updateRowColor);
+            selectEtat.addEventListener('change', updateRowColor);
+            selectExpedition.addEventListener('change', updateRowColor);
+
+            // Vérifier la couleur initiale dès que la ligne est ajoutée
+            updateRowColor();
+        });
+    });
+
+    // Configurer l'observateur pour surveiller l'ajout de lignes (ajout d'enfants dans tbody)
+    observer.observe(tbody, {
+        childList: true // Observer uniquement les ajouts/suppressions d'enfants
+    });
+});
+
+
+
+        
+function ajouterLigne(numProforma = '', nomMachine = '', etat = 'Complète', montage = 'Non', dateMontage = '', expedition = 'Non', dateExpedition = '') {
+    let tbody = document.getElementById("tableau").getElementsByTagName('tbody')[0];
+    let row = tbody.insertRow();
+    row.innerHTML = `
+        <td><input type="text" value="${numProforma}"></td>
+        <td><input type="text" value="${nomMachine}"></td>
+        <td><select><option ${etat==='Complète'?'selected':''}>Complète</option><option ${etat==='Reliquats'?'selected':''}>Reliquats</option></select></td>
+        <td><select><option ${montage==='Oui'?'selected':''}>Oui</option><option ${montage==='Non'?'selected':''}>Non</option></select></td>
+        <td><input type="date" value="${dateMontage}"></td>
+        <td><select><option ${expedition==='Oui'?'selected':''}>Oui</option><option ${expedition==='Non'?'selected':''}>Non</option></select></td>
+        <td><input type="date" value="${dateExpedition}"></td>
+        <td><button onclick="supprimerLigne(this)">❌</button></td>
+    `;
+
+    // Maintenant, il faut s'assurer que la couleur est mise à jour immédiatement après l'ajout de la ligne
+    const selectMontage = row.cells[3].getElementsByTagName('select')[0];
+    const selectEtat = row.cells[2].getElementsByTagName('select')[0];
+    const selectExpedition = row.cells[5].getElementsByTagName('select')[0];
+
+    // Vérification de la couleur de la ligne
+    function updateRowColor() {
+        if (selectMontage.value === 'Oui' && selectExpedition.value === 'Oui') {
+            row.style.backgroundColor = "#d4edda"; // Vert clair
+        } else if (selectEtat.value === 'Reliquats') {
+            row.style.backgroundColor = "#FF8C00"; // Orange clair
+        } else {
+            row.style.backgroundColor = ""; // Couleur par défaut
         }
     }
+
+    // Ajout des écouteurs d'événements pour les deux sélecteurs
+    selectMontage.addEventListener('change', updateRowColor);
+    selectExpedition.addEventListener('change', updateRowColor);
+
+    // Mise à jour initiale de la couleur
+    updateRowColor();
+}
+
+        function supprimerLigne(button) {
+            if (confirm("Êtes-vous sûr de vouloir supprimer cette ligne ?")) {
+                button.closest("tr").remove();
+            }
+        }
 
         function sauvegarderTableau() {
             let tableau = document.getElementById("tableau").getElementsByTagName('tbody')[0];
@@ -236,22 +338,38 @@ thead tr:first-child th {
             a.click();
         }
 
-        function chargerFichier(event) {
-            let file = event.target.files[0];
-            if (!file) return;
 
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                let contenu = JSON.parse(e.target.result);
-                let tableau = document.getElementById("tableau").getElementsByTagName('tbody')[0];
-                tableau.innerHTML = "";
-                
-                contenu.forEach(item => {
-                    ajouterLigne(item.numProforma, item.nomMachine, item.etat, item.montage, item.dateMontage, item.expedition, item.dateExpedition);
-                });
+        function chargerFichier(event) {
+            let tbody = document.getElementById("tableau").getElementsByTagName('tbody')[0];
+            if (tbody.rows.length > 0 && !confirm("Cela remplacera le tableau actuel. Continuer ?")) {
+        return;
+            }
+                let input = document.createElement("input");
+                input.type = "file";
+                input.accept = ".json";
+                input.onchange = function(event) {
+                    let file = event.target.files[0];
+                    if (!file) return;
+                    let reader = new FileReader();
+                    reader.onload = function(e) {
+                        let contenu = JSON.parse(e.target.result);
+                        let tbody = document.getElementById("tableau").getElementsByTagName('tbody')[0];
+                        tbody.innerHTML = "";
+                        contenu.forEach(item => ajouterLigne(item.numProforma, item.nomMachine, item.etat, item.montage, item.dateMontage, item.expedition, item.dateExpedition));
+                };
+                reader.readAsText(file);
             };
-            reader.readAsText(file);
+                input.click();
         }
+
+        function supprimerTout() {
+            let tbody = document.getElementById("tableau").getElementsByTagName('tbody')[0];
+            if (tbody.rows.length > 0 && !confirm("Voulez-vous vraiment tout supprimer ?")) {
+                return;
+            }
+            document.querySelector("#tableau tbody").innerHTML = "";
+        }
+
     </script>
 </body>
 </html>
