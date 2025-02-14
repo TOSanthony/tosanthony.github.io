@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="../icons/favicon.ico">
+    <title>Facture Proforma</title>
+    <style>
+        body { 
+           font-family: Arial, sans-serif;
+           margin: 20px;
+           font-family: Arial, sans-serif;
+           padding: 20px;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           flex-direction: column;
+           background-color: #f0f0f0;
+           background: linear-gradient(90deg, #b9deed, #efefef);
+        }
+        table {
+           width: 100%;
+           border-collapse: collapse;
+           margin-top: 10px;
+           font-size: 10px;
+        }
+        .tableTotal {
+           width: 100%;
+           align-items: right;
+           border-collapse: collapse;
+           margin-top: -2px;
+           font-size: 10px;
+        }
+        th, td {
+           border: 1px solid black;
+           /* padding-top, padding-right, padding-bottom, padding-left */
+           padding: 3px 5px 3px 3px;
+           text-align: left;
+           font-size: 10px;
+        }
+        th {
+           background-color: #f2f2f2;
+        }
+        .header {
+           display: flex;
+           justify-content: space-between;
+           align-items: flex-start;
+           margin-bottom: 20px;
+        }
+        .img {
+           max-width: 300px;
+        }
+        .company-info {
+           font-size: 10px;
+           padding: 3px 5px 3px 3px;
+        }
+        .right-info {
+           text-align: left;
+           margin-top: -58.5px;
+        }
+        .input-group {
+           margin-bottom: 10px;
+        }
+        input {
+           font-size: 10px;
+        }
+        input:disabled {
+           background-color: transparent;
+           color: black;
+           border: 0px solid #ccc;
+           font-size: 10px;
+        }
+        .table-container {
+            display: flex;
+            justify-content: space-between; /* Aligner les tableaux à gauche et à droite */
+            align-items: flex-start; /* Aligner les tableaux en haut */
+        }
+        #company-info-left {
+            width: 300px; /* Largeur du tableau */
+            border-collapse: collapse;
+        }
+        #company-info-left th {
+            text-align: center;
+        }
+        #company-info-left td {
+            text-align: left;
+        }
+        #company-info-left input:disabled {
+           background-color: transparent;
+           color: black;
+           border: 0px solid #ccc;
+           font-size: 10px;
+           text-align: left;
+        }
+        #company-info-right {
+            width: 300px;
+            border-collapse: collapse;
+        }
+        #company-info-right th {
+            text-align: center;
+        }
+        #company-info-right td {
+            text-align: left;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+            height: 60px;
+        }
+        .left-section img {
+            margin-top: -10px;
+            width: 70%;
+        }
+        .right-section {
+            text-align: left;
+            font-size: 12px;
+        }
+        .right-section label {
+            font-weight: bold;
+        }
+        .right-section input {
+            border: 0px;
+            font-size: 12px;
+            padding: 2px;
+        }
+        .right-section strong {
+            font-size: 12px;
+        }
+        .floating-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 75px;
+            height: 75px;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .floating-button:hover {
+            background-color: #007bff;
+            transform: scale(1.1);
+        }
+        .floating-button svg {
+            width: 35px;
+            height: 35px;
+        }
+        .floating-button img {
+            width: 50px;
+            height: 50px;
+        }
+        .form-container {
+            margin-bottom: 30px;
+        }
+        .form-container input, .form-container button, .form-container select {
+            margin: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            margin-top: 10px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        button:disabled {
+            background-color: #d6d6d6;
+            color: #a0a0a0;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        button:hover:not(:disabled) {
+            background-color: #007bff;
+        }
+        .a4-container {
+            width: 210mm;
+            /* height: 297mm; */
+            background-color: #FFFFFF;
+            flex-wrap: wrap;
+            margin: 0 auto;
+            padding: 10mm; /* Ajout d'une marge intérieure pour éviter que le contenu touche les bords */
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+        }
+        h1 {
+            color: #0056b3;
+            justify-content: center;
+            align: center;
+        }
+
+select {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #a0a0a0;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-right: 10px;
+        }
+
+.hidden {
+    display: none; /* Cache le bouton */
+}
+
+
+
+input[type="file"] {
+  color: transparent;         /* Cache le texte */
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #0056b3;
+            border: none;
+            border-radius: 10px;
+            margin-top: 10px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.blink_me {
+  animation: blinker 1s linear 2;
+}
+
+.blink_me_loop {
+  animation: redBlinker 1s linear infinite;
+}
+
+@keyframes blinker {  
+  0% { background-color: inherit; }
+  50% { background-color: red; }
+  100% { background-color: inherit; } 
+}
+
+@keyframes redBlinker {
+  0% { background-color: inherit; }
+  50% { background-color: red; }
+  100% { background-color: inherit; }
+}
+
+
+
+
+        /* Optimisation pour l'impression */
+        @media print {
+            body {
+                background: none;
+                margin: 0;
+                padding: 0;
+            }
+            h1 {
+                display: none;
+            }
+            .a4-container {
+                page-break-after: always;
+                width: 210mm;
+                /* height: 297mm; */
+                box-shadow: none;
+                margin-top: -50px;
+                margin: 0px;
+                /* padding-top, padding-right, padding-bottom, padding-left */
+                padding: -20mm 10mm 0mm 10mm;
+            }
+            .floating-button, .form-container {
+                display: none; /* Cache les boutons inutiles à l'impression */
+            }
+            input {
+                border: none; /* Supprime les bordures des inputs */
+                /* font-size: 12px; */
+            }
+            table {
+                page-break-inside: avoid; /* Évite les coupures de tableaux entre pages */
+            }
+            /* Ajustement pour remonter tout le contenu vers le haut */
+            .a4-container, body {
+                margin-top: 0;
+                padding-top: 0;
+            }
+            /* Retirer les marges par défaut pour le contenu de la page */
+            .content, .a4-container {
+                margin-top: 10px;
+                padding-top: 0;
+            }
+            /* Optionnel : Si vous voulez supprimer l'espace entre le haut de la page et le contenu */
+            body {
+                padding-top: 0;
+            }
+            /* Ajout d'une en-tête avant l'impression */
+            .print-header {
+                text-align: center;
+                font-size: 10px;
+                font-weight: bold;
+                margin-top: 0px;
+                margin-bottom: 0mm; /* Espacement avant le contenu principal */
+            }
+        }
+
+
+
+
+    </style>
+</head>
+<body>
+
+    <a href="../index.html" class="floating-button" title="Retour à l'accueil">
+        <img src="../icons/ic_action_home.png" alt="Home" />
+    </a>
+
+    <div align="center">
+       <h1 id="InvoiceTitle" >Facture Proforma</h1>
+    </div>
+
+
+    <div class="form-container">
+
+        <select id="clientSelect">
+            <option value="">-- Choisir un client --</option>
+        </select>
+
+
+<input type="file" id="colisageFile" accept=".csv" class="hidden">
+<button id="colisageButton">Ouvrir export.csv</button>
+<span id="fileName" class="hidden"></span>
+
+<input type="file" id="produitsFile" accept=".csv" class="hidden">
+<button id="produitsButton">Ouvrir export_xxxxx.csv</button>
+<span id="fileName" class="hidden"></span>
+
+        <!--<input type="file" class="hidden-input" id="colisageFile" accept=".csv">
+
+        <input type="file"  id="produitsFile" accept=".csv">-->
+
+        <button id="validButton" onclick="generateInvoice()">Générer la Facture</button>
+        <button id="printButton" onclick="window.print()" style="display: none;">Imprimer la Facture</button>
+
+    </div>
+
+    <div class="a4-container">
+
+        <div class="print-header">
+            <h2 align="center" style="font-size: 10px;">Commercial INVOICE</h2>
+        </div>
+
+        <div class="container">
+
+            <div class="left-section">
+                <img src="../icons/logo.png" alt="Logo Société">
+            </div>
+
+            <div class="right-section">
+                <strong style="font-size: 12px;">Date :</strong> <span id="currentDate"></span><br>
+                <label for="proformaNumber" style="font-size: 12px;"><strong>FACTURE N° </strong></label>
+                <input type="text" id="proformaNumber" placeholder="000000">
+            </div>
+        </div>
+
+        <div class="table-container">
+
+            <table id="company-info-left">
+                <thead>
+                    <tr>
+                        <th>Expéditeur / Sender</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align: left;">
+                            <input type="text" style="border: 0px;text-align: left;" value="1foTeam / 1foTrade" disabled><br>
+                            <input type="text" style="border: 0px;" value="HANEUSE Philippe" disabled><br>
+                            <input type="text" style="border: 0px;" value="91 cours de la république" disabled><br>
+                            <input type="text" style="border: 0px;" value="76600 Le Havre" disabled><br>
+                            <input type="text" style="border: 0px;" value="staff@1fotrade.com" disabled><br>
+                            <input type="text" style="border: 0px;" value="0235533413" disabled><br>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table id="company-info-right">
+                <thead>
+                    <tr>
+                        <th>Destinataire / Consignee</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="text" style="border: 0px;" id="clientSociety" placeholder="Nom de la société" disabled><br>
+                            <input type="text" style="border: 0px;" id="clientName" placeholder="NOM Prénom" disabled><br>
+                            <input type="text" style="border: 0px;" id="clientAddress" placeholder="Adresse" disabled><br>
+                            <input type="text" style="border: 0px;" id="clientPostalCity" placeholder="Code postal Ville" disabled><br>
+                            <input type="text" style="border: 0px;" id="clientEmail" placeholder="Email" disabled><br>
+                            <input type="text" style="border: 0px;" id="clientPhone" placeholder="Téléphone" disabled>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <table id="company-info">
+            <thead>
+                <td>
+                    <h4 id="nombreColis" style="font-size: 10px;">Nombre de colis : </h4>
+                    <div id="colisageContainer" style="font-size: 10px;"></div>
+                    <h4 style="font-size: 10px;">Origin : France</h4>
+                </td>
+            </thead>
+        </table>
+
+        <table>
+            <thead>
+            <tr>
+                <th style="text-align: center;">Mode de livraison / Delivery method</th>
+                <th style="text-align: center;">Quantité totale / Total Quantity</th>
+                <th style="text-align: center;">Poids total / Total Weight</th>
+            </tr>
+                <td style="text-align: center;">Avion, Route / Air, Road</td>
+                <td style="text-align: center;" id="productQuantity"></td>
+                <td style="text-align: center;"><input type="text" style="border: 0px;text-align: center;" id="shippingWeightOne" oninput="updateWeight()" onblur="formatWeight()" onfocus="clearWeight()" placeholder="0.00 Kg"></td>
+            </thead>
+        </table>
+
+        <table id="produitsTable">
+            <thead>
+                <tr>
+                    <th style="text-align: center;width:58%">Description précise et détaillée / Detailled description</th>
+                    <th style="text-align: center;width:9%">HS Code</th>
+                    <th style="text-align: center;width:6%">Origine</th>
+                    <th style="text-align: center;width:8%">Quantité / Quantity</th>
+                    <th style="text-align: center;width:10%">Single Price Without Taxes</th>
+                    <th style="text-align: center;width:9%">Total (€)</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+        <div align="right">
+            <table id="produitsTotal" class="tableTotal">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;width:28%;border: 0px;background-color: transparent;"></th>
+                        <th style="text-align: center;width:10%;border: 0px;background-color: transparent;"></th>
+                        <th style="text-align: center;width:10%;border: 0px;background-color: transparent;"></th>
+                        <th style="text-align: center;width:10%;border: 0px;background-color: transparent;"></th>
+                        <th style="text-align: center;width:33px;border: 1px;background-color: transparent;"></th>
+                        <th style="text-align: center;width:9%;border: 1px;background-color: transparent;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    
+        <p style="width: 100%;text-align: left;font-size: 12px;"><strong>EORI : </strong><span>1foTeam FR44995572300035</span></p>
+        <p style="width: 100%;text-align: left;font-size: 12px;"><strong>EORI : </strong><span id="EORIValue"></span></p>
+        <p style="width: 100%;text-align: left;font-size: 14px;color: red;"><strong>Incoterm : DAP</strong></p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th width="40%" style="text-align: center;border: 0px;background-color:#FFFFFF"></th>
+                    <th width="20%" style="text-align: center;">Poids Total / Total Weight:</th>
+                    <th width="40%" style="text-align: center;border: 0px;background-color:#FFFFFF"></th>
+                </tr>
+                    <td style="text-align: center;border: 0px;"></td>
+                    <td style="text-align: center;" id="shippingWeightTwo">0.00 Kg</td>
+                    <td style="text-align: center;border: 0px;"></td>
+            </thead>
+        </table>
+
+        <p style="width: 100%;text-align: center;font-size: 10px;"><strong>1foTeam - Le Havre B 449 955 723 - 44995572300035 - 40 000,00 € - Phillipe Hanneuse</strong></p>
+    </div>
+
+<script>
+
+
+    const colisageInput = document.getElementById('colisageFile');
+    const colisageButton = document.getElementById('colisageButton');
+    const produitsInput = document.getElementById('produitsFile');
+    const produitsButton = document.getElementById('produitsButton');
+    const proformaNumber = document.getElementById('proformaNumber');
+
+    colisageButton.addEventListener('click', () => {
+        colisageInput.click(); // Ouvre l'explorateur de fichiers
+    });
+
+    produitsButton.addEventListener('click', () => {
+        produitsInput.click(); // Ouvre l'explorateur de fichiers
+    });
+
+    colisageInput.addEventListener('change', () => {
+        if (colisageInput.files.length > 0) {
+            const file = event.target.files[0];
+            if (file && file.name !== 'export.csv') {
+                //alert('Le fichier doit être export.csv');
+                document.getElementById('colisageButton').classList.add('blink_me_loop');
+                event.target.value = '';
+                colisageButton.textContent = 'Ouvrir export.csv';
+            } else  {
+                colisageButton.textContent =  colisageInput.files[0].name + ' ouvert';
+                document.getElementById('colisageButton').classList.remove('blink_me_loop');
+            }
+        } else {
+            colisageButton.textContent = 'Ouvrir export.csv';
+        }
+    });
+
+    produitsInput.addEventListener('change', () => {
+        if (produitsInput.files.length > 0) {
+            const file = event.target.files[0];
+            if (file && file.name == 'export.csv') {
+                alert('Le fichier ne doit pas être export.csv');
+                event.target.value = '';
+                produitsButton.textContent = 'Ouvrir export_xxxxx.csv';
+            } else  {
+                produitsButton.textContent =  produitsInput.files[0].name + ' ouvert';
+                document.getElementById('produitsButton').classList.remove('blink_me_loop');
+            }
+        } else {
+            produitsButton.textContent = 'Ouvrir export_xxxxx.csv';
+        }
+    });
+
+proformaNumber.addEventListener('change', () => {
+    if (!proformaNumber.value) {  // Vérifie si la valeur est vide
+        document.getElementById('proformaNumber').classList.add('blink_me_loop');
+        return;
+    } else if (!/^\d{6,}$/.test(proformaNumber.value)) {  // Vérifie si le format est valide
+        document.getElementById('proformaNumber').classList.add('blink_me_loop');
+        return;
+    } else {
+        document.getElementById('proformaNumber').classList.remove('blink_me_loop');
+    }
+});
+
+
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        function checkAndAddPage() {
+            let a4Container = document.querySelector(".a4-container");
+            let clone;
+        
+            while (a4Container.scrollHeight > a4Container.clientHeight) {
+                if (!clone) {
+                    clone = a4Container.cloneNode(true);
+                    document.body.appendChild(clone);
+                }
+            
+                let lastRow = a4Container.querySelector("#produitsTable tbody tr:last-child");
+                if (lastRow) {
+                    clone.querySelector("#produitsTable tbody").prepend(lastRow);
+                } else {
+                    break;
+                }
+            }
+        }
+        //window.onload = checkAndAddPage;
+        //window.onresize = checkAndAddPage;
+    });
+
+    //window.addEventListener("resize", checkAndAddPage);
+
+    document.getElementById("currentDate").textContent = new Date().toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric"
+    });
+
+    // Fonction pour normaliser les accents
+    function normalizeString(str) {
+        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    }
+
+    function calculerPrixColisage() {
+        const colisageFile = document.getElementById("colisageFile").files[0];
+        const produitsFile = document.getElementById("produitsFile").files[0];
+
+        if (colisageFile && produitsFile) {
+            // Lire les fichiers CSV
+            readCSV(produitsFile, function(produits) {
+                // Créer un objet pour stocker les prix des produits
+                const produitPrix = {};
+
+                // Remplir l'objet produitPrix avec les données de produits
+                produits.slice(1).forEach(row => {
+                    const codeProduit = row[0];
+                    const prixUnitaire = parseFloat(row[4]); // Prix unitaire
+                    produitPrix[codeProduit] = prixUnitaire;
+                });
+
+                // Lire le fichier de colisage
+                readCSV(colisageFile, function(colisage) {
+                    const colisMap = {};
+
+                    // Remplir un objet pour les colis
+                    colisage.slice(1).forEach(row => {
+                        const numColis = row[1]; // Numéro de colis
+                        const codeProduit = row[0]; // Code produit
+                        const quantite = parseInt(row[2], 10); // Quantité du produit dans le colis
+
+                        if (!colisMap[numColis]) {
+                            colisMap[numColis] = [];
+                        }
+
+                        colisMap[numColis].push({
+                            codeProduit,
+                            quantite
+                        });
+                    });
+
+                    // Calculer le prix total pour chaque colis
+                    Object.keys(colisMap).forEach(numColis => {
+                        let totalColis = 0;
+                        colisMap[numColis].forEach(item => {
+                            const prixUnitaire = produitPrix[item.codeProduit];
+                            if (prixUnitaire) {
+                                totalColis += prixUnitaire * item.quantite;
+                            }
+                        });
+
+                        // Afficher le résultat pour ce colis
+                        console.log(`Colis N° ${numColis}: Total Prix = ${totalColis.toFixed(2)} €`);
+                    });
+                });
+            });
+        }
+    }
+
+    function readCSV(file, callback) {
+        const reader = new FileReader();
+        reader.onload = event => {
+            const rows = event.target.result.trim().split("\n").map(row => row.split(";"));
+            callback(rows);
+        };
+        encoding = "UTF-8"
+        encodingOLD = "ISO-8859-15"
+        encodingNew = "ISO-8859-1"
+        reader.readAsText(file, encodingNew);
+    }
+
+    function readCSVencoding(file, callback) {
+        const reader = new FileReader();
+        reader.onload = event => {
+            const rows = event.target.result.trim().split("\n").map(row => row.split(";"));
+            callback(rows);
+        };
+        encoding = "UTF-8"
+        encodingOLD = "ISO-8859-15"
+        encodingNew = "ISO-8859-1"
+        //reader.readAsText(file, encoding);
+        reader.readAsText(file, encodingNew);
+    }
+
+    function readCSVpapa(file, callback) {
+        const reader = new FileReader();
+        reader.onload = event => {
+            Papa.parse(event.target.result, {
+                delimiter: ";",
+                quoteChar: '"',
+                skipEmptyLines: true,
+                complete: function(results) {
+                    callback(results.data);
+                }
+            });
+        };
+    reader.readAsText(file, "ISO-8859-1");
+    }
+       
+    function readCSVtest(file, callback) {
+        const reader = new FileReader();
+        reader.onload = event => {
+            const csv = event.target.result.trim().split("\n").map(line => {
+            // Trouver l'indice du premier point-virgule
+            const firstSemicolonIndex = line.indexOf(";");
+
+            // Extraire le nom du produit avant le premier point-virgule
+            let productName = line.substring(0, firstSemicolonIndex).trim();
+
+            // Supprimer les guillemets s'ils existent
+            productName = productName.replace(/^"(.+)"$/, '$1').trim(); // Si entouré de guillemets
+
+            // Extraire les autres informations après le premier point-virgule
+            const rest = line.substring(firstSemicolonIndex + 1).split(";");
+
+            // Vérification si rest[1] contient des valeurs séparées par des virgules
+            if (rest.length > 1 && rest[1].includes(",")) {
+                rest[1] = rest[1].split(","); // Cela va diviser la chaîne "85285210,asie,1,526,57,526,57" en un tableau
+            }
+
+            //console.log(`PRODUIT: ${productName}, LE RESTE: ${rest}`);
+
+            return [productName, rest];
+        });
+        callback(csv);  // Passer les lignes nettoyées au callback
+    };
+    reader.readAsText(file, "ISO-8859-1");
+    }
+
+    function generateInvoice() {
+        const clientSelect = document.getElementById('clientSelect');
+        const clientName = clientSelect.options[clientSelect.selectedIndex].text; // Gets selected option text
+        const clientValue = clientSelect.value; // Gets selected option value
+        const proformaNumber = document.getElementById('proformaNumber').value;
+        const colisageFile = document.getElementById("colisageFile").files[0];
+        const produitsFile = document.getElementById("produitsFile").files[0];
+
+        // Réinitialiser les couleurs d'erreur
+        //document.getElementById('proformaNumber').style.backgroundColor = '';
+        document.getElementById('proformaNumber').classList.remove('blink_me_loop');
+
+        //document.getElementById('clientSelect').style.backgroundColor = '';
+        //document.getElementById('clientSelect').classList.remove('blink_me');
+
+        //document.getElementById('colisageButton').style.backgroundColor = '';
+        //document.getElementById('colisageButton').classList.remove('blink_me');
+
+        //document.getElementById('produitsButton').style.backgroundColor = '';
+        document.getElementById('produitsButton').classList.remove('blink_me');
+
+        if (clientName === '-- Choisir un client --') {
+            //alert('Veuillez choisir un client.');
+            //document.getElementById('clientSelect').style.backgroundColor = 'red';
+            document.getElementById('clientSelect').classList.add('blink_me_loop');
+            return;
+        }
+
+        if (!colisageFile && !produitsFile) {
+            //alert('Veuillez sélectionner les deux fichiers CSV (colisage et panier) avant de générer la facture.');
+            //document.getElementById('colisageButton').style.backgroundColor = 'red';
+            document.getElementById('colisageButton').classList.add('blink_me_loop');
+            //document.getElementById('produitsButton').style.backgroundColor = 'red';
+            document.getElementById('produitsButton').classList.add('blink_me_loop');
+            return;
+        } else if (!produitsFile) {
+            //alert('Veuillez sélectionner le fichier CSV du panier (export_xxxxx.csv) avant de générer la facture.');
+            //document.getElementById('produitsButton').style.backgroundColor = 'red';
+            document.getElementById('produitsButton').classList.add('blink_me_loop');
+            return;
+        } else if (!colisageFile) {
+            //alert('Veuillez sélectionner le fichier CSV du colisage (export.csv) avant de générer la facture.');
+            //document.getElementById('colisageButton').style.backgroundColor = 'red';
+            document.getElementById('colisageButton').classList.add('blink_me_loop');
+            return;
+        }
+
+        if (!proformaNumber) {
+            //alert('Le numéro de la proforma est vide.');
+            //document.getElementById('proformaNumber').style.backgroundColor = 'red';
+            document.getElementById('proformaNumber').classList.add('blink_me_loop');
+            return;
+        } else if (!/^\d{6,}$/.test(proformaNumber)) {
+            //alert('Le numéro de la proforma doit contenir au moins 6 chiffres.');
+            //document.getElementById('proformaNumber').style.backgroundColor = 'red';
+            document.getElementById('proformaNumber').classList.add('blink_me_loop');
+            return;
+        }
+
+        document.getElementById("colisageButton").style.display = 'none';
+        document.getElementById("produitsButton").style.display = 'none';
+        document.getElementById("validButton").style.display = 'none';
+        document.getElementById("clientSelect").style.display = 'none';
+        //document.querySelector("button").style.display = 'none';
+        document.getElementById('InvoiceTitle').textContent = `${clientName} - Facture n°${proformaNumber}`;
+        document.title = `${clientName} - Facture n°${proformaNumber}`;
+
+        if (colisageFile) {
+            readCSV(colisageFile, function(rows) {
+                const colisageContainer = document.getElementById("colisageContainer");
+                colisageContainer.innerHTML = "";
+            
+                let quantite = 0;
+
+                const colisMap = {};
+                rows.forEach(row => {
+                    if (row.length >= 5) {
+                        const [codeProduit, numColis, quantite, ean, nomProduit] = row;
+                        if (!colisMap[numColis]) colisMap[numColis] = [];
+                        colisMap[numColis].push({ codeProduit, numColis, quantite, ean, nomProduit });
+                    }
+                }
+            );
+
+            readCSV(produitsFile, function(produitsRows) {
+                const produitPrixParNom = {};
+                produitsRows.slice(1).forEach(row => {
+                    const [nomProduit, codeDouane, Origine, quantite, prixUnitaire, prixTotal] = row;
+                    const normalizedNomProduit = normalizeString(nomProduit.trim());
+
+                    produitPrixParNom[normalizedNomProduit] = prixUnitaire;
+                    //console.log(`Produit: ${normalizedNomProduit}, Prix: ${prixUnitaire}`);
+                }
+            );
+
+            Object.keys(colisMap).forEach(numColis => {
+                const div = document.createElement("div");
+                const numberColisTotal = document.getElementById("nombreColis");
+                let totalColis = Object.keys(colisMap).length;
+                numberColisTotal.innerHTML = `Nombre de colis : ${totalColis}`;
+
+                let totalColisPrix = 0;
+                colisMap[numColis].forEach(prod => {
+                    const normalizedNomProduit = normalizeString(prod.nomProduit.trim());
+                    const prixUnitaire = produitPrixParNom[normalizedNomProduit];  // Recherche du prix par nom normalisé
+
+                    //console.log(`Colis: ${numColis}, Produit: ${prod.nomProduit}, Qté: ${prod.quantite}, Prix: ${prixUnitaire}`);
+
+                    if (prixUnitaire) {
+                        totalColisPrix += prod.quantite * parseFloat(prixUnitaire.replace(",", "."));
+                    } else {
+                        console.log(`Prix non trouvé pour le produit: ${prod.nomProduit}`);
+                    }
+                }
+            );
+
+            div.innerHTML = `<h4>Colis N° ${numColis} - Prix Total: ${totalColisPrix.toFixed(2)} €</h4>`;
+
+            const table = document.createElement("table");
+            colisMap[numColis].forEach(prod => {
+                const p = document.createElement("p");
+                p.innerHTML = `<strong>${prod.quantite}x:</strong> ${prod.nomProduit}`;
+                div.appendChild(p);
+            });
+            div.appendChild(table);
+            colisageContainer.appendChild(div);
+        });
+    });
+    });
+    }
+    
+    if (produitsFile) {
+        readCSVtest(produitsFile, function(rows) {
+            const tableBody = document.getElementById("produitsTable").querySelector("tbody");
+            tableBody.innerHTML = "";
+
+            const tableTotal = document.getElementById("produitsTotal").querySelector("tbody");
+            tableTotal.innerHTML = "";
+
+            let totalQuantity = 0;
+            let totalPrice = 0;
+
+
+            rows.slice(1).forEach(row => {
+
+                //console.log(row); // Vérifier la structure de chaque ligne
+                //console.log(`${row.productName}`)
+
+                const productName = row[0]; // Utilisez le productName ici
+                const data = row.rest;  // Récupérer le reste des données
+
+                // Échapper les guillemets dans productName pour l'injecter proprement dans HTML
+                const escapedProductName = productName.replace(/"/g, "&quot;");
+
+                    console.log(`--- PRODUIT START ---`)
+                    console.log(`Nom : ${row[0]}`)
+                    console.log(`HS code : ${row[1][0]}`)
+                    console.log(`Origine : ${row[1][1]}`)
+                    console.log(`Quantité : ${row[1][2]}`)
+                    console.log(`Prix Unitaire : ${row[1][3]}`)
+                    console.log(`Prix Total : ${row[1][4]}`)
+                    console.log(`--- PRODUIT END ---`)
+                    console.log(``)
+
+
+                //if (row.rest >= 3) {
+                //if (row.rest && Array.isArray(row.rest)) {
+                    totalQuantity += parseInt(row[1][2], 10); 
+                    //const productName = row[0];
+                    //const productName = row.productName; // Utilisez le productName ici
+
+
+
+                    //const data = row.rest;  // Récupérer le reste des données
+    
+                    //const total = (parseFloat(row[3]) * parseFloat(row[4])).toFixed(2);
+                    const capitalized = row[1][1].charAt(0).toUpperCase() + row[1][1].slice(1).toLowerCase();
+                    const prixUnitaire = row[1][3].replace(",", ".").trim();
+                    const total = (parseFloat(row[1][2]) * prixUnitaire).toFixed(2);
+                    totalPrice = Math.round((totalPrice + parseFloat(row[1][2]) * prixUnitaire) * 100) / 100;
+
+
+                    // Encoder le texte en UTF-8
+                    //const encoder = new TextEncoder('ISO-8859-1');  // Crée un objet TextEncoder
+                    //const encodedText = encoder.encode(row[0]);  // Encode le texte dans row[0] en UTF-8
+                    // Décode le tableau d'octets en texte lisible
+                    //const decoder = new TextDecoder('ISO-8859-1');
+                    //const decodedText = decoder.decode(encodedText); 
+
+
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td style="text-align: left;"><input id="Row0" type="text" style="border: 0px;text-align: left;width:100%;" value="${escapedProductName}"></td>
+                        <td style="text-align: right;"><input id="Row1" type="text" style="border: 0px;text-align: right;width:100%;" value="${row[1][0]}"></td>
+                        <td style="text-align: right;"><input id="Row2" type="text" style="border: 0px;text-align: right;width:100%;" value="${capitalized}"></td>
+                        <td style="text-align: right;"><input id="Row3" type="text" style="border: 0px;text-align: right;width:100%;" value="${row[1][2]}"></td>
+                        <td style="text-align: right;"><input id="Row4" type="text" style="border: 0px;text-align: right;width:100%;" value="${prixUnitaire} €"></td>
+                        <td style="text-align: right;"><input id="Row5" type="text" style="border: 0px;text-align: right;width:100%;" value="${total} €"></td>`;
+                    tableBody.appendChild(tr);
+                //}
+            });
+
+            // Ligne Total HT Marchandise
+            const totalWithoutPort = document.createElement("tr");
+            totalWithoutPort.innerHTML = `
+                <td style="border: 0px;text-align: left;">Signature:</td>
+                <td style="border: 0px;text-align: left;"></td>
+                <td style="border: 0px;text-align: left;"></td>
+                <td style="border: 0px;text-align: left;"></td>
+                <td style="text-align: right;font-size: 8px;"><strong>Total HT Marchandise / Total value of products Excluding Taxes</strong></td>
+                <td style="text-align: right;" id="totalPriceWithoutPort">${totalPrice.toFixed(2)} €</td>`;
+            tableTotal.appendChild(totalWithoutPort);
+
+            // Ligne Expédition et manipulation
+            const totalPort = document.createElement("tr");
+            totalPort.innerHTML = `
+                <td style="border: 0px;text-align: left;">Lieu / Place : Le Havre</td>
+                <td style="border: 0px;text-align: right;"></td>
+                <td style="border: 0px;text-align: right;"></td>
+                <td style="border: 0px;text-align: right;"></td>
+                <td style="text-align: right;">Expédition et manipulation / Shipping and Handling</td>
+                <td style="text-align: right;">
+                    <input type="text" id="FdP" style="border: 0px;text-align: right;width:100%;" value="0.00 €" 
+                        oninput="updateTotal()" onfocus="clearFdP()" onblur="formatFdP()">
+                </td>`;
+            tableTotal.appendChild(totalPort);
+
+            // Ligne Total HT
+            const totalWithPort = document.createElement("tr");
+            totalWithPort.innerHTML = `
+                <td style="border: 0px;text-align: left;" id="currentDateSecond">Date / Date : ${new Date().toLocaleDateString("en-US")}</td>
+                <td style="border: 0px;text-align: right;"></td>
+                <td style="border: 0px;text-align: right;"></td>
+                <td style="border: 0px;text-align: right;"></td>
+                <td style="text-align: right;">Total HT / Total value Excluding Taxes</td>
+                <td style="text-align: right;" id="TotalValue">0.00 €</td>`;
+            tableTotal.appendChild(totalWithPort);
+
+            // Met à jour la quantité totale
+            document.getElementById("productQuantity").textContent = totalQuantity;
+        });
+    }
+
+
+
+    const printButton = document.getElementById("printButton");
+    printButton.style.display = 'block';  // Affiche le bouton immédiatement
+
+    function checkInputs() {
+        const shippingWeightInput = document.getElementById("shippingWeightOne");
+        const fraisPortInput = document.getElementById("FdP");
+        const inputs = document.querySelectorAll('input[id^="Row"]');
+        const proformaNumber = document.getElementById('proformaNumber');
+
+        //document.getElementById('shippingWeightOne').style.backgroundColor = '';
+        //document.getElementById("proformaNumber").style.backgroundColor = '';        
+        //document.getElementById("FdP").style.backgroundColor = '';
+        document.getElementById('shippingWeightOne').classList.remove('blink_me_loop');
+        document.getElementById('proformaNumber').classList.remove('blink_me_loop');
+        document.getElementById('FdP').classList.remove('blink_me_loop');
+
+        document.querySelectorAll('input[id^="Row"]').forEach(el => {
+            //el.style.backgroundColor = '';
+            el.classList.remove('blink_me_loop');
+        });
+
+        let allFilled = true;
+
+        if (!shippingWeightInput || !fraisPortInput) {
+            //console.error("Un des champs requis est introuvable.");
+            //document.getElementById('shippingWeightOne').style.backgroundColor = 'red';
+            document.getElementById('shippingWeightOne').classList.add('blink_me_loop');
+            return;
+        }
+
+        const shippingWeight = shippingWeightInput.value.trim();
+        const fraisPort = fraisPortInput.value.trim();
+        const NumberProforma = proformaNumber.value.trim();
+
+        if (
+            shippingWeight.trim() === '' || 
+            shippingWeight === '0.00 Kg'
+        ) {
+            //document.getElementById('shippingWeightOne').style.backgroundColor = 'red';
+            document.getElementById('shippingWeightOne').classList.add('blink_me_loop');
+            allFilled = false;
+        }
+
+        if (
+            fraisPort.trim() === '' || 
+            fraisPort === '0.00 €'
+        ) {
+            //document.getElementById("FdP").style.backgroundColor = 'red';
+            document.getElementById('FdP').classList.add('blink_me_loop');
+            allFilled = false;
+        }
+
+        if (
+            !/^\d{6,}$/.test(NumberProforma)
+        ) {
+            //document.getElementById('proformaNumber').style.backgroundColor = 'red';
+            document.getElementById('proformaNumber').classList.add('blink_me_loop');
+            allFilled = false;
+        }
+
+        inputs.forEach(input => {
+            if (!input || input.value.trim() === '') {
+                //input.style.backgroundColor = 'red';
+                input.classList.add('blink_me_loop');
+                allFilled = false;
+            }
+        });
+
+        printButton.disabled = !allFilled;  // Active/désactive le bouton en fonction de l'état
+
+        setTimeout(checkInputs, 500);  // Vérification continue toutes les 500ms
+    }
+
+    setTimeout(checkInputs, 1000);
+
+}
+
+// Fonction pour mettre à jour le total avec les frais de port
+//function updateTotal() {
+    //const shippingCost = parseFloat(document.getElementById("FdP").value.replace(',', '.')) || 0;
+    //const totalWithoutPort = parseFloat(document.getElementById("totalPriceWithoutPort").textContent.replace(' €', '').replace(',', '.')) || 0;
+    //const totalWithPort = totalWithoutPort + shippingCost;
+    //document.getElementById("TotalValue").textContent = `${totalWithPort.toFixed(2)} €`;
+//}
+
+// Supprime le "€" lorsqu'on clique sur le champ
+//function clearFdP() {
+    //let fraisPortInput = document.getElementById("FdP");
+    //fraisPortInput.value = fraisPortInput.value.replace("€", "").trim();
+//}
+
+// Ajoute le "€" lorsqu'on quitte le champ
+//function formatFdP() {
+    //let fraisPortInput = document.getElementById("FdP");
+    //let fraisPort = parseFloat(fraisPortInput.value.replace(',', '.')) || 0;
+    //fraisPortInput.value = fraisPort.toFixed(2) + " €";
+//}
+
+//function updateWeight() {
+    //let poidsInput = document.getElementById("shippingWeightOne");
+    //let poidsValue = parseFloat(poidsInput.value.replace("Kg", "").replace(',', '.').trim()) || 0;
+
+    // Mise à jour de l'affichage du poids
+    //document.getElementById("shippingWeightTwo").textContent = poidsValue.toFixed(2) + " Kg";
+//}
+
+//function formatWeight() {
+    //let poidsInput = document.getElementById("shippingWeightOne");
+    //let poidsValue = parseFloat(poidsInput.value.replace("Kg", "").replace(',', '.').trim()) || 0;
+    //poidsInput.value = poidsValue.toFixed(2) + " Kg"; // Ajoute "Kg" quand l'input perd le focus
+//}
+
+//function clearWeight() {
+    //let poidsInput = document.getElementById("shippingWeightOne");
+    //poidsInput.value = poidsInput.value.replace("Kg", "").trim(); // Supprime "Kg" quand l'input est sélectionné
+//}
+
+
+// Fonction pour mettre à jour le total avec les frais de port
+function updateTotal() {
+    const shippingCost = parseFloat(document.getElementById("FdP").value.replace(',', '.')) || 0;
+    const totalWithoutPort = parseFloat(document.getElementById("totalPriceWithoutPort").textContent.replace(' €', '').replace(',', '.')) || 0;
+    const totalWithPort = totalWithoutPort + shippingCost;
+    document.getElementById("TotalValue").textContent = `${totalWithPort.toFixed(2)} €`;
+}
+
+// Supprime le "€" lorsqu'on clique sur le champ
+function clearFdP() {
+    let fraisPortInput = document.getElementById("FdP");
+    fraisPortInput.value = fraisPortInput.value.replace("€", "").trim();
+}
+
+// Ajoute le "€" lorsqu'on quitte le champ
+function formatFdP() {
+    let fraisPortInput = document.getElementById("FdP");
+    let fraisPort = parseFloat(fraisPortInput.value.replace(',', '.')) || 0;
+    fraisPortInput.value = fraisPort.toFixed(2) + " €";
+}
+
+function updateWeight() {
+    let poidsInput = document.getElementById("shippingWeightOne");
+    let poidsValue = parseFloat(poidsInput.value.replace("Kg", "").replace(',', '.').trim()) || 0;
+
+    // Mise à jour de l'affichage du poids
+    document.getElementById("shippingWeightTwo").textContent = poidsValue.toFixed(2) + " Kg";
+}
+
+function formatWeight() {
+    let poidsInput = document.getElementById("shippingWeightOne");
+    let poidsValue = parseFloat(poidsInput.value.replace("Kg", "").replace(',', '.').trim()) || 0;
+    poidsInput.value = poidsValue.toFixed(2) + " Kg"; // Ajoute "Kg" quand l'input perd le focus
+}
+
+function clearWeight() {
+    let poidsInput = document.getElementById("shippingWeightOne");
+    poidsInput.value = poidsInput.value.replace("Kg", "").trim(); // Supprime "Kg" quand l'input est sélectionné
+}
+
+
+
+
+
+
+    const clients = {
+        client1: { society: "Delbos Informatique", eori: "Delbos FR53185174900014", name: "DELBOS Arnaud", address: "32 RUE JOSEPH SUACOT", postalcity: "97429 PETITE ILE", email: "delbos@delbosinformatique.com", phone: "06.92.60.30.89" },
+        client2: { society: "MyPlace", eori: "MyPlace 81297681900019", name: "CODY Jean Philippe", address: "2 Boulevard VAUBAN ", postalcity: "97400 ST DENIS", email: "administrateur@myplace.re", phone: "06.93.10.15.55" },
+        client3: { society: "CM2I", eori: "CM2I FR94832916400016", name: "CUVELIER Stéphane", address: "1148 CHEMIN MENCIOL", postalcity: "97440 ST ANDRE", email: "achat@cm2i.re", phone: "06.92.56.81.35"},
+        client4: { society: "GAMER'S SMITH", eori: "GAMER'S SMITH FR35982435828", name: "POTHIN Pacha", address: "15 RUE DE VENISE ", postalcity: "97430 LE TAMPON", email: "gamersmith@outlook.fr", phone: "06.92.52.48.21" },
+        client5: { society: "E – Machine", eori: "E – MACHINES FR86804180206", name: "CAZANOVE Alain", address: "98 route de Montée Sano ", postalcity: "97438 STE Marie", email: " e.machines.reunion@gmail.com", phone: "06.92.76.48.68" },
+        client6: { society: "Love games geek", eori: "Love games geek FR43880871118", name: "Delahaye Christine", address: "16 IMPASSE SIMON OGNARD", postalcity: "97410 ST PIERRE", email: "lovegamesgeek@gmail.com", phone: "06.92.43.04.45" }
+
+
+    };
+
+
+    // Trier les clients par ordre alphabétique en fonction de 'society'
+    const sortedClients = Object.entries(clients).sort((a, b) => {
+        return a[1].society.localeCompare(b[1].society);
+    });
+
+    const select = document.getElementById('clientSelect');
+    sortedClients.forEach(([key, client]) => {
+        const option = document.createElement('option');
+        option.value = key;
+        option.textContent = client.society;
+        select.appendChild(option);
+    });
+
+    document.getElementById("clientSelect").addEventListener("change", function () {
+        const client = clients[this.value] || {};
+        ["Society", "Name", "Address", "PostalCity", "Email", "Phone"].forEach(field =>
+            document.getElementById("client" + field).value = client[field.toLowerCase()] || "");
+        document.getElementById("EORIValue").textContent = client.eori || "";
+        document.getElementById('clientSelect').classList.remove('blink_me_loop');
+    });
+
+
+    </script>
+</body>
+</html>
