@@ -1,233 +1,197 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <link rel="icon" type="image/x-icon" href="../icons/favicon.ico">
-    <title>Cotation</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(90deg, #b9deed, #efefef);
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 500px;
-            margin: auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
-        }
-        h1 {
-            text-align: center;
-            color: #0056b3;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .form-group select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .form-group input {
-            width: 93%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .form-group3 input {
-            width: 96%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        /* Nouveau style pour aligner le type de Chronopost et la zone sur la même ligne */
-        .form-group-inline {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .form-group-inline .form-group {
-            flex: 1;
-        }
-
-        .form-group2 label {
-            display: block;
-            padding-left: 15px;
-            text-indent: -15px;
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .form-group2 input {
-            width: 13px;
-            height: 13px;
-            padding: 0;
-            margin: 0;
-            vertical-align: bottom;
-            position: relative;
-            top: 13px;
-            *overflow: hidden;
-            margin-bottom: 15px;
-        }
-
-        .form-group.checkbox-group input {
-            margin-bottom: 5px;
-        }
-
-        .result {
-            margin-top: 20px;
-            font-size: 18px;
-        }
-        .result p {
-            margin: 5px 0;
-            text-align: right;
-        }
-        .button {
-            background-color: #0056b3;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 15px;
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
-        }
-        .button:hover:not(:disabled) {
-            background-color: #007bff;
-        }
-
-        .floating-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            width: 75px;
-            height: 75px;
-            background-color: #0056b3;
-            color: #fff;
-            border: none;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-
-        .floating-button:hover {
-            background-color: #007bff;
-            transform: scale(1.1);
-        }
-
-        .floating-button svg {
-            width: 35px;
-            height: 35px;
-        }
-
-        .floating-button img {
-            width: 50px;
-            height: 50px;
-        }
-
-        h1 {
-            color: #0056b3;
-            justify-content: center;
-            align: center;
-        }
-
-        /* Nouvelle classe pour aligner les 3 labels et inputs sur une seule ligne */
-        .form-group-inline-extended {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            margin-top: 0px;
-            margin-bottom: 10px;
-        }
-
-        .form-group-inline-extended .form-group {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            margin-right: 15px;
-        }
-
-        .form-group-inline-extended .form-group input {
-            width: 80%; /* S'assurer que les inputs prennent toute la largeur de leur conteneur */
-        }
-
-        .form-group4 input {
-            width: 90%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .form-group4 label {
-            width: 90%;
-            font-size: 12px;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .readonly-input {
-            background-color: #f0f0f0;
-            color: #555;
-            border: 1px solid #ddd;
-            cursor: not-allowed;
-        }
-
-button:disabled {
-    background-color: #d6d6d6;
-    color: #a0a0a0;
-    cursor: not-allowed;
-    box-shadow: none;
-}
-    </style>
-</head>
+    <html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <link rel="icon" type="image/x-icon" href="../icons/favicon.ico">
+        <title>Cotation</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background: linear-gradient(90deg, #b9deed, #efefef);
+                margin: 0;
+                padding: 20px;
+            }
+            .container {
+                max-width: 500px;
+                margin: auto;
+                background: #fff;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            }
+            h1 {
+                text-align: center;
+                color: #0056b3;
+            }
+            .form-group {
+                margin-bottom: 15px;
+            }
+            .form-group label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+            .form-group select {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+            .form-group input {
+                width: 93%;
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+            .form-group3 input {
+                width: 96%;
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+            .form-group-inline {
+                display: flex;
+                justify-content: space-between;
+                gap: 10px;
+            }
+            .form-group-inline .form-group {
+                flex: 1;
+            }
+            .form-group2 label {
+                display: block;
+                padding-left: 15px;
+                text-indent: -15px;
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+                margin-bottom: 15px;
+            }
+            .form-group2 input {
+                width: 13px;
+                height: 13px;
+                padding: 0;
+                margin: 0;
+                vertical-align: bottom;
+                position: relative;
+                top: 13px;
+                *overflow: hidden;
+                margin-bottom: 15px;
+            }
+            .form-group.checkbox-group input {
+                margin-bottom: 5px;
+            }
+            .result {
+                margin-top: 20px;
+                font-size: 18px;
+            }
+            .result p {
+                 margin: 5px 0;
+                text-align: right;
+            }
+            .button {
+                background-color: #0056b3;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+                margin-top: 15px;
+                box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            }
+            .button:hover:not(:disabled) {
+                background-color: #007bff;
+            }
+            .floating-button {
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                width: 75px;
+                height: 75px;
+                background-color: #0056b3;
+                color: #fff;
+                border: none;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+                cursor: pointer;
+                transition: background-color 0.3s, transform 0.2s;
+            }
+            .floating-button:hover {
+                background-color: #007bff;
+                transform: scale(1.1);
+            }
+            .floating-button svg {
+                width: 35px;
+                height: 35px;
+            }
+            .floating-button img {
+                width: 50px;
+                height: 50px;
+            }
+            h1 {
+                color: #0056b3;
+                justify-content: center;
+                align: center;
+            }
+            .form-group-inline-extended {
+                display: flex;
+                justify-content: space-between;
+                gap: 10px;
+                margin-top: 0px;
+                margin-bottom: 10px;
+            }
+            .form-group-inline-extended .form-group {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                margin-right: 15px;
+            }
+            .form-group-inline-extended .form-group input {
+                width: 80%; /* S'assurer que les inputs prennent toute la largeur de leur conteneur */
+            }
+            .form-group4 input {
+                width: 90%;
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+            .form-group4 label {
+                width: 90%;
+                font-size: 12px;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+            .readonly-input {
+                background-color: #f0f0f0;
+                color: #555;
+                border: 1px solid #ddd;
+                cursor: not-allowed;
+            }
+            button:disabled {
+                background-color: #d6d6d6;
+                color: #a0a0a0;
+                cursor: not-allowed;
+                box-shadow: none;
+            }
+            .hidden {
+                display: none;
+            }
+        </style>
+    </head>
 <body>
-
-    <!-- Bouton Retour Accueil
     <a href="../index.html" class="floating-button" title="Retour à l'accueil">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"></polyline>
-        </svg>
-    </a> -->
-
-    <!-- Bouton Retour Accueil
-<a href="../index.html" class="floating-button" title="Retour à l'accueil">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 9l9-7 9 7v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z" />
-        <path d="M9 22V12h6v10" />
-    </svg>
-</a> -->
-<a href="../index.html" class="floating-button" title="Retour à l'accueil">
-    <img src="../icons/ic_action_home.png" alt="Home" />
-</a>
-
+        <img src="../icons/ic_action_home.png" alt="Home" />
+    </a>
     <div align="center">
        <h1>Cotation</h1>
     </div>
-
     <div class="container">
         <form id="chronopostForm">
             <div class="form-group-inline">
@@ -239,83 +203,65 @@ button:disabled {
                         <option value="corse">Corse</option>
                     </select>
                 </div>
-
                 <div class="form-group">
                     <label for="zone">Zone :</label>
                     <select id="zone" name="zone">
                     </select>
                 </div>
             </div>
-
             <div class="form-group-inline">
                 <div class="form-group">
                     <label for="poids">Poids (kg) :</label>
                     <input type="number" id="poids" name="poids" step="0.1" min="0" max="30">
                 </div>
-
                 <div class="form-group">
                     <label for="colis">Nombre de colis :</label>
                     <input type="number" id="colis" name="colis" min="1" value="1">
                 </div>
             </div>
-
+            <div align="center">
+                <p id="errorLabel" style="color: red;" class="hidden">
+                    <strong>Erreur lors de la récupération de la surcharge carburant.
+                        <br>Veuillez verifier manuellement depuis le site
+                        <a target="_blank" href="https://www.chronopost.fr/fr/surcharge-carburant">Chronopost</a>.
+                    </strong>
+                </p>
+            </div>
             <div class="form-group-inline-extended">
                 <div class="form-group4">
                     <label for="surchargeCarburant">Surcharge Carburant :</label>
                     <input type="text" id="surchargeCarburant" name="surchargeCarburant" value="" class="readonly-input" readonly>
                 </div>
-
                 <div class="form-group4">
                     <label for="surete">Sûreté :</label>
                     <input type="text" id="participationSurete" name="participationSurete" value="0.00 €" class="readonly-input" readonly>
                 </div>
-
                 <div class="form-group4">
                     <label for="participationEco">Participation Éco-Responsable :</label>
                     <input type="text" id="participationEco" name="participationEco" value="0.00 €" class="readonly-input" readonly>
                 </div>
             </div>
-
-
-            <!-- Modification de la structure pour le checkbox et le label -->
             <div class="form-group2 checkbox-group">
                 <label for="inclureAssurance">Inclure une assurance
                 <input type="checkbox" id="inclureAssurance" name="inclureAssurance">
                 </label>
             </div>
-
-
-
             <div class="form-group-inline">
-
-            <div class="form-group" id="valeurCommandeGroup" style="display: none;">
-                <label for="assurance">Valeur en € :</label>
-                <input type="number" id="assurance" name="assurance" min="0" step="0.01">
-            </div>
-
+                <div class="form-group" id="valeurCommandeGroup" style="display: none;">
+                    <label for="assurance">Valeur en € :</label>
+                    <input type="number" id="assurance" name="assurance" min="0" step="0.01">
+                </div>
                 <div class="form-group">
                     <label for="proforma">Proforma n° :</label>
                     <input type="texte" style="width:50%; justify-content: flex-end;" id="proforma" name="profroma" min="0" step="0.01">
                 </div>
             </div>
-
-
-
-
             <div class="form-group-inline-extended">
-
-
-
-            <button type="button" class="button" onclick="calculerFrais()"><i class="fa-solid fa-calculator"></i> Calculer</button>
-
-            <button type="button" class="button" onclick="resetFields()" id="reset" disabled><i class="fa-solid fa-rotate-right"></i> Réinitialiser</button>
-
-            <button type="button" class="button" onclick="exporterEnImage()" id="print" disabled><i class="fa-solid fa-file-export"></i> Exporter</button>
-
+                <button type="button" class="button" onclick="calculerFrais()"><i class="fa-solid fa-calculator"></i> Calculer</button>
+                <button type="button" class="button" onclick="resetFields()" id="reset" disabled><i class="fa-solid fa-rotate-right"></i> Réinitialiser</button>
+                <button type="button" class="button" onclick="exporterEnImage()" id="print" disabled><i class="fa-solid fa-file-export"></i> Exporter</button>
             </div>
-
         </form>
-
         <div class="result" id="resultat">
             <p style="font-size:14px;" id="prixColis"></p>
             <p style="font-size:14px;" id="prixExpedition"></p>
@@ -327,103 +273,91 @@ button:disabled {
             <p style="font-size:22px;color:red;" ><strong>Prix total HT : 0.00 €</strong></p>
         </div>
     </div>
-
     <script>
         const zones = {
             classic: [1, 2, 3, 4],
             express: [1, 2, 3, 4, 5, 6, 7, 8, 9],
             corse: ['Corse']
         };
-
         document.addEventListener('DOMContentLoaded', function () {
             function fetchSurchargeCarburant() {
                 fetch('https://tvstore.synology.me/chronopost/surcharge_carburant.php')
-                    .then(response => response.json()) // Assurez-vous que le serveur renvoie les données en JSON
+                    .then(response => response.json())
                     .then(data => {
-                        const routierPercentage = data.routier_percentage; // Valeur pour Chronopost Classic
-                        const aerienPercentage = data.aerien_percentage; // Valeur pour Chronopost Express
-
-                        // Mettez à jour la surcharge carburant selon le type de Chronopost
+                        const routierPercentage = data.routier_percentage;
+                        const aerienPercentage = data.aerien_percentage;
+                        const errorLabel = document.getElementById('errorLabel');
                         const typeChronopost = document.getElementById('typeChronopost').value;
                         if (typeChronopost === 'classic') {
                             document.getElementById('surchargeCarburant').value = `${routierPercentage}`;
+                            document.getElementById('surchargeCarburant').classList.add('readonly-input');
+                            document.getElementById('surchargeCarburant').setAttribute('readonly', true);
+                            errorLabel.classList.add('hidden');
                         } else if (typeChronopost === 'express') {
                             document.getElementById('surchargeCarburant').value = `${aerienPercentage}`;
+                            document.getElementById('surchargeCarburant').classList.add('readonly-input');
+                            document.getElementById('surchargeCarburant').setAttribute('readonly', true);
+                            errorLabel.classList.add('hidden');
                         } else {
                             document.getElementById('surchargeCarburant').value = `0,00 €`;
+                            document.getElementById('surchargeCarburant').classList.add('readonly-input');
+                            document.getElementById('surchargeCarburant').setAttribute('readonly', true);
+                            errorLabel.classList.add('hidden');
                         }
 
                     })
                     .catch(error => {
                         console.error('Erreur lors de la récupération de la surcharge carburant :', error);
+                        errorLabel.classList.remove('hidden');
+                        document.getElementById('surchargeCarburant').classList.remove('readonly-input');
+                        document.getElementById('surchargeCarburant').removeAttribute('readonly');
                     });
             }
-
             document.getElementById('typeChronopost').addEventListener('change', function () {
                 const type = this.value;
                 const zoneSelect = document.getElementById('zone');
                 zoneSelect.innerHTML = '';
-
                 zones[type].forEach(zone => {
                     const option = document.createElement('option');
                     option.value = zone;
                     option.textContent = `Zone ${zone}`;
                     zoneSelect.appendChild(option);
-                    //alert(option.textContent);
                 });
             });
-
             document.getElementById('inclureAssurance').addEventListener('change', function () {
                 const valeurCommandeGroup = document.getElementById('valeurCommandeGroup');
                 const prixAssurance = document.getElementById('prixAssurance');
                 valeurCommandeGroup.style.display = this.checked ? 'block' : 'none';
                 prixAssurance.style.display = this.checked ? 'block' : 'none';
             });
-
-            // Appel initial pour récupérer la surcharge carburant au chargement de la page
             fetchSurchargeCarburant();
-
-            // Met à jour la surcharge carburant lors du changement de type de Chronopost
             document.getElementById('typeChronopost').addEventListener('change', fetchSurchargeCarburant);
-
-            // Simule le changement de type de Chronopost au chargement de la page
             document.getElementById('typeChronopost').dispatchEvent(new Event('change'));
             document.getElementById('inclureAssurance').dispatchEvent(new Event('change'));
         });
-
         document.getElementById('inclureAssurance').addEventListener('change', function () {
             const valeurCommandeGroup = document.getElementById('valeurCommandeGroup');
             const prixAssurance = document.getElementById('prixAssurance');
             valeurCommandeGroup.style.display = this.checked ? 'block' : 'none';
             prixAssurance.style.display = this.checked ? 'block' : 'none';
         });
-
         document.addEventListener('DOMContentLoaded', function () {
            document.getElementById('colis').addEventListener('change', function () {
            const colis = parseInt(document.getElementById('colis').value);
                 if (!isNaN(colis) && colis > 0) {
-                    // Calcul des surcharges
                     const prixSurete = colis * 0.8;
                     const prixEco = colis * 0.09;
-
-                    // Mise à jour des valeurs des champs
                     document.getElementById('participationSurete').value = `${prixSurete.toFixed(2)} €`;
                     document.getElementById('participationEco').value = `${prixEco.toFixed(2)} €`;
                 } else {
-                    // Si le nombre de colis n'est pas valide, réinitialiser les champs
-                    document.getElementById('participationSurete').value = '0.00 €'; // Valeur par défaut
-                    document.getElementById('participationEco').value = '0.00 €'; // Valeur par défaut
+                    document.getElementById('participationSurete').value = '0.00 €';
+                    document.getElementById('participationEco').value = '0.00 €';
                 }
             });
-            // Simule le changement de type de Chronopost au chargement de la page
             document.getElementById('colis').dispatchEvent(new Event('change'));
         });
-
-
-
         function calculerFrais() {
             const type = document.getElementById('typeChronopost').value;
-            //const zone = parseInt(document.getElementById('zone').value);
             const zone = document.getElementById('zone').value;
             const poids = parseFloat(document.getElementById('poids').value);
             const colis = parseInt(document.getElementById('colis').value);
@@ -433,8 +367,6 @@ button:disabled {
             const nproforma = document.getElementById('proforma').value;
             const inclureAssurance = document.getElementById('inclureAssurance').checked;
             const valeurCommande = inclureAssurance ? parseFloat(document.getElementById('assurance').value || 0) : 0;
-
-            // Validation des champs
             if (isNaN(poids) || poids <= 0) {
                 alert('Veuillez mettre le poids total de la commande.');
                 return;
@@ -451,20 +383,16 @@ button:disabled {
                 alert('Veuillez mettre un montant à assurer valide.');
                 return;
             }
-
             if (!tarifsChronopost[type] || !tarifsChronopost[type][zone]) {
                 alert("Données invalides, veuillez vérifier le type de Chronopost et la zone.");
                 return;
             }
-
             let prixExpedition = 0;
             let prixColis = 0;
             let prixAssurance = 0;
             let prixSurcharge = 0;
             let surchargePercentage = 0;
-
             surchargePercentage = document.getElementById('surchargeCarburant').value;
-
             if (type === 'classic') {
                 prixColis = colis * 9; // 9€ par colis pour Classic
             } else if (type === 'express') {
@@ -472,21 +400,10 @@ button:disabled {
             } else if (type === 'corse') {
                 prixColis = colis * 25.60; // 25.60€ par colis pour Express
             }
-
-
-            // Si le poids est supérieur à 30, on prend le tarif de 30 kg
             if (poids > 30) {
-
-                // Prix pour 30 kg
                 let tarif = tarifsChronopost[type][zone].slice(-1)[0].prix;
-
-                // Calcul du surplus de poids
                 let surplusPoids = parseFloat((poids - 30).toFixed(2)); // Convertir le surplus en nombre avec 2 décimales
-
-                // Initialisation du tarif supplémentaire
                 let tarifSupplémentaire = 0;
-
-                // Logique des tarifs supplémentaires selon le type et la zone
                 if (type === 'classic') {
                     switch (zone) {
                         case '1': tarifSupplémentaire = surplusPoids * 1.47; break;
@@ -509,29 +426,16 @@ button:disabled {
                 } else if (type === 'corse') {
                     tarifSupplémentaire = surplusPoids * 0.60;
                 }
-
-                // Afficher le supplément de poids
                 document.getElementById('prixExpSupp').innerText = `Supplément Poids > 30Kg : ${tarifSupplémentaire.toFixed(2)} €`;
                 document.getElementById('prixExpSupp').style.display = 'block';
-
                 tarifSupp = tarifSupplémentaire;
-
-                // Retourner le tarif total (prix de base + supplément)
-                //prixExpedition = tarif + tarifSupplémentaire;
                 prixExpedition = tarif;
 
             } else {
-
-                // Pour les poids <= 30 kg, on choisit le tarif en fonction du poids arrondi
                 const tarifs = tarifsChronopost[type][zone];
-
                 tarifSupp = 0;
                 document.getElementById('prixExpSupp').style.display = 'none';
-
-                // Arrondir le poids à l'entier inférieur
                 const poidsArrondi = Math.floor(poids);
-
-                // Chercher le tarif correspondant au poids arrondi
                 for (let i = 0; i < tarifs.length; i++) {
                     if (poidsArrondi <= tarifs[i].maxPoids) {
                         prixExpedition = tarifs[i].prix.toFixed(2);
@@ -539,34 +443,21 @@ button:disabled {
                     }
                 }
             }
-
-            //prixAssurance = document.getElementById('prixExpSupp');
-            //valeurCommandeGroup.style.display = this.checked ? 'block' : 'none';
-            //prixAssurance.style.display = 'block' ;
-
             if (inclureAssurance && valeurCommande > 0) {
                 prixAssurance = Math.max((valeurCommande * 0.009).toFixed(2), 5);
             }
-
             document.getElementById('prixColis').innerText = `Montant pour les colis : ${prixColis.toFixed(2)} €`;
             document.getElementById('prixExpedition').innerText = `Montant pour l'expédition : ${prixExpedition} €`;
             document.getElementById('prixAssurance').innerText = `Montant de l'assurance : ${prixAssurance} €`;
             document.getElementById('prixSurete').innerText = `Montant pour la sûreté : ${surete}`;
             document.getElementById('prixEco').innerText = `Montant éco-participation : ${eco}`;
-
-            // Calculer le montant de la surcharge carburant
             const montantSurcharge = prixExpedition * (parseFloat(surchargePercentage).toFixed(2) / 100);
             document.getElementById('prixSurcharge').innerText = `Montant surcharge carburant : ${montantSurcharge.toFixed(2)} €`;
-
             const prixTotal = (parseFloat(prixExpedition) + parseFloat(tarifSupp) + parseFloat(surete) + montantSurcharge + parseFloat(eco) + prixColis + parseFloat(prixAssurance)).toFixed(2);
-
             document.getElementById('print').disabled = false;
             document.getElementById('reset').disabled = false;
-
             document.querySelector('#resultat p:last-child').innerHTML = `<strong>Prix total HT : ${prixTotal} €</strong>`;
         }
-
-
 const tarifsChronopost = {
     "classic": {
         "1": [
@@ -1292,36 +1183,28 @@ const tarifsChronopost = {
             { "maxPoids": 30, "prix": 22.30 }
         ]    }
     };
-
 function exporterEnImage() {
-    let container = document.querySelector('.container'); // Sélection du div à capturer
-    let buttons = document.querySelectorAll('.button'); // Sélection des boutons à masquer
-
-    // Masquer les boutons
+    let container = document.querySelector('.container');
+    let buttons = document.querySelectorAll('.button');
     buttons.forEach(button => {
         button.style.display = 'none';
     });
-
-    // Capturer l'image
     html2canvas(container, { scale: 2 }).then(canvas => {
-        let imgURL = canvas.toDataURL('image/jpeg', 1.0); // Convertir en JPG
+        let imgURL = canvas.toDataURL('image/jpeg', 1.0);
         let link = document.createElement('a');
         link.href = imgURL;
         number = document.getElementById("proforma").value;
-        link.download = 'PF' + number + '.jpg'; // Nom du fichier
+        link.download = 'PF' + number + '.jpg';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
     }).catch(error => console.error("Erreur de capture :", error))
     .finally(() => {
-        // Réafficher les boutons après la capture
         buttons.forEach(button => {
             button.style.display = '';
         });
     });
 }
-
-        // Reset all fields
         function resetFields() {
             document.getElementById("proforma").value = '';
             document.getElementById("poids").value = '';
@@ -1338,11 +1221,9 @@ function exporterEnImage() {
             document.getElementById('reset').disabled = true;
             document.querySelector('#resultat p:last-child').innerHTML = `<strong>Prix total HT : 0.00 €</strong>`;
         }
-
 document.addEventListener('wheel', function(event) {
-    // Vérifie si la molette est utilisée pour zoomer (le zoom utilise un facteur de direction)
     if (event.ctrlKey || event.metaKey) {
-        event.preventDefault(); // Empêche le zoom
+        event.preventDefault();
     }
 }, { passive: false });
     </script>
