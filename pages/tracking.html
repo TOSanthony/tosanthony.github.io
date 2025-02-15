@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="icon" type="image/x-icon" href="../icons/favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+      <link
+        rel="stylesheet"
+        href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css"
+      >
+
+    <title>tracking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background-color: #f0f0f0;
+            background: linear-gradient(90deg, #b9deed, #efefef);
+            background: linear-gradient(-45deg, #82B2C0 33%, #B3D1E7 66%, #97B3AE 100%);
+            background: linear-gradient(-45deg, #9200ff 25%, #e73c7e 50%, #23a6d5 75%, #23d5ab 100%);
+            background-size: 400% 400%;
+            animation: gradient 20s ease infinite;
+        }
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        .container {
+            max-width: 70%;
+            width: 50%;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.3s, box-shadow 0.3s;
+            background: rgba(0, 0, 0, 0.5);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    input {
+      padding: 10px 20px;
+      cursor: pointer;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      text-align: center;
+      margin-top: 10px;
+      height:28px;
+            background-color: rgba(0, 0, 0, 0.5);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+    }
+    input:focus {
+        border: none;
+        outline: none;  /* Pour éviter les contours autour de l'input */
+    }
+    input:hover {
+        border: none;
+        outline: none;  /* Pour éviter les contours autour de l'input */
+        background-color: #007bff;
+    }
+    input::placeholder {
+        color: white; /* Remplace cette couleur par celle de ton choix */
+    }
+        .output {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #a0a0a0;
+            word-wrap: break-word;
+            color: white;
+            border: 1px;
+            border-radius: 10px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            background: rgba(0, 0, 0, 0.5);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+        }
+        .tracking-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 0px;
+            margin-top: 0px;
+            position: relative;
+        }
+        .tracking-item input {
+            flex: 2;
+        }
+        .tracking-item select {
+            flex: 1;
+            margin-right: 60px;
+        }
+        .remove-btn {
+            position: absolute;
+            right: 0px;
+            margin-right: 4px;
+            margin-left: 5px;
+            top: -2px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            color: red;
+            font-size: 20px;
+            font-weight: bold;
+            background-color: transparent;
+        }
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            margin: 5px 0 0;
+            display: none;
+        }
+
+        button {
+            margin: 10px;
+            margin-bottom: 20px;
+            padding: 10px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.3s, box-shadow 0.3s;
+            background: rgba(0, 0, 0, 0.5);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+        }
+
+    button:disabled {
+      background-color: #d6d6d6;
+      color: #a0a0a0;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    button:hover:not(:disabled) {
+      background-color: #007bff;
+    }
+
+    input {
+      padding: 5px 20px;
+      cursor: pointer;
+      background-color: #a0a0a0;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      margin-top: 10px;
+      height:23px;
+    }
+
+    select {
+      padding: 5px 20px;
+      cursor: pointer;
+      background-color: #a0a0a0;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      margin-top: 10px;
+      margin-right: 10px;
+    }
+    select:hover {
+background-color: #007bff;
+    }
+select:hover option {
+    background-color: #007bff;
+}
+        .floating-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 75px;
+            height: 75px;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.5);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+        }
+
+        .floating-button:hover {
+            background-color: #007bff;
+            transform: scale(1.1);
+        }
+
+        .floating-button svg {
+            width: 35px;
+            height: 35px;
+        }
+
+        .floating-button img {
+            width: 50px;
+            height: 50px;
+        }
+
+        h1 {
+            color: white;
+            /*color: #0056b3;*/
+            justify-content: center;
+            align: center;
+        }
+
+.button-container {
+    display: flex;
+    gap: 10px; /* Ajoute un espacement entre les boutons */
+    width: 33%;
+            justify-content: center;
+            align: center;
+}
+    </style>
+</head>
+<body>
+
+    <!-- Bouton Retour Accueil -->
+<a href="../index.html" class="floating-button" title="Retour à l'accueil">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z" />
+        <path d="M9 22V12h6v10" />
+    </svg>
+</a>
+
+<a href="../index.html" class="floating-button" title="Retour à l'accueil">
+    <img src="../icons/ic_action_home.png" alt="Home" />
+</a>
+
+    <div align="center">
+       </br><h1>Tracking</h1>
+    </div>
+
+
+
+        <div class="button-container">
+        <button onclick="addTrackingItem()"><i class="fa-solid fa-plus"></i> Ajouter un colis</button>
+        <button onclick="generateTrackingLinks()"><i class="fa-solid fa-circle-check"></i> Générer les liens</button>
+        </div>
+
+
+    <div class="container">
+
+        <!--<h2>Générateur de liens de suivi</h2>-->
+        <div id="trackingList">
+            <div class="tracking-item">
+                <input type="text" placeholder="Entrez le numéro de suivi">
+                <select>
+                    <option value="chronopost">Chronopost</option>
+                    <option value="colissimo">Colissimo</option>
+                    <option value="dbschenker">DB Schenker</option>
+                    <option value="geodis">Geodis</option>
+                </select>
+                <button class="remove-btn" onclick="removeTrackingItem(this)"><i class="fa-solid fa-trash"></i></button>
+            </div>
+        </div>
+
+
+        <h3>Liens générés :</h3>
+        <div id="output" class="output">Les liens générés apparaîtront ici.</div>
+    </div>
+
+    <script>
+        function addTrackingItem() {
+            const trackingList = document.getElementById('trackingList');
+            const trackingItem = document.createElement('div');
+            trackingItem.className = 'tracking-item';
+            trackingItem.innerHTML = `
+                <input type="text" placeholder="Entrez le numéro de suivi">
+                <select>
+                    <option value="chronopost">Chronopost</option>
+                    <option value="colissimo">Colissimo</option>
+                    <option value="dbschenker">DB Schenker</option>
+                    <option value="geodis">Geodis</option>
+                </select>
+                <button class="remove-btn" onclick="removeTrackingItem(this)"><i class="fa-solid fa-trash"></i></button>
+            `;
+            trackingList.appendChild(trackingItem);
+        }
+
+        function removeTrackingItem(button) {
+            const trackingItem = button.closest('.tracking-item');
+            const inputField = trackingItem.querySelector('input');
+            const selectField = trackingItem.querySelector('select');
+
+            // Si c'est le seul champ rempli, on supprime l'élément complet
+            if (!inputField.value.trim() && selectField.value === 'chronopost') {
+                trackingItem.remove();
+            } else {
+                //inputField.value = ''; // Sinon, on vide le champ
+                //selectField.value = 'chronopost'; // Remet le transporteur par défaut
+                trackingItem.remove();
+            }
+        }
+
+        function generateTrackingLinks() {
+            const trackingItems = document.querySelectorAll('.tracking-item');
+            const output = document.getElementById('output');
+            output.innerHTML = '';
+
+            const links = [];
+            let hasError = false;
+
+            trackingItems.forEach(item => {
+                const inputField = item.querySelector('input');
+                const errorMessage = item.querySelector('.error-message');
+                let trackingNumber = inputField.value.trim();
+                const carrier = item.querySelector('select').value;
+
+                if (!trackingNumber) {
+                    hasError = true;
+                    return;
+                }
+
+                // Remove spaces from the tracking number
+                trackingNumber = trackingNumber.replace(/\s+/g, '');
+
+                let trackingUrl = '';
+
+                switch (carrier) {
+                    case 'chronopost':
+                        trackingUrl = `https://www.chronopost.fr/tracking-no-cms/suivi-page?listeNumerosLT=${trackingNumber}`;
+                        break;
+                    case 'dbschenker':
+                        trackingUrl = `https://www.dbschenker.com/app/tracking-public/?refNumber=${trackingNumber}&refType=WaybillNo&language_region=fr-FR_FR`;
+                        break;
+                    case 'colissimo':
+                        trackingUrl = `https://www.laposte.fr/outils/suivre-vos-envois?code=${trackingNumber}`;
+                        break;
+                    case 'geodis':
+                        trackingUrl = `https://espace-client.geodis.com/services/destinataires/#/fr/suivi/${trackingNumber}`;
+                        break;
+                    default:
+                        errorMessage.innerHTML = 'Transporteur non reconnu.';
+                        hasError = true;
+                        return;
+                }
+
+                links.push(`<code>&lt;a target=&quot;_blank&quot; href=&quot;${trackingUrl}&quot;&gt;${trackingNumber}&lt;/a&gt;</code>`);
+            });
+
+            if (hasError) {
+                output.innerHTML = '<p style="color: red;">Veuillez entrer un numéro de suivi.</p>';
+            } else {
+                output.innerHTML = links.join(' - ');
+            }
+        }
+
+document.addEventListener('wheel', function(event) {
+    // Vérifie si la molette est utilisée pour zoomer (le zoom utilise un facteur de direction)
+    if (event.ctrlKey || event.metaKey) {
+        event.preventDefault(); // Empêche le zoom
+    }
+}, { passive: false });
+    </script>
+</body>
+</html>
