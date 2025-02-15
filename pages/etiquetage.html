@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="icon" type="image/x-icon" href="../icons/favicon.ico">
+  <title>Etiquette</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <!-- Polyfill pour les promesses (si nécessaire) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.2.8/es6-promise.auto.min.js"></script>
+  
+  <!-- Charger html2canvas version 1.4.1 -->
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+  
+  <!-- Charger jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <title>Étiquettes d'expédition</title>
+  <style>
+    body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background-color: #f0f0f0;
+            background: linear-gradient(90deg, #b9deed, #efefef);
+            background: linear-gradient(-45deg, #82B2C0 33%, #B3D1E7 66%, #97B3AE 100%);
+            background: linear-gradient(-45deg, #9200ff 25%, #e73c7e 50%, #23a6d5 75%, #23d5ab 100%);
+            background-size: 400% 400%;
+            animation: gradient 20s ease infinite;
+        }
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+.stripe {
+  height:300px;
+  background: 
+    /* Color                         position     / width height */
+    linear-gradient(#25dbf3,#25dbf3) center right / 30%   70px, 
+   
+    linear-gradient(#1fa2ff,#1fa2ff) bottom left  / 40%   70px,
+    
+    linear-gradient(#5533ff,#5533ff) top left     / 30%   70px,
+    linear-gradient(#4553ff,#4553ff) top left     / 60%   70px,
+    linear-gradient(#4f40ff,#4f40ff) top left     / 100%  70px,
+    /* main background*/
+    linear-gradient(150deg, #53f 15%, #05d5ff 70%, #a6ffcb 94%);
+  background-repeat:no-repeat;
+  transform:skewY(-10deg);
+  transform-origin:left;
+}
+
+    button {
+      padding: 10px 20px;
+      cursor: pointer;
+      background-color: #0056b3;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      margin-top: 10px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.3s, box-shadow 0.3s;
+            background: rgba(0, 0, 0, 0.5);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+    }
+
+    button:disabled {
+      background-color: #d6d6d6;
+      color: #a0a0a0;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    button:hover:not(:disabled) {
+      background-color: #007bff;
+    }
+
+    input {
+      padding: 10px 20px;
+      cursor: pointer;
+      background-color: white;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      text-align: center;
+      margin-top: 10px;
+      height:28px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+      transition: background-color 0.3s, box-shadow 0.3s;
+      background: rgba(0, 0, 0, 0.5);
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+    }
+    input:focus {
+        border: none;
+        outline: none;  /* Pour éviter les contours autour de l'input */
+    }
+    input:hover {
+        border: none;
+        outline: none;  /* Pour éviter les contours autour de l'input */
+        background-color: #007bff;
+    }
+    input::placeholder {
+        color: white; /* Remplace cette couleur par celle de ton choix */
+    }
+
+    select {
+      padding: 10px 20px;
+      cursor: pointer;
+      background-color: white;
+      color: black;
+      border: none;
+      border-radius: 10px;
+      margin-top: 10px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    #client-name {
+      padding: 5px;
+      width: auto;
+    }
+
+    .form-container {
+      margin-bottom: 30px;
+    }
+
+    .form-container input, .form-container button, .form-container select {
+      margin: 10px;
+    }
+
+    .a4-container {
+      width: 297mm;
+      height: 210mm;
+      background-color: #FFFFFF;
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0;
+      padding: 0;
+      display: none;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+      zoom: 0.5;
+    }
+
+    .a4-section {
+      width: 50%;
+      height: 50%;
+      text-align: center;
+      border: 1px solid black;
+      box-sizing: border-box;
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .a4-section p {
+      margin: 0;
+      font-size: 18px;
+    }
+
+  /* Styles par défaut pour 'imprimer papier' */
+  .print-paper .a4-section {
+    border: 1px solid black;
+  }
+
+  /* Styles pour 'imprimer étiquette' */
+  .print-etiquette .a4-section {
+    border: 0px solid black;
+  }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+
+      #labels-container, #labels-container * {
+        visibility: visible;
+      }
+
+      #labels-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 297mm;
+        height: 210mm;
+      }
+
+      .a4-container {
+        display: flex !important;
+        zoom: 1.0;
+      }
+    }
+
+    .nav-buttons {
+      margin-top: 20px;
+      display: none;
+    }
+
+    .print-buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-evenly;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 14px;
+    }
+
+        .floating-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 75px;
+            height: 75px;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.5);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+        }
+
+        .floating-button:hover {
+            background-color: #007bff;
+            transform: scale(1.1);
+        }
+
+        .floating-button svg {
+            width: 35px;
+            height: 35px;
+        }
+
+        .floating-button img {
+            width: 50px;
+            height: 50px;
+        }
+
+        h1 {
+            color: white;
+            /*color: #0056b3;*/
+            justify-content: center;
+            align: center;
+        }
+
+
+        .form-group2 label {
+            display: block;
+            padding-left: 15px;
+            text-indent: -15px;
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .form-group2 input {
+            width: 13px;
+            height: 13px;
+            padding: 0;
+            margin: 0;
+            vertical-align: bottom;
+            position: relative;
+            top: -10px;
+            *overflow: hidden;
+            margin-bottom: 13px;
+            margin-right: 50px;
+        }
+
+        .form-group.checkbox-group input {
+            margin-bottom: 5px;
+        }
+.dropbtn {
+  background-color: #04AA6D;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            margin-top: 10px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.3s, box-shadow 0.3s;
+            background: rgba(0, 0, 0, 0.5);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+width: 300px;
+
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  z-index: 2;
+              transition: background-color 0.3s, box-shadow 0.3s;
+            background: rgba(0, 0, 0, 0.5);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            width: 300px;
+            padding: 0px;
+            margin-left: 10px;
+}
+
+.dropdown-content a {
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+    color: black;
+    border-radius: 10px;
+}
+
+.dropdown:hover .dropdown-content {
+  display: none;
+}
+
+.dropdown:click .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+    background-color: #0056b3;
+}
+  </style>
+</head>
+
+
+    <!-- Bouton Retour Accueil
+<a href="../index.html" class="floating-button" title="Retour à l'accueil">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z" />
+        <path d="M9 22V12h6v10" />
+    </svg>
+</a> -->
+
+<a href="../index.html" class="floating-button" title="Retour à l'accueil">
+    <img src="../icons/ic_action_home.png" alt="Home" />
+</a>
+
+
+    <div align="center">
+       <h1>Etiquette montage</h1>
+    </div>
+
+  <div class="form-container">
+
+  <!--<input type="text" id="client-name" placeholder="Entrez le nom du client" required>-->
+
+
+    <!--<label for="number-of-montages">Nombre de montages :</label>
+    <input type="number" id="number-of-montages" min="1" value="0">-->
+
+        <div class="dropdown">
+            <button  id="montages-button" class="dropbtn" style="width: 250px;">Nombre de montage : 0</button>
+                <div id="montages-content" class="dropdown-content" style="width: 250px; display: none;">
+                    <a id="0" style="text-align: center;">Nombre de montages : 0</a>
+                    <a id="1" style="text-align: center;">Nombre de montages : 1</a>
+                    <a id="2" style="text-align: center;">Nombre de montages : 2</a>
+                    <a id="3" style="text-align: center;">Nombre de montages : 3</a>
+                    <a id="4" style="text-align: center;">Nombre de montages : 4</a>
+                    <a id="5" style="text-align: center;">Nombre de montages : 5</a>
+                    <a id="6" style="text-align: center;">Nombre de montages : 6</a>
+                    <a id="7" style="text-align: center;">Nombre de montages : 7</a>
+                    <a id="8" style="text-align: center;">Nombre de montages : 8</a>
+                    <a id="9" style="text-align: center;">Nombre de montages : 9</a>
+                    <a id="10" style="text-align: center;">Nombre de montages : 10</a>
+                </div>
+        </div>
+
+
+
+    <label class="form-group2 checkbox-group" for="inclureAssurance" style="color: white;">Regrouper
+       <input class="form-group2 checkbox-group" type="checkbox" id="ecoPapier" name="ecoPapier">
+    </label>
+
+
+    <!--<select id="number-of-palettes">
+      <option value="1">Nombre de palettes : 1</option>
+      <option value="2">Nombre de palettes : 2</option>
+      <option value="3">Nombre de palettes : 3</option>
+      <option value="4">Nombre de palettes : 4</option>
+      <option value="5">Nombre de palettes : 5</option>
+      <option value="6">Nombre de palettes : 6</option>
+      <option value="7">Nombre de palettes : 7</option>
+      <option value="8">Nombre de palettes : 8</option>
+      <option value="9">Nombre de palettes : 9</option>
+      <option value="10">Nombre de palettes : 10</option>
+    </select>
+
+    <select id="font-size">
+      <option value="80">Police : 80</option>
+      <option value="75">Police : 75</option>
+      <option value="70">Police : 70</option>
+      <option value="65">Police : 65</option>
+      <option value="60">Police : 60</option>
+      <option value="55">Police : 55</option>
+      <option value="50">Police : 50</option>
+      <option value="45">Police : 45</option>
+      <option value="40">Police : 40</option>
+      <option value="35">Police : 35</option>
+    </select>-->
+    
+    <button onclick="generateLabels()"><i class="fa-solid fa-check"></i> Générer</button>
+
+    <div class="error-message" id="error-message"></div>
+
+    <div class="print-buttons">
+
+<button id="nav-precedent" onclick="changePage(-1)"><i class="fa-solid fa-circle-left"></i> Précédente</button>
+
+<button id="print-etiquette" onclick="setPrintType('etiquette')"><i class="fa-solid fa-print"></i> Imprimer étiquette</button>
+
+<button id="print-papier" onclick="setPrintType('papier')"><i class="fa-solid fa-print"></i> Imprimer papier</button>
+
+    <!--<button onclick="exportToPDF()"><i class="fa-solid fa-file-pdf"></i> Exporter en PDF</button>-->
+
+
+<button id="nav-suivant" onclick="changePage(1)">Suivante <i class="fa-solid fa-circle-right"></i></button>
+
+    </div>
+
+
+  </div>
+
+        <div id="labels-container" style="display: block;">
+            <div class="a4-container" style="display: flex;">
+            </div>
+        </div>
+
+  <script>
+    let currentPage = 0;
+    let totalPages = 0;
+    let numberOfMontages = 0;
+
+      //const clientName = document.getElementById('client-name').value;
+      //const numberOfPalettes = parseInt(document.getElementById('number-of-palettes').value);
+      //const numberOfMontages = parseInt(document.getElementById('number-of-montages').value);
+      
+
+        const dropdownMontages = document.querySelectorAll('#montages-content a');
+        const montagesButton = document.getElementById('montages-button');
+        const montagesContent = document.getElementById('montages-content');
+
+      const navsuivant = document.getElementById('nav-suivant');
+      const navprecedent = document.getElementById('nav-precedent');
+      const printetiquette = document.getElementById('print-etiquette');
+      const printpapier = document.getElementById('print-papier');
+      const ecoPapier = document.getElementById('ecoPapier').checked;
+      //const valeurFeuille = ecoPapier ?
+
+      // Validation
+      if (numberOfMontages <= 0) {
+        printetiquette.disabled = true;
+        printpapier.disabled = true;
+      }
+
+      if (ecoPapier  || numberOfMontages <= 3 ) {
+          navsuivant.disabled = true;
+          navprecedent.disabled = true;
+      } else if (ecoPapier  || numberOfMontages <= 2 ) {
+          navsuivant.disabled = true;
+          navprecedent.disabled = true;
+      }
+
+
+//document.addEventListener("DOMContentLoaded", function () {
+    //const montagesContent = document.getElementById("montages-content"); // Cibler le conteneur
+
+    //for (let i = 0; i <= 10; i++) {
+        //const aElement = document.createElement("a"); // Créer un nouvel élément <a>
+        //aElement.id = i; // Ajouter l'ID basé sur l'index (i)
+        //aElement.style.textAlign = "center"; // Centrer le texte (optionnel)
+        //aElement.textContent = `Nombre de montages : ${i}`; // Ajouter le texte dans l'élément <a>
+        //montagesContent.appendChild(aElement); // Ajouter l'élément <a> dans le conteneur
+    //}
+//});
+
+        dropdownMontages.forEach(link => {
+            link.addEventListener('click', function() {
+                const clientName = this.textContent;
+                numberOfMontages = this.id;
+                montagesButton.textContent = clientName;
+                montagesContent.style.display = 'none'; // Masque le dropdown-content
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const montagesButton = document.getElementById('montages-button');
+            const montagesContent = document.getElementById('montages-content');
+            montagesButton.addEventListener('click', function() {
+                if (montagesContent.style.display === 'none' || montagesContent.style.display === '') {
+                    montagesContent.style.display = 'block';
+                } else {
+                    montagesContent.style.display = 'none';
+                }
+            });
+        });
+
+
+
+// Fonction pour récupérer la valeur de sizeOfText à partir d'une autre fonction
+function getNumberOfMontages() {
+    return numberOfMontages;  // Retourne la valeur actuelle de sizeOfText
+}
+
+    function generateLabels() {
+      //const clientName = document.getElementById('client-name').value;
+      //const numberOfPalettes = parseInt(document.getElementById('number-of-palettes').value);
+
+      //const numberOfMontages = parseInt(document.getElementById('number-of-montages').value);
+      const numberOfMontages = getNumberOfMontages()
+
+      //const sizeOfText = parseInt(document.getElementById('font-size').value);
+      const container = document.getElementById('labels-container');
+      const navButtons = document.querySelector('.nav-buttons');
+      const printButtons = document.querySelector('.print-buttons');
+      const errorMessage = document.getElementById('error-message');
+
+      // Validation
+      if (numberOfMontages <= 0) {
+        errorMessage.textContent = "Veuillez choisir le nombre de montage.";
+        return;
+      } else {
+        errorMessage.textContent = ""; // Clear error message
+      }
+
+      container.innerHTML = '';
+      totalPages = numberOfMontages;
+
+const ecoPapier = document.getElementById('ecoPapier').checked;
+//errorMessage.textContent = ecoPapier;
+
+      if (!ecoPapier) {
+
+
+
+
+
+      for (let i = 0; i < numberOfMontages; i++) {
+        const a4 = document.createElement('div');
+        a4.classList.add('a4-container');
+
+        for (let j = 0; j < 4; j++) {
+          const section = document.createElement('div');
+          section.classList.add('a4-section');
+          const paletteText = document.createElement('p');
+          //paletteText.innerHTML = `${clientName}<br>Palette ${i + 1}/${numberOfPalettes}`;
+          paletteText.innerHTML = `${i + 1}`;
+          section.appendChild(paletteText);
+          //paletteText.style.fontSize = sizeOfText + "px";
+          paletteText.style.fontSize = "150px";
+          a4.appendChild(section);
+        }
+
+        container.appendChild(a4);
+      }
+
+
+
+
+
+
+
+
+          //return;
+      } else {
+
+
+
+
+
+
+      for (let i = 1; i <= numberOfMontages; i += 2) {
+        const a4 = document.createElement('div');
+        a4.classList.add('a4-container');
+        
+        for (let j = 0; j < 4; j++) {
+          const section = document.createElement('div');
+          section.classList.add('a4-section');
+          
+          const montageNumber = i + Math.floor(j / 2); 
+          if (montageNumber <= numberOfMontages) {
+            section.textContent = montageNumber;
+            section.style.fontSize = "150px";
+          }
+          a4.appendChild(section);
+        }
+        container.appendChild(a4);
+      }
+
+
+
+
+
+
+          //return;
+      }
+
+
+
+
+      showPage(0);
+      // printButtons.style.display = 'block';
+
+      const navsuivant = document.getElementById('nav-suivant');
+      const navprecedent = document.getElementById('nav-precedent');
+      totalPages = numberOfMontages;
+
+      //const ecoPapier = document.getElementById('ecoPapier').checked;
+
+      if (totalPages > 1) {
+        printetiquette.disabled = false;
+        printpapier.disabled = false;
+      } else {
+        printetiquette.disabled = false;
+        printpapier.disabled = false;
+      }
+
+
+
+      if (ecoPapier) {
+          if (numberOfMontages > 2) {
+            navsuivant.disabled = false;
+            navprecedent.disabled = false;
+          } else {
+            navsuivant.disabled = true;
+            navprecedent.disabled = true;
+          }
+      } else if (!ecoPapier) {
+          if (numberOfMontages > 1) {
+            navsuivant.disabled = false;
+            navprecedent.disabled = false;
+          } else {
+            navsuivant.disabled = true;
+            navprecedent.disabled = true;
+          }
+      } else {
+        navsuivant.disabled = true;
+        navprecedent.disabled = true;
+      }
+
+
+    }
+
+    function showPage(pageIndex) {
+      const pages = document.querySelectorAll('.a4-container');
+      if (pageIndex >= 0 && pageIndex < pages.length) {
+        pages.forEach(page => page.style.display = 'none');
+        pages[pageIndex].style.display = 'flex';
+        currentPage = pageIndex;
+      }
+    }
+
+    function changePage(direction) {
+      const newPage = currentPage + direction;
+      if (newPage >= 0 && newPage < totalPages) {
+        showPage(newPage);
+      }
+    }
+
+// Fonction pour définir le type d'impression
+function setPrintType(type) {
+  const container = document.getElementById('labels-container');
+
+  // Nettoyer les anciennes classes
+  container.classList.remove('print-etiquette', 'print-paper');
+
+  // Ajouter la classe en fonction du type sélectionné
+  if (type === 'etiquette') {
+    container.classList.add('print-etiquette');
+  } else if (type === 'papier') {
+    container.classList.add('print-paper');
+  }
+
+  // Afficher la fenêtre d'impression
+  window.print();
+}
+
+//console.log(html2canvas);
+
+function exportToPDF() {
+  const { jsPDF } = window.jspdf; // Initialisation de jsPDF
+  const doc = new jsPDF('l', 'mm', 'a4'); // Créer un document PDF au format A4 paysage
+
+  var width = doc.internal.pageSize.getWidth();
+  var height = doc.internal.pageSize.getHeight();
+
+  // Sélectionner l'élément à exporter
+  const container = document.getElementById('labels-container');
+  
+  // Vérifier que le conteneur existe
+  if (!container) {
+    console.error('Le conteneur avec id "labels-container" n\'a pas été trouvé.');
+    return;
+  }
+
+  // Utiliser html2canvas pour capturer le contenu de l'élément après un délai pour s'assurer qu'il est visible
+  setTimeout(function() {
+    html2canvas(container).then(function(canvas) {
+      // Convertir le canvas en image PNG
+      const imgData = canvas.toDataURL('image/jpg');
+
+       const pdf = new jsPDF({
+          orientation: 'landscape',
+        });
+
+
+        const imgProps= pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        //pdf.addImage(imgData, 'PNG', 0, 0);
+
+      doc.addImage(imgData, 'JPG', 0, 0, pdfWidth, pdfHeight);
+
+      // Sauvegarder le fichier PDF
+      doc.save('etiquettes.pdf');
+    }).catch(function(error) {
+      // Si une erreur se produit dans html2canvas
+      console.error('Erreur dans la capture HTML2Canvas :', error);
+    });
+  }, 1000); // Attendre 1 seconde avant de prendre la capture d'écran
+}
+
+document.addEventListener('wheel', function(event) {
+    // Vérifie si la molette est utilisée pour zoomer (le zoom utilise un facteur de direction)
+    if (event.ctrlKey || event.metaKey) {
+        event.preventDefault(); // Empêche le zoom
+    }
+}, { passive: false });
+  </script>
+
+</body>
+</html>
