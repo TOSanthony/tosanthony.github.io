@@ -64,18 +64,19 @@
 }
 
     button {
-      padding: 10px 20px;
+      padding: 0px 20px;
       cursor: pointer;
       background-color: #0056b3;
       color: white;
       border: none;
+      height: 39px;
       border-radius: 10px;
       margin-top: 10px;
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
-            transition: background-color 0.3s, box-shadow 0.3s;
-            background: rgba(0, 0, 0, 0.5);
-            -webkit-backdrop-filter: blur(20px);
-            backdrop-filter: blur(20px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+      transition: background-color 0.3s, box-shadow 0.3s;
+      background: rgba(0, 0, 0, 0.5);
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
     }
 
     button:disabled {
@@ -87,6 +88,7 @@
 
     button:hover:not(:disabled) {
       background-color: #007bff;
+      /* transform: scale(1.05); */
     }
 
     input {
@@ -294,54 +296,55 @@
             margin-bottom: 5px;
         }
 .dropbtn {
-  background-color: #04AA6D;
-  color: white;
-  padding: 16px;
-  font-size: 16px;
-  border: none;
-
-            padding: 10px 20px;
-            cursor: pointer;
-            background-color: #0056b3;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            margin-top: 10px;
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
-            transition: background-color 0.3s, box-shadow 0.3s;
-            background: rgba(0, 0, 0, 0.5);
-            -webkit-backdrop-filter: blur(20px);
-            backdrop-filter: blur(20px);
-width: 300px;
+    background-color: #04AA6D;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    margin-top: 10px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+    transition: background-color 0.3s, box-shadow 0.3s;
+    background: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    width: 300px;
 
 }
 
 .dropdown {
-  position: relative;
-  display: inline-block;
+    position: relative;
+    display: inline-block;
 }
 
 .dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f1f1f1;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
-  border-radius: 10px;
-  z-index: 2;
-              transition: background-color 0.3s, box-shadow 0.3s;
-            background: rgba(0, 0, 0, 0.5);
-            -webkit-backdrop-filter: blur(20px);
-            backdrop-filter: blur(20px);
-            width: 300px;
-            padding: 0px;
-            margin-left: 10px;
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    z-index: 2;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    background: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    width: 300px;
+    padding: 0px;
+    margin-left: 10px;
+    max-height: 200px; /* Limiter la hauteur du dropdown */
+    overflow-y: auto; /* Ajouter une scrollbar verticale */
 }
 
 .dropdown-content a {
-  color: white;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
 }
 
 .dropdown-content a:hover {
@@ -351,17 +354,104 @@ width: 300px;
 }
 
 .dropdown:hover .dropdown-content {
-  display: none;
+    display: block;
 }
 
 .dropdown:click .dropdown-content {
-  display: block;
+    display: block;
 }
 
 .dropdown:hover .dropbtn {
     background-color: #3e8e41;
     background-color: #0056b3;
 }
+
+
+/* Personnaliser la barre de défilement */
+.dropdown-content::-webkit-scrollbar {
+  width: 12px; /* Largeur de la barre de défilement */
+  height: 12px; /* Hauteur de la barre de défilement horizontal */
+}
+
+/* Style de la piste (l'arrière-plan de la scrollbar) */
+.dropdown-content::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Couleur de fond de la piste */
+  border-radius: 0px 10px 10px 0px; /* Coins arrondis de la piste */
+}
+
+/* Style du "pouce" (la partie qui défile) */
+.dropdown-content::-webkit-scrollbar-thumb {
+  background: #0056b3; /* Couleur du pouce */
+  border-radius: 25px; /* Coins arrondis du pouce */
+  border: 3px solid #f1f1f1; /* Bordure autour du pouce pour le séparer de la piste */
+}
+
+/* Effet au survol du pouce */
+.dropdown-content::-webkit-scrollbar-thumb:hover {
+  background: #007bff; /* Couleur du pouce au survol */
+}
+
+/* Optionnel: Personnaliser le coin de la scrollbar */
+.dropdown-content::-webkit-scrollbar-corner {
+  background: transparent; /* Coin transparent si on utilise la scrollbar horizontale */
+}
+
+
+
+.checkbox-input {
+    display: none;
+}
+
+.checkbox-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    font-weight: bold;
+    background-color: #0056b3;
+    padding: 0px 20px;
+    height: 39px;
+    color: white;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    margin-top: 10px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+    transition: background-color 0.3s, box-shadow 0.3s;
+    background: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+
+
+
+
+}
+
+.checkbox-button:hover {
+    background-color: #007bff;
+    transform: scale(1.00);
+}
+
+        .checkbox-input:checked + .checkbox-button {
+            background-color: #28a745;
+        }
+
+        /* Icône qui change lorsque la case est cochée */
+        .checkbox-button i {
+            margin-right: 10px;
+        }
+
+
+
+
+
+
+
+
+
+
         .blink_me {
             animation: blinker 1s linear 2;
         }
@@ -421,14 +511,46 @@ width: 300px;
                     <a id="8" style="text-align: center;">Nombre de montage : 8</a>
                     <a id="9" style="text-align: center;">Nombre de montage : 9</a>
                     <a id="10" style="text-align: center;">Nombre de montage : 10</a>
+                    <a id="11" style="text-align: center;">Nombre de montage : 11</a>
+                    <a id="12" style="text-align: center;">Nombre de montage : 12</a>
+                    <a id="13" style="text-align: center;">Nombre de montage : 13</a>
+                    <a id="14" style="text-align: center;">Nombre de montage : 14</a>
+                    <a id="15" style="text-align: center;">Nombre de montage : 15</a>
+                    <a id="16" style="text-align: center;">Nombre de montage : 16</a>
+                    <a id="17" style="text-align: center;">Nombre de montage : 17</a>
+                    <a id="18" style="text-align: center;">Nombre de montage : 18</a>
+                    <a id="19" style="text-align: center;">Nombre de montage : 19</a>
+                    <a id="20" style="text-align: center;">Nombre de montage : 20</a>
+                    <a id="21" style="text-align: center;">Nombre de montage : 21</a>
+                    <a id="22" style="text-align: center;">Nombre de montage : 22</a>
+                    <a id="23" style="text-align: center;">Nombre de montage : 23</a>
+                    <a id="24" style="text-align: center;">Nombre de montage : 24</a>
+                    <a id="25" style="text-align: center;">Nombre de montage : 25</a>
+                    <a id="26" style="text-align: center;">Nombre de montage : 26</a>
+                    <a id="27" style="text-align: center;">Nombre de montage : 27</a>
+                    <a id="28" style="text-align: center;">Nombre de montage : 28</a>
+                    <a id="29" style="text-align: center;">Nombre de montage : 29</a>
+                    <a id="30" style="text-align: center;">Nombre de montage : 30</a>
+                    <a id="31" style="text-align: center;">Nombre de montage : 31</a>
+                    <a id="32" style="text-align: center;">Nombre de montage : 32</a>
+                    <a id="33" style="text-align: center;">Nombre de montage : 33</a>
+                    <a id="34" style="text-align: center;">Nombre de montage : 34</a>
+                    <a id="35" style="text-align: center;">Nombre de montage : 35</a>
+                    <a id="36" style="text-align: center;">Nombre de montage : 36</a>
+                    <a id="37" style="text-align: center;">Nombre de montage : 37</a>
+                    <a id="38" style="text-align: center;">Nombre de montage : 38</a>
+                    <a id="39" style="text-align: center;">Nombre de montage : 39</a>
+                    <a id="40" style="text-align: center;">Nombre de montage : 40</a>
                 </div>
         </div>
 
 
-
-    <label class="form-group2 checkbox-group" for="inclureAssurance" style="color: white;">Regrouper
-       <input class="form-group2 checkbox-group" type="checkbox" id="ecoPapier" name="ecoPapier">
+    <label class="checkbox-button" for="ecoPapier">
+        <input type="checkbox" id="ecoPapier" name="ecoPapier" class="checkbox-input">
+        <i id="icon" class="fa-solid fa-square"></i> <!-- Icône de base, carré vide -->
+        Regrouper
     </label>
+
 
 
     <!--<select id="number-of-palettes">
@@ -498,6 +620,11 @@ width: 300px;
       const montagesButton = document.getElementById('montages-button');
       const montagesContent = document.getElementById('montages-content');
 
+//const element = document.getElementById('montages-button');
+//const elementHeight = element.offsetHeight; // Gets the height of the element including padding, border, but not margin
+//console.log(elementHeight);
+
+
       const navsuivant = document.getElementById('nav-suivant');
       const navprecedent = document.getElementById('nav-precedent');
       const printetiquette = document.getElementById('print-etiquette');
@@ -556,6 +683,32 @@ width: 300px;
         });
 
 
+document.addEventListener("DOMContentLoaded", function() {
+    const checkbox = document.getElementById('ecoPapier');
+    //const icon = checkbox.nextElementSibling.querySelector('i'); // Récupère l'icône associée
+    var icon = document.getElementById("icon");
+
+    // Initialiser l'icône selon l'état initial de la case à cocher
+    if (checkbox.checked) {
+        icon.classList.remove('fa-square');
+        icon.classList.add('fa-square-check');
+        //icon.classList.toggle('fa-floppy-o');
+        //icon.classList.toggle('fa-pencil');
+    }
+
+    // Écouter le changement d'état de la case à cocher
+    checkbox.addEventListener('change', function() {
+        if (checkbox.checked) {
+            icon.classList.remove('fa-square');
+            icon.classList.add('fa-square-check');
+        } else {
+            icon.classList.remove('fa-square-check');
+            icon.classList.add('fa-square');
+        }
+    });
+});
+
+
 // Fonction pour récupérer la valeur de sizeOfText à partir d'une autre fonction
 function getNumberOfMontages() {
     return numberOfMontages;
@@ -579,10 +732,10 @@ function getNumberOfMontages() {
 
       // Validation
       if (numberOfMontages <= 0) {
-        errorMessage.textContent = "Veuillez choisir le nombre de montage.";
+        //errorMessage.textContent = "Veuillez choisir le nombre de montage.";
         return;
       } else {
-        errorMessage.textContent = ""; // Clear error message
+        //errorMessage.textContent = ""; // Clear error message
       }
 
       container.innerHTML = '';

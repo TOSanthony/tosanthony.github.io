@@ -309,6 +309,8 @@ width: 300px;
             width: 300px;
             padding: 0px;
             margin-left: 10px;
+                max-height: 200px; /* Limiter la hauteur du dropdown */
+    overflow-y: auto; /* Ajouter une scrollbar verticale */
 }
 
 .dropdown-content a {
@@ -336,7 +338,34 @@ width: 300px;
     background-color: #3e8e41;
     background-color: #0056b3;
 }
+/* Personnaliser la barre de défilement */
+.dropdown-content::-webkit-scrollbar {
+  width: 12px; /* Largeur de la barre de défilement */
+  height: 12px; /* Hauteur de la barre de défilement horizontal */
+}
 
+/* Style de la piste (l'arrière-plan de la scrollbar) */
+.dropdown-content::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Couleur de fond de la piste */
+  border-radius: 0px 10px 10px 0px; /* Coins arrondis de la piste */
+}
+
+/* Style du "pouce" (la partie qui défile) */
+.dropdown-content::-webkit-scrollbar-thumb {
+  background: #0056b3; /* Couleur du pouce */
+  border-radius: 25px; /* Coins arrondis du pouce */
+  border: 3px solid #f1f1f1; /* Bordure autour du pouce pour le séparer de la piste */
+}
+
+/* Effet au survol du pouce */
+.dropdown-content::-webkit-scrollbar-thumb:hover {
+  background: #007bff; /* Couleur du pouce au survol */
+}
+
+/* Optionnel: Personnaliser le coin de la scrollbar */
+.dropdown-content::-webkit-scrollbar-corner {
+  background: transparent; /* Coin transparent si on utilise la scrollbar horizontale */
+}
         .blink_me {
             animation: blinker 1s linear 2;
         }
@@ -379,12 +408,36 @@ width: 300px;
                 <a id="8" style="text-align: center;">Nombre de palettes : 8</a>
                 <a id="9" style="text-align: center;">Nombre de palettes : 9</a>
                 <a id="10" style="text-align: center;">Nombre de palettes : 10</a>
+                <a id="11" style="text-align: center;">Nombre de palettes : 11</a>
+                <a id="12" style="text-align: center;">Nombre de palettes : 12</a>
+                <a id="13" style="text-align: center;">Nombre de palettes : 13</a>
+                <a id="14" style="text-align: center;">Nombre de palettes : 14</a>
+                <a id="15" style="text-align: center;">Nombre de palettes : 15</a>
+                <a id="16" style="text-align: center;">Nombre de palettes : 16</a>
+                <a id="17" style="text-align: center;">Nombre de palettes : 17</a>
+                <a id="18" style="text-align: center;">Nombre de palettes : 18</a>
+                <a id="19" style="text-align: center;">Nombre de palettes : 19</a>
+                <a id="20" style="text-align: center;">Nombre de palettes : 20</a>
+                <a id="21" style="text-align: center;">Nombre de palettes : 21</a>
+                <a id="22" style="text-align: center;">Nombre de palettes : 22</a>
+                <a id="23" style="text-align: center;">Nombre de palettes : 23</a>
+                <a id="24" style="text-align: center;">Nombre de palettes : 24</a>
+                <a id="25" style="text-align: center;">Nombre de palettes : 25</a>
+                <a id="26" style="text-align: center;">Nombre de palettes : 26</a>
+                <a id="27" style="text-align: center;">Nombre de palettes : 27</a>
+                <a id="28" style="text-align: center;">Nombre de palettes : 28</a>
+                <a id="29" style="text-align: center;">Nombre de palettes : 29</a>
+                <a id="30" style="text-align: center;">Nombre de palettes : 30</a>
             </div>
         </div>
 
         <div class="dropdown">
             <button  id="font-button" class="dropbtn" style="width: 150px;">Police : 80</button>
             <div id="font-content" class="dropdown-content" style="width: 150px;">
+                <a id="100" style="text-align: center;">Police : 100</a>
+                <a id=95 style="text-align: center;">Police : 95</a>
+                <a id="90" style="text-align: center;">Police : 90</a>
+                <a id="85" style="text-align: center;">Police : 85</a>              
                 <a id="80" style="text-align: center;">Police : 80</a>
                 <a id="75" style="text-align: center;">Police : 75</a>
                 <a id="70" style="text-align: center;">Police : 70</a>
@@ -395,6 +448,12 @@ width: 300px;
                 <a id="45" style="text-align: center;">Police : 45</a>
                 <a id="40" style="text-align: center;">Police : 40</a>
                 <a id="35" style="text-align: center;">Police : 35</a>
+                <a id="30" style="text-align: center;">Police : 30</a>
+                <a id="25" style="text-align: center;">Police : 25</a>
+                <a id="20" style="text-align: center;">Police : 20</a>
+                <a id="15" style="text-align: center;">Police : 15</a>
+                <a id="10" style="text-align: center;">Police : 10</a>
+                <a id="5" style="text-align: center;">Police : 5</a>
             </div>
         </div>
 
