@@ -337,7 +337,22 @@ width: 300px;
     background-color: #0056b3;
 }
 
-
+        .blink_me {
+            animation: blinker 1s linear 2;
+        }
+        .blink_me_loop {
+            animation: redBlinker 1s linear infinite;
+        }
+        @keyframes blinker {  
+            0% { background-color: inherit; }
+            50% { background-color: red; }
+            100% { background-color: inherit; } 
+        }
+        @keyframes redBlinker {
+            0% { background-color: inherit; }
+            50% { background-color: red; }
+            100% { background-color: inherit; }
+        }
     </style>
 </head>
 
@@ -411,7 +426,7 @@ width: 300px;
         const navprecedent = document.getElementById('nav-precedent');
         const printetiquette = document.getElementById('print-etiquette');
         const printpapier = document.getElementById('print-papier');
-        
+
         const dropdownFont = document.querySelectorAll('#font-content a');
         const fontButton = document.getElementById('font-button');
         const fontContent = document.getElementById('font-content');
@@ -470,6 +485,34 @@ width: 300px;
             });
         });
 
+document.addEventListener("DOMContentLoaded", function () {
+    const produitsInput = document.getElementById('client-name');
+    
+    // Récupérer la valeur de l'input
+    const clientName = produitsInput.value;  // Utiliser .value pour récupérer le texte de l'input
+    
+    if (!clientName) {
+        produitsInput.classList.add('blink_me_loop');
+    } else {
+        produitsInput.classList.remove('blink_me_loop');
+    }
+
+    // Écouteur d'événements 'input' pour détecter les changements de texte
+    produitsInput.addEventListener('input', function() {
+        const clientName = produitsInput.value;  // Utiliser .value pour récupérer le texte de l'input
+        
+        if (!clientName) {
+            produitsInput.classList.add('blink_me_loop');
+        } else {
+            produitsInput.classList.remove('blink_me_loop');
+        }
+    });
+});
+
+
+
+
+
 // Fonction pour récupérer la valeur de sizeOfText à partir d'une autre fonction
 function getSizeOfText() {
     return sizeOfText;  // Retourne la valeur actuelle de sizeOfText
@@ -499,12 +542,29 @@ dropdownFont.forEach(link => {
 
 
 
+
+const produitsInput = document.getElementById('client-name');
+    produitsInput.addEventListener('change', () => {
+        if (!clientName || numberOfPalettes <= 0) {
+            //document.getElementById('client-name').classList.remove('blink_me_loop');
+        } else {
+            //document.getElementById('client-name').classList.add('blink_me_loop');
+        }
+    });
+
+
+
+
+
+
       // Validation
       if (!clientName || numberOfPalettes <= 0) {
-        errorMessage.textContent = "Veuillez remplir tous les champs correctement.";
+        //errorMessage.textContent = "Veuillez remplir tous les champs correctement.";
+        //document.getElementById('client-name').classList.add('blink_me_loop');
         return;
       } else {
-        errorMessage.textContent = ""; // Clear error message
+        //errorMessage.textContent = ""; // Clear error message
+        //document.getElementById('client-name').classList.remove('blink_me_loop');
       }
 
       container.innerHTML = '';
