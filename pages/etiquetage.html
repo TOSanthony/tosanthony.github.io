@@ -362,6 +362,22 @@ width: 300px;
     background-color: #3e8e41;
     background-color: #0056b3;
 }
+        .blink_me {
+            animation: blinker 1s linear 2;
+        }
+        .blink_me_loop {
+            animation: redBlinker 1s linear infinite;
+        }
+        @keyframes blinker {  
+            0% { background-color: inherit; }
+            50% { background-color: red; }
+            100% { background-color: inherit; } 
+        }
+        @keyframes redBlinker {
+            0% { background-color: inherit; }
+            50% { background-color: red; }
+            100% { background-color: inherit; }
+        }
   </style>
 </head>
 
@@ -394,17 +410,17 @@ width: 300px;
         <div class="dropdown">
             <button  id="montages-button" class="dropbtn" style="width: 250px;">Nombre de montage : 0</button>
                 <div id="montages-content" class="dropdown-content" style="width: 250px; display: none;">
-                    <a id="0" style="text-align: center;">Nombre de montages : 0</a>
-                    <a id="1" style="text-align: center;">Nombre de montages : 1</a>
-                    <a id="2" style="text-align: center;">Nombre de montages : 2</a>
-                    <a id="3" style="text-align: center;">Nombre de montages : 3</a>
-                    <a id="4" style="text-align: center;">Nombre de montages : 4</a>
-                    <a id="5" style="text-align: center;">Nombre de montages : 5</a>
-                    <a id="6" style="text-align: center;">Nombre de montages : 6</a>
-                    <a id="7" style="text-align: center;">Nombre de montages : 7</a>
-                    <a id="8" style="text-align: center;">Nombre de montages : 8</a>
-                    <a id="9" style="text-align: center;">Nombre de montages : 9</a>
-                    <a id="10" style="text-align: center;">Nombre de montages : 10</a>
+                    <a id="0" style="text-align: center;">Nombre de montage : 0</a>
+                    <a id="1" style="text-align: center;">Nombre de montage : 1</a>
+                    <a id="2" style="text-align: center;">Nombre de montage : 2</a>
+                    <a id="3" style="text-align: center;">Nombre de montage : 3</a>
+                    <a id="4" style="text-align: center;">Nombre de montage : 4</a>
+                    <a id="5" style="text-align: center;">Nombre de montage : 5</a>
+                    <a id="6" style="text-align: center;">Nombre de montage : 6</a>
+                    <a id="7" style="text-align: center;">Nombre de montage : 7</a>
+                    <a id="8" style="text-align: center;">Nombre de montage : 8</a>
+                    <a id="9" style="text-align: center;">Nombre de montage : 9</a>
+                    <a id="10" style="text-align: center;">Nombre de montage : 10</a>
                 </div>
         </div>
 
@@ -478,9 +494,9 @@ width: 300px;
       //const numberOfMontages = parseInt(document.getElementById('number-of-montages').value);
       
 
-        const dropdownMontages = document.querySelectorAll('#montages-content a');
-        const montagesButton = document.getElementById('montages-button');
-        const montagesContent = document.getElementById('montages-content');
+      const dropdownMontages = document.querySelectorAll('#montages-content a');
+      const montagesButton = document.getElementById('montages-button');
+      const montagesContent = document.getElementById('montages-content');
 
       const navsuivant = document.getElementById('nav-suivant');
       const navprecedent = document.getElementById('nav-precedent');
@@ -510,6 +526,12 @@ width: 300px;
                 numberOfMontages = this.id;
                 montagesButton.textContent = clientName;
                 montagesContent.style.display = 'none'; // Masque le dropdown-content
+                // Vérifier si numberOfMontages est égal à '0'
+                if (numberOfMontages === '0') {
+                    document.getElementById('montages-button').classList.add('blink_me_loop');
+                } else {
+                    document.getElementById('montages-button').classList.remove('blink_me_loop'); // Suppression correcte de la classe
+                }
             });
         });
 
@@ -525,20 +547,30 @@ width: 300px;
             });
         });
 
+        document.addEventListener("DOMContentLoaded", function () {
+            if (montagesButton.textContent === 'Nombre de montage : 0') {
+                document.getElementById('montages-button').classList.add('blink_me_loop');
+            } else {
+                document.getElementById('montages-button').classList.remove('blink_me_loop'); // Suppression correcte de la classe
+            }
+        });
 
 
 // Fonction pour récupérer la valeur de sizeOfText à partir d'une autre fonction
 function getNumberOfMontages() {
-    return numberOfMontages;  // Retourne la valeur actuelle de sizeOfText
+    return numberOfMontages;
 }
 
     function generateLabels() {
+
+//
+
+
       //const clientName = document.getElementById('client-name').value;
       //const numberOfPalettes = parseInt(document.getElementById('number-of-palettes').value);
 
       //const numberOfMontages = parseInt(document.getElementById('number-of-montages').value);
-      const numberOfMontages = getNumberOfMontages()
-
+      numberOfMontages = getNumberOfMontages();
       //const sizeOfText = parseInt(document.getElementById('font-size').value);
       const container = document.getElementById('labels-container');
       const navButtons = document.querySelector('.nav-buttons');
