@@ -386,12 +386,14 @@ width: 300px;
             backdrop-filter: blur(20px);
             width: 300px;
             padding: 0px;
-            margin-left: 10px;
+            margin-top: 10px;
+            max-height: 200px; /* Limiter la hauteur du dropdown */
+            overflow-y: auto; /* Ajouter une scrollbar verticale */
 }
 
 .dropdown-content a {
   color: white;
-  padding: 12px 16px;
+  padding: 10px 16px;
   text-decoration: none;
   display: block;
 }
@@ -402,11 +404,45 @@ width: 300px;
     border-radius: 10px;
 }
 
-.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropdown-content {
+  display: none;
+}
+
+.dropdown:click .dropdown-content {
+  display: block;
+}
 
 .dropdown:hover .dropbtn {
     background-color: #3e8e41;
     background-color: #0056b3;
+}
+/* Personnaliser la barre de défilement */
+.dropdown-content::-webkit-scrollbar {
+  width: 12px; /* Largeur de la barre de défilement */
+  height: 12px; /* Hauteur de la barre de défilement horizontal */
+}
+
+/* Style de la piste (l'arrière-plan de la scrollbar) */
+.dropdown-content::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Couleur de fond de la piste */
+  border-radius: 0px 10px 10px 0px; /* Coins arrondis de la piste */
+}
+
+/* Style du "pouce" (la partie qui défile) */
+.dropdown-content::-webkit-scrollbar-thumb {
+  background: #0056b3; /* Couleur du pouce */
+  border-radius: 25px; /* Coins arrondis du pouce */
+  border: 3px solid #f1f1f1; /* Bordure autour du pouce pour le séparer de la piste */
+}
+
+/* Effet au survol du pouce */
+.dropdown-content::-webkit-scrollbar-thumb:hover {
+  background: #007bff; /* Couleur du pouce au survol */
+}
+
+/* Optionnel: Personnaliser le coin de la scrollbar */
+.dropdown-content::-webkit-scrollbar-corner {
+  background: transparent; /* Coin transparent si on utilise la scrollbar horizontale */
 }
 
 
@@ -440,13 +476,6 @@ width: 300px;
         .blink_me_loop {
             animation: redBlinker 1s linear infinite;
         }
-
-
-
-.button-container {
-    display: flex;
-    gap: 10px; /* Ajoute un espacement entre les boutons */
-}
         @keyframes blinker {  
             0% { background-color: inherit; }
             50% { background-color: red; }
@@ -457,6 +486,12 @@ width: 300px;
             50% { background-color: red; }
             100% { background-color: inherit; }
         }
+        .button-container {
+            display: flex;
+            gap: 10px; /* Ajoute un espacement entre les boutons */
+        }
+
+
         /* Optimisation pour l'impression */
         @media print {
             body {
@@ -530,8 +565,8 @@ width: 300px;
 
 
     <div class="dropdown">
-        <button  id="dropdown-button" class="dropbtn">-- CHOISIR UN CLIENT --</button>
-            <div id="dropdown-content" class="dropdown-content">
+        <button  id="dropdown-button" class="dropbtn" style="width: 300px;">-- CHOISIR UN CLIENT --</button>
+            <div id="dropdown-content" class="dropdown-content" style="width: 300px; display: none;">
                 <a id="client0">-- CHOISIR UN CLIENT --</a>
             </div>
     </div>
@@ -765,6 +800,16 @@ proformaNumber.addEventListener('change', () => {
         document.getElementById('proformaNumber').classList.remove('blink_me_loop');
     }
 });
+
+            const dropdownClients = document.querySelectorAll('#montages-content a');
+            const dropdownButton = document.getElementById('dropdown-button');
+            const dropdownContent = document.getElementById('dropdown-content');
+
+//const dropdownButton = document.getElementById('dropdown-button');
+    //const dropdownContent = document.getElementById('dropdown-content');
+
+
+
 
 
 
@@ -1371,8 +1416,8 @@ function clearWeight() {
         //option.textContent = client.society;
         //select.appendChild(option);
     //});
-
-    const dropdownContent = document.getElementById('dropdown-content');
+//const dropdownButton = document.getElementById('dropdown-button');
+    //const dropdownContent = document.getElementById('dropdown-content');
     sortedClients.forEach(([key, client]) => {
         const content = document.createElement('a');
         content.value = key;
@@ -1392,7 +1437,7 @@ function clearWeight() {
 
 // Sélectionne tous les éléments <a> dans le menu dropdown
 const dropdownLinks = document.querySelectorAll('#dropdown-content a');
-const dropdownButton = document.getElementById('dropdown-button');
+//const dropdownButton = document.getElementById('dropdown-button');
 
 // Ajoute un événement de clic à chaque élément
 dropdownLinks.forEach(link => {
@@ -1405,9 +1450,34 @@ dropdownLinks.forEach(link => {
             document.getElementById('dropdown-button').classList.remove('blink_me_loop');
         const clientName = this.textContent;
         dropdownButton.textContent = clientName;
-
+        dropdownContent.style.display = 'none';
     });
 });
+
+
+        ////dropdownClients.forEach(link => {
+            ////link.addEventListener('click', function() {
+                //const clientName = this.textContent;
+                //dropdownButton.textContent = clientName;
+                dropdownContent.style.display = 'none'; // Masque le dropdown-content
+            ////});
+        ////});
+
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            dropdownButton.addEventListener('click', function() {
+                if (dropdownContent.style.display === 'none' || dropdownContent.style.display === '') {
+                    dropdownContent.style.display = 'block';
+                } else {
+                    dropdownContent.style.display = 'none';
+                }
+            });
+        });
+
+
+
 
 
 function resetFields() {
