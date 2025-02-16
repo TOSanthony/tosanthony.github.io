@@ -8,19 +8,20 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
         <style>
-            body {
-                font-family: Arial, sans-serif;
-                background: linear-gradient(90deg, #b9deed, #efefef);
-                margin: 0;
-                padding: 20px;
-
+    body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
             background-color: #f0f0f0;
             background: linear-gradient(90deg, #b9deed, #efefef);
             background: linear-gradient(-45deg, #82B2C0 33%, #B3D1E7 66%, #97B3AE 100%);
             background: linear-gradient(-45deg, #9200ff 25%, #e73c7e 50%, #23a6d5 75%, #23d5ab 100%);
             background-size: 400% 400%;
             animation: gradient 20s ease infinite;
-            
         }
         @keyframes gradient {
             0% {
@@ -56,6 +57,14 @@
         ::-webkit-scrollbar-thumb {
             background: #FF0000;
         }
+    .form-container {
+      margin-bottom: 30px;
+      display: flex;
+    }
+
+    .form-container input, .form-container button, .form-container select {
+      margin: 10px;
+    }
             .container {
                 max-width: 500px;
                 margin: auto;
@@ -135,17 +144,21 @@
                  margin: 5px 0;
                 text-align: right;
             }
-            .button {
-                background-color: #0056b3;
-                color: white;
-                padding: 10px 20px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                font-size: 16px;
-                margin-top: 15px;
-                box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
-            }
+    .button {
+      padding: 0px 20px;
+      cursor: pointer;
+      background-color: #0056b3;
+      color: white;
+      border: none;
+      height: 39px;
+      border-radius: 10px;
+      margin-top: 10px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+      transition: background-color 0.3s, box-shadow 0.3s;
+      background: rgba(0, 0, 0, 0.5);
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+    }
             .button:hover:not(:disabled) {
                 background-color: #007bff;
             }
@@ -226,6 +239,68 @@
             .hidden {
                 display: none;
             }
+
+
+.checkbox-input {
+    display: none;
+}
+
+.checkbox-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    font-weight: bold;
+    background-color: #0056b3;
+    padding: 0px 20px;
+    height: 39px;
+    color: white;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    margin-top: 10px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+    transition: background-color 0.3s, box-shadow 0.3s;
+    background: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+
+
+
+
+}
+
+.checkbox-button:hover {
+    background-color: #007bff;
+    transform: scale(1.00);
+}
+
+        .checkbox-input:checked + .checkbox-button {
+            background-color: #28a745;
+        }
+
+        /* Icône qui change lorsque la case est cochée */
+        .checkbox-button i {
+            margin-right: 10px;
+        }
+        .blink_me {
+            animation: blinker 1s linear 2;
+        }
+        .blink_me_loop {
+            animation: redBlinker 1s linear infinite;
+        }
+        @keyframes blinker {  
+            0% { background-color: inherit; }
+            50% { background-color: red; }
+            100% { background-color: inherit; } 
+        }
+        @keyframes redBlinker {
+            0% { background-color: inherit; }
+            50% { background-color: red; }
+            100% { background-color: inherit; }
+        }
         </style>
     </head>
 <body>
@@ -235,6 +310,26 @@
     <div align="center">
        <h1>Cotation</h1>
     </div>
+
+
+            <div class="form-container">
+                <button type="button" id="calcul" class="button" onclick="calculerFrais()"><i class="fa-solid fa-calculator"></i> Calculer</button>
+
+                <label class="checkbox-button" for="inclureAssurance">
+                    <input type="checkbox" id="inclureAssurance" name="inclureAssurance" class="checkbox-input">
+                    <i id="icon" class="fa-solid fa-square"></i> <!-- Icône de base, carré vide -->
+                    Assurance
+                </label>
+
+                <button type="button" class="button" onclick="resetFields()" id="reset" disabled><i class="fa-solid fa-rotate-right"></i> Réinitialiser</button>
+
+                <button type="button" class="button" onclick="exporterEnImage()" id="print" disabled>
+                    <i class="fa-solid fa-file-export"></i>
+                    Exporter
+                </button>
+            </div>
+
+
     <div class="container">
         <form id="chronopostForm">
             <div class="form-group-inline">
@@ -255,11 +350,11 @@
             <div class="form-group-inline">
                 <div class="form-group">
                     <label for="poids">Poids (kg) :</label>
-                    <input type="number" id="poids" name="poids" step="0.1" min="0" max="30">
+                    <input type="number" id="poids" name="poids" step="0.5" min="0" max="30">
                 </div>
                 <div class="form-group">
                     <label for="colis">Nombre de colis :</label>
-                    <input type="number" id="colis" name="colis" min="1" value="1">
+                    <input type="number" id="colis" name="colis" min="0" value="">
                 </div>
             </div>
             <div align="center">
@@ -284,26 +379,26 @@
                     <input type="text" id="participationEco" name="participationEco" value="0.00 €" class="readonly-input" readonly>
                 </div>
             </div>
-            <div class="form-group2 checkbox-group">
+            <!--<div class="form-group2 checkbox-group">
                 <label for="inclureAssurance">Inclure une assurance
                 <input type="checkbox" id="inclureAssurance" name="inclureAssurance">
                 </label>
-            </div>
+            </div>-->
             <div class="form-group-inline">
                 <div class="form-group" id="valeurCommandeGroup" style="display: none;">
                     <label for="assurance">Valeur en € :</label>
-                    <input type="number" id="assurance" name="assurance" min="0" step="0.01">
+                    <input type="number" id="assurance" name="assurance" min="0" value="" step="0.01">
                 </div>
                 <div class="form-group">
                     <label for="proforma">Proforma n° :</label>
-                    <input type="texte" style="width:50%; justify-content: flex-end;" id="proforma" name="profroma" min="0" step="0.01">
+                    <input type="number" style="width:50%; justify-content: flex-end;" id="proforma" name="profroma" min="0" value="" step="1000">
                 </div>
             </div>
-            <div class="form-group-inline-extended">
+            <!--<div class="form-group-inline-extended">
                 <button type="button" class="button" onclick="calculerFrais()"><i class="fa-solid fa-calculator"></i> Calculer</button>
                 <button type="button" class="button" onclick="resetFields()" id="reset" disabled><i class="fa-solid fa-rotate-right"></i> Réinitialiser</button>
                 <button type="button" class="button" onclick="exporterEnImage()" id="print" disabled><i class="fa-solid fa-file-export"></i> Exporter</button>
-            </div>
+            </div>-->
         </form>
         <div class="result" id="resultat">
             <p style="font-size:14px;" id="prixColis"></p>
@@ -356,6 +451,7 @@
                         document.getElementById('surchargeCarburant').removeAttribute('readonly');
                     });
             }
+
             document.getElementById('typeChronopost').addEventListener('change', function () {
                 const type = this.value;
                 const zoneSelect = document.getElementById('zone');
@@ -367,38 +463,129 @@
                     zoneSelect.appendChild(option);
                 });
             });
+
             document.getElementById('inclureAssurance').addEventListener('change', function () {
                 const valeurCommandeGroup = document.getElementById('valeurCommandeGroup');
                 const prixAssurance = document.getElementById('prixAssurance');
+                const checkbox = document.getElementById('inclureAssurance');
+                var icon = document.getElementById("icon");
                 valeurCommandeGroup.style.display = this.checked ? 'block' : 'none';
                 prixAssurance.style.display = this.checked ? 'block' : 'none';
+                if (checkbox.checked) {
+                    icon.classList.remove('fa-square');
+                    icon.classList.add('fa-square-check');
+                }
             });
-            fetchSurchargeCarburant();
-            document.getElementById('typeChronopost').addEventListener('change', fetchSurchargeCarburant);
-            document.getElementById('typeChronopost').dispatchEvent(new Event('change'));
-            document.getElementById('inclureAssurance').dispatchEvent(new Event('change'));
-        });
-        document.getElementById('inclureAssurance').addEventListener('change', function () {
-            const valeurCommandeGroup = document.getElementById('valeurCommandeGroup');
-            const prixAssurance = document.getElementById('prixAssurance');
-            valeurCommandeGroup.style.display = this.checked ? 'block' : 'none';
-            prixAssurance.style.display = this.checked ? 'block' : 'none';
-        });
-        document.addEventListener('DOMContentLoaded', function () {
-           document.getElementById('colis').addEventListener('change', function () {
-           const colis = parseInt(document.getElementById('colis').value);
+
+
+            // Gestion du champ "poids"
+            document.getElementById('poids').addEventListener('change', function () {
+                const poids = parseInt(document.getElementById('poids').value);
+                if (isNaN(poids) || poids <= 0) {
+                    document.getElementById('poids').classList.add('blink_me_loop');
+                } else {
+                    document.getElementById('poids').classList.remove('blink_me_loop');
+                }
+            });
+
+            // Gestion du champ "assurance"
+            document.getElementById('assurance').addEventListener('change', function () {
+                const inclureAssurance = document.getElementById('inclureAssurance').checked;
+                const valeurCommande = parseFloat(document.getElementById('assurance').value);
+                if (isNaN(valeurCommande) || valeurCommande <= 0) {
+                    document.getElementById('assurance').classList.add('blink_me_loop');
+                } else {
+                    document.getElementById('assurance').classList.remove('blink_me_loop');
+                }
+            });
+
+            // Gestion du champ "proforma"
+            document.getElementById('proforma').addEventListener('change', function () {
+                const proforma = document.getElementById('proforma').value;
+                if (proforma === "") { // Vérification si la valeur est vide
+                    document.getElementById('proforma').classList.add('blink_me_loop');
+                } else {
+                    document.getElementById('proforma').classList.remove('blink_me_loop');
+                }
+            });
+
+            // Gestion du champ "colis"
+            document.getElementById('colis').addEventListener('change', function () {
+                const colis = parseInt(document.getElementById('colis').value);
                 if (!isNaN(colis) && colis > 0) {
                     const prixSurete = colis * 0.8;
                     const prixEco = colis * 0.09;
                     document.getElementById('participationSurete').value = `${prixSurete.toFixed(2)} €`;
                     document.getElementById('participationEco').value = `${prixEco.toFixed(2)} €`;
+                    document.getElementById('colis').classList.remove('blink_me_loop');
                 } else {
                     document.getElementById('participationSurete').value = '0.00 €';
                     document.getElementById('participationEco').value = '0.00 €';
+                    document.getElementById('colis').classList.add('blink_me_loop');
                 }
             });
+
+            fetchSurchargeCarburant();
+            document.getElementById('typeChronopost').addEventListener('change', fetchSurchargeCarburant);
+            document.getElementById('typeChronopost').dispatchEvent(new Event('change'));
+            document.getElementById('inclureAssurance').dispatchEvent(new Event('change'));
+            document.getElementById('poids').dispatchEvent(new Event('change'));
+            document.getElementById('assurance').dispatchEvent(new Event('change'));
+            document.getElementById('proforma').dispatchEvent(new Event('change'));
             document.getElementById('colis').dispatchEvent(new Event('change'));
         });
+
+        document.getElementById('inclureAssurance').addEventListener('change', function () {
+            const valeurCommandeGroup = document.getElementById('valeurCommandeGroup');
+            const prixAssurance = document.getElementById('prixAssurance');
+            const checkbox = document.getElementById('inclureAssurance');
+            var icon = document.getElementById("icon");
+            valeurCommandeGroup.style.display = this.checked ? 'block' : 'none';
+            prixAssurance.style.display = this.checked ? 'block' : 'none';
+            if (checkbox.checked) {
+                icon.classList.remove('fa-square');
+                icon.classList.add('fa-square-check');
+            } else {
+                icon.classList.remove('fa-square-check');
+                icon.classList.add('fa-square');
+            }
+        });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const colis = document.getElementById('colis');
+    const proforma = document.getElementById('proforma');
+    const poids = document.getElementById('poids');
+    const assurance = document.getElementById('assurance');
+    const inclureAssurance = document.getElementById('inclureAssurance');
+    const calculButton = document.getElementById('calcul');
+
+    function verifyInputs() {
+        // Vérifie si tous les champs sont remplis et si inclureAssurance est checked
+        const colisValide = colis.value.trim() !== "";
+        const proformaValide = proforma.value.trim() !== "";
+        const poidsValide = poids.value.trim() !== "" && !isNaN(poids.value) && poids.value > 0;
+        const assuranceValide = inclureAssurance.checked ? (assurance.value.trim() !== "" && !isNaN(assurance.value) && assurance.value > 0) : true;
+
+        // Active ou désactive le bouton de calcul en fonction de la validité des champs
+        if (colisValide && proformaValide && poidsValide && assuranceValide) {
+            calculButton.disabled = false;
+        } else {
+            calculButton.disabled = true;
+        }
+    }
+
+    // Ajouter des écouteurs d'événements sur les champs
+    colis.addEventListener('input', verifyInputs);
+    proforma.addEventListener('input', verifyInputs);
+    poids.addEventListener('input', verifyInputs);
+    assurance.addEventListener('input', verifyInputs);
+    inclureAssurance.addEventListener('change', verifyInputs);
+
+    // Vérification initiale des champs au chargement
+    verifyInputs();
+});
+
+
         function calculerFrais() {
             const type = document.getElementById('typeChronopost').value;
             const zone = document.getElementById('zone').value;
@@ -411,13 +598,14 @@
             const inclureAssurance = document.getElementById('inclureAssurance').checked;
             const valeurCommande = inclureAssurance ? parseFloat(document.getElementById('assurance').value || 0) : 0;
             if (isNaN(poids) || poids <= 0) {
-                alert('Veuillez mettre le poids total de la commande.');
+                //alert('Veuillez mettre le poids total de la commande.');
+                document.getElementById('poids').classList.add('blink_me_loop');
                 return;
             } else if (isNaN(colis) || colis <= 0) {
-                alert('Veuillez mettre le nombre de colis.');
+                //alert('Veuillez mettre le nombre de colis.');
                 return;
             } else if (nproforma === "") {
-                alert('Veuillez remplir le numéro de proforma.');
+                //alert('Veuillez remplir le numéro de proforma.');
                 return;
             } else if (zone === "") {
                 alert('Veuillez mettre une zone correct.');
@@ -1249,6 +1437,7 @@ function exporterEnImage() {
     });
 }
         function resetFields() {
+            location.reload(true);
             document.getElementById("proforma").value = '';
             document.getElementById("poids").value = '';
             document.getElementById("prixColis").innerText = '';
