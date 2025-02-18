@@ -1,0 +1,2269 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="icon" type="image/x-icon" href="../icons/favicon.ico">
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css">
+    <title>Facture Proforma</title>
+    <style>
+        /* Style global */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(90deg, #b9deed, #efefef);
+            background: linear-gradient(-45deg, #82B2C0 33%, #B3D1E7 66%, #97B3AE 100%);
+            background: linear-gradient(-45deg, #9200ff 25%, #e73c7e 50%, #23a6d5 75%, #23d5ab 100%);
+            background-size: 400% 400%;
+            animation: gradient 20s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* En-tête */
+        header {
+            width: 100%;
+            padding: 20px;
+            /* background-color: #2c3e50; */
+            background-color: transparent;
+            color: white;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
+        }
+
+        /* Conteneur principal */
+        .container {
+            display: flex;
+            flex: 1;
+            width: 90%;
+            margin-top: 30px;
+            min-height: 85vh;
+            max-height: 85vh;
+        }
+
+        /* Section des boutons à gauche */
+        .left-panel {
+            width: 25%;
+            /* background-color: #ffffff; */
+            background-color: transparent;
+            padding: 20px;
+            border-radius: 8px;
+            /* box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1); */
+            margin-right: 20px;
+        }
+
+        .left-panel h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .button {
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            text-align: center;
+        }
+
+        .button:hover {
+            background-color: #2980b9;
+        }
+
+        .button:focus {
+            outline: none;
+        }
+
+
+        /* Titre du contenu */
+        .content-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .content-text {
+            font-size: 18px;
+            color: #7f8c8d;
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        html {
+            overflow: scroll;
+            overflow-x: hidden;
+        }
+        ::-webkit-scrollbar {
+            width: 0;  /* Remove scrollbar space */
+            background: transparent;  /* Optional: just make scrollbar invisible */
+        }
+        /* Optional: show position indicator in red */
+        ::-webkit-scrollbar-thumb {
+            background: #FF0000;
+        }
+        table {
+           width: 100%;
+           border-collapse: collapse;
+           margin-top: 10px;
+           font-size: 10px;
+        }
+        .tableTotal {
+           width: 100%;
+           align-items: right;
+           border-collapse: collapse;
+           margin-top: -2px;
+           font-size: 10px;
+        }
+        th, td {
+           border: 1px solid black;
+           /* padding-top, padding-right, padding-bottom, padding-left */
+           padding: 3px 5px 3px 3px;
+           text-align: left;
+           font-size: 10px;
+        }
+        th {
+           background-color: #f2f2f2;
+        }
+        .header {
+           display: flex;
+           justify-content: space-between;
+           align-items: flex-start;
+           margin-bottom: 20px;
+        }
+        .img {
+           max-width: 300px;
+        }
+        .company-info {
+           font-size: 10px;
+           padding: 3px 5px 3px 3px;
+        }
+        .right-info {
+           text-align: left;
+           margin-top: -58.5px;
+        }
+        .input-group {
+           margin-bottom: 10px;
+        }
+        input {
+           font-size: 10px;
+        }
+        input:disabled {
+           background-color: transparent;
+           color: black;
+           border: 0px solid #ccc;
+           font-size: 10px;
+        }
+        .table-container {
+            display: flex;
+            justify-content: space-between; /* Aligner les tableaux à gauche et à droite */
+            align-items: flex-start; /* Aligner les tableaux en haut */
+        }
+        #company-info-left {
+            width: 300px; /* Largeur du tableau */
+            border-collapse: collapse;
+        }
+        #company-info-left th {
+            text-align: center;
+        }
+        #company-info-left td {
+            text-align: left;
+        }
+        #company-info-left input:disabled {
+           background-color: transparent;
+           color: black;
+           border: 0px solid #ccc;
+           font-size: 10px;
+           text-align: left;
+        }
+        #company-info-right {
+            width: 300px;
+            border-collapse: collapse;
+        }
+        #company-info-right th {
+            text-align: center;
+        }
+        #company-info-right td {
+            text-align: left;
+        }
+        .container-up {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+            height: 60px;
+        }
+        .left-section img {
+            margin-top: -10px;
+            width: 70%;
+        }
+        .right-section {
+            text-align: left;
+            font-size: 12px;
+        }
+        .right-section label {
+            font-weight: bold;
+        }
+        .right-section input {
+            border: 0px;
+            font-size: 12px;
+            padding: 2px;
+        }
+        .right-section strong {
+            font-size: 12px;
+        }
+        .floating-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 75px;
+            height: 75px;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.5);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+        }
+        .floating-button:hover {
+            background-color: #007bff;
+            transform: scale(1.1);
+        }
+        .floating-button svg {
+            width: 35px;
+            height: 35px;
+        }
+        .floating-button img {
+            width: 50px;
+            height: 50px;
+        }
+        .form-container {
+            margin-bottom: 30px;
+        }
+        .form-container input, .form-container button, .form-container select {
+            margin: 0px;
+        }
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            margin-top: 10px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.3s, box-shadow 0.3s;
+            background: rgba(0, 0, 0, 0.5);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+        }
+        button:disabled {
+            background-color: #d6d6d6;
+            color: #a0a0a0;
+            cursor: not-allowed;
+            box-shadow: none;
+            border: none;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        button:hover:not(:disabled) {
+            background-color: #007bff;
+        }
+        .a4-container {
+            margin-left: 70%;
+            width: 210mm;
+            /* height: 297mm; */
+            background-color: #FFFFFF;
+            flex-wrap: wrap;
+            margin: 0px auto;
+            /* padding: 10mm; Ajout d'une marge intérieure pour éviter que le contenu touche les bords */
+            padding-top: 10mm;
+            padding-left: 10mm;
+            padding-right: 10mm;
+            border-radius: 10px;
+            z-index: 1;
+            overflow-y: auto;
+        }
+
+
+        /* Section du contenu principal à droite */
+        .right-panel {
+            width: 50%;
+            background-color: #000000;
+            border-radius: 10px;
+            z-index: 1;
+            overflow-y: auto;
+        }
+
+/* Personnaliser la barre de défilement */
+.a4-container::-webkit-scrollbar {
+  width: 12px; /* Largeur de la barre de défilement */
+  height: 12px; /* Hauteur de la barre de défilement horizontal */
+}
+
+/* Style de la piste (l'arrière-plan de la scrollbar) */
+.a4-container::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Couleur de fond de la piste */
+  border-radius: 0px 10px 10px 0px; /* Coins arrondis de la piste */
+}
+
+/* Style du "pouce" (la partie qui défile) */
+.a4-container::-webkit-scrollbar-thumb {
+  background: #0056b3; /* Couleur du pouce */
+  border-radius: 25px; /* Coins arrondis du pouce */
+  border: 3px solid #f1f1f1; /* Bordure autour du pouce pour le séparer de la piste */
+}
+
+/* Effet au survol du pouce */
+.a4-container::-webkit-scrollbar-thumb:hover {
+  background: #007bff; /* Couleur du pouce au survol */
+}
+
+/* Optionnel: Personnaliser le coin de la scrollbar */
+.a4-container::-webkit-scrollbar-corner {
+  background: transparent; /* Coin transparent si on utilise la scrollbar horizontale */
+}
+
+
+
+        .area {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;  
+            background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8);  
+            z-index: -1; /* Placer l'élément derrière tout le reste */
+            /*overflow: hidden;*/
+        }
+        h1 {
+            color: white;
+            /*color: #0056b3;*/
+            justify-content: center;
+            align: center;
+        }
+        select {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #a0a0a0;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            margin-top: 10px;
+            margin-right: 10px;
+        }
+        select {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: white;
+            color: black;
+            border: none;
+            border-radius: 10px;
+            margin-top: 10px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        select {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: white;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            margin-top: 10px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.5);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+        }
+
+/* Change la couleur de fond lorsque le <select> est activé (focus) */
+select:focus {
+                box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.5);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+}
+
+option {
+
+
+                
+            background: rgba(0, 0, 0, 0.5) !important;
+            -webkit-backdrop-filter: blur(20px)  !important;
+            backdrop-filter: blur(20px)  !important;
+
+
+}
+select option:hover,
+    select option:focus,
+    select option:active {
+background: rgba(0, 0, 0, 0.5) !important;
+            -webkit-backdrop-filter: blur(20px)  !important;
+            backdrop-filter: blur(20px)  !important;
+    }
+
+    select option:checked {
+background: rgba(0, 0, 0, 0.5) !important;
+            -webkit-backdrop-filter: blur(20px)  !important;
+            backdrop-filter: blur(20px)  !important;
+    }
+
+
+select option:checked:after {
+    content: attr(title);
+    background: #666;
+    color: #fff;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    border: none;
+}
+#select {
+  width: 100px;
+}
+
+select:hover {
+  color: white;
+background: rgba(0, 0, 0, 0.5) !important;
+            -webkit-backdrop-filter: blur(20px)  !important;
+            backdrop-filter: blur(20px)  !important;
+            background-color: transparent  !important;
+
+}
+
+select option:checked {
+  background: yellow;
+  /* selected */
+}
+
+
+.dropbtn {
+    background-color: #04AA6D;
+    color: white;
+    padding: 16px;
+    font-size: 12px;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #0056b3;
+    color: white;
+    border-radius: 10px;
+    margin-top: 10px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+    transition: background-color 0.3s, box-shadow 0.3s;
+    background: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    width: 100%;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    z-index: 2;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    background: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    width: 100%;
+    padding: 0px;
+    margin-top: 10px;
+    max-height: 200px; /* Limiter la hauteur du dropdown */
+    overflow-y: auto; /* Ajouter une scrollbar verticale */
+    align-items: center;
+}
+
+.dropdown-content a {
+  color: white;
+  padding: 10px 16px;
+  text-decoration: none;
+  display: block;
+  align-items: center;
+  text-align: center;
+  font-size: 12px;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+    color: black;
+    border-radius: 10px;
+}
+
+.dropdown:hover .dropdown-content {
+  display: none;
+}
+
+.dropdown:click .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+    background-color: #0056b3;
+}
+/* Personnaliser la barre de défilement */
+.dropdown-content::-webkit-scrollbar {
+  width: 12px; /* Largeur de la barre de défilement */
+  height: 12px; /* Hauteur de la barre de défilement horizontal */
+}
+
+/* Style de la piste (l'arrière-plan de la scrollbar) */
+.dropdown-content::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Couleur de fond de la piste */
+  border-radius: 0px 10px 10px 0px; /* Coins arrondis de la piste */
+}
+
+/* Style du "pouce" (la partie qui défile) */
+.dropdown-content::-webkit-scrollbar-thumb {
+  background: #0056b3; /* Couleur du pouce */
+  border-radius: 25px; /* Coins arrondis du pouce */
+  border: 3px solid #f1f1f1; /* Bordure autour du pouce pour le séparer de la piste */
+}
+
+/* Effet au survol du pouce */
+.dropdown-content::-webkit-scrollbar-thumb:hover {
+  background: #007bff; /* Couleur du pouce au survol */
+}
+
+/* Optionnel: Personnaliser le coin de la scrollbar */
+.dropdown-content::-webkit-scrollbar-corner {
+  background: transparent; /* Coin transparent si on utilise la scrollbar horizontale */
+}
+
+
+
+
+        .hidden {
+            display: none; /* Cache le bouton */
+        }
+        input[type="file"] {
+            color: transparent;         /* Cache le texte */
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #0056b3;
+            border: none;
+            border-radius: 10px;
+            margin-top: 10px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .readonly-input {
+            background-color: transparent;
+            color: black;
+            cursor: text;
+            border: 0px solid #ccc;
+            font-size: 10px;
+            outline:none;
+        }
+        .blink_me {
+            animation: blinker 1s linear 2;
+        }
+        .blink_me_loop {
+            animation: redBlinker 1s linear infinite;
+        }
+        @keyframes blinker {  
+            0% { background-color: inherit; }
+            50% { background-color: red; }
+            100% { background-color: inherit; } 
+        }
+        @keyframes redBlinker {
+            0% { background-color: inherit; }
+            50% { background-color: red; }
+            100% { background-color: inherit; }
+        }
+        .button-container {
+            display: flex;
+            gap: 10px; /* Ajoute un espacement entre les boutons */
+        }
+
+
+        /* Optimisation pour l'impression */
+        @media print {
+            body {
+                background: none;
+                margin: 0;
+                padding: 0;
+            }
+            h1 {
+                display: none;
+            }
+            .left-panel {
+                display: none;
+            }
+            header {
+                display: none;
+            }
+            .a4-container {
+                width: 210mm;
+                /* height: 297mm; */
+                background-color: #FFFFFF;
+                flex-wrap: wrap;
+                margin: 0px;
+                padding: 0px; /* Ajout d'une marge intérieure pour éviter que le contenu touche les bords */
+                padding-top: -20mm;
+                padding-left: 10mm;
+                padding-right: 10mm;
+            }
+            .floating-button, .form-container {
+                display: none; /* Cache les boutons inutiles à l'impression */
+            }
+            input {
+                border: none; /* Supprime les bordures des inputs */
+                /* font-size: 12px; */
+            }
+            table {
+                page-break-inside: avoid; /* Évite les coupures de tableaux entre pages */
+            }
+            /* Ajustement pour remonter tout le contenu vers le haut */
+            .a4-container, body {
+                margin-top: 0;
+                padding-top: 0;
+            }
+            /* Retirer les marges par défaut pour le contenu de la page */
+            .content, .a4-container {
+                margin-top: 10px;
+                padding-top: 0;
+            }
+            /* Optionnel : Si vous voulez supprimer l'espace entre le haut de la page et le contenu */
+            body {
+                padding-top: 0;
+            }
+            /* Ajout d'une en-tête avant l'impression */
+            .print-header {
+                text-align: center;
+                font-size: 10px;
+                font-weight: bold;
+                margin-top: 0px;
+                margin-bottom: 0mm; /* Espacement avant le contenu principal */
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+    .file-container {
+        display: flex;
+        justify-content: space-between; /* Espace égal entre les groupes */
+        gap: 10px; /* Espacement entre les groupes */
+    }
+
+    .file-group {
+        display: flex;
+        align-items: center;
+        gap: 5px; /* Espacement entre les éléments du groupe */
+        width:50%;
+    }
+
+
+
+
+
+
+        /* Circles Animation */
+        .circles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 98%;
+            overflow: hidden;
+        }
+
+        .circles li {
+            position: absolute;
+            display: block;
+            list-style: none;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            animation: animate 25s linear infinite;
+            bottom: -150px;
+        }
+
+        .circles li:nth-child(1) {
+            left: 25%;
+            width: 80px;
+            height: 80px;
+            animation-delay: 0s;
+        }
+
+        .circles li:nth-child(2) {
+            left: 10%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 2s;
+            animation-duration: 12s;
+        }
+
+        .circles li:nth-child(3) {
+            left: 70%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 4s;
+        }
+
+        .circles li:nth-child(4) {
+            left: 40%;
+            width: 60px;
+            height: 60px;
+            animation-delay: 0s;
+            animation-duration: 18s;
+        }
+
+        .circles li:nth-child(5) {
+            left: 65%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 0s;
+        }
+
+        .circles li:nth-child(6) {
+            left: 75%;
+            width: 110px;
+            height: 110px;
+            animation-delay: 3s;
+        }
+
+        .circles li:nth-child(7) {
+            left: 35%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 7s;
+        }
+
+        .circles li:nth-child(8) {
+            left: 50%;
+            width: 25px;
+            height: 25px;
+            animation-delay: 15s;
+            animation-duration: 45s;
+        }
+
+        .circles li:nth-child(9) {
+            left: 20%;
+            width: 15px;
+            height: 15px;
+            animation-delay: 2s;
+            animation-duration: 35s;
+        }
+
+        .circles li:nth-child(10) {
+            left: 85%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 0s;
+            animation-duration: 11s;
+        }
+
+        @keyframes animate {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+                border-radius: 0;
+            }
+
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+                border-radius: 50%;
+            }
+        }
+
+        /* Media Queries pour ajuster les cercles */
+        @media (max-width: 768px) {
+            .circles li {
+                width: 15px;
+                height: 15px;
+            }
+
+            .circles li:nth-child(1) {
+                width: 60px;
+                height: 60px;
+            }
+        }
+
+
+
+
+    </style>
+</head>
+<body>
+
+
+    <!-- Circles Animation in Background -->
+    <div class="area">
+        <ul class="circles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+
+
+    <a href="../index.html" class="floating-button" title="Retour à l'accueil">
+        <img src="https://raw.githubusercontent.com/TOSanthony/tosanthony.github.io/refs/heads/main/icons/ic_action_home.png" alt="Home" />
+    </a>
+
+    <header id="InvoiceTitle">
+        Facture Proforma
+    </header>
+
+    <div class="container">
+        <!-- Section des boutons à gauche -->
+        <div class="left-panel">
+            <h3>Choisissez une option</h3>
+
+
+            <div class="dropdown" style="width: 100%;">
+                <button  id="dropdown-button" class="dropbtn" style="width: 100%;">-- CHOISIR UN CLIENT --</button>
+                    <div id="dropdown-content" class="dropdown-content" style="width: 100%; display: none;">
+                        <a id="client0">-- CHOISIR UN CLIENT --</a>
+                    </div>
+            </div>
+
+
+
+
+            <!-- DISPLAY 1-->
+
+            <!--<input type="file" id="colisageFile" accept=".csv" class="hidden">
+            <button id="colisageButton" style="width:100%;">
+                <i class="fa-solid fa-file-import"></i> Ouvrir export.csv
+            </button>
+            <span id="fileName" class="hidden"></span>
+
+            <input type="file" id="produitsFile" accept=".csv" class="hidden">
+            <button id="produitsButton" style="width:100%;">
+                <i class="fa-solid fa-file-import"></i> Ouvrir export_xxxxx.csv
+            </button>
+            <span id="fileName" class="hidden"></span>
+
+
+            <div class="dropdown" style="width: 100%;">
+                <button  id="colis-button" class="dropbtn" style="width: 100%;">Colis <i class="fa-solid fa-caret-down"></i></button>
+                    <div id="colis-content" class="dropdown-content" style="width: 100%; display: none;">
+                        <a id="0">Colis</a>
+                        <a id="1">Palette</a>
+                    </div>
+            </div>
+
+            <button id="validButton" onclick="generateInvoice()" style="width:100%;">
+                <i class="fa-solid fa-check"></i> Générer la Facture
+            </button>
+
+            <button id="printButton" onclick="window.print()" disabled style="width:100%;display: none;">
+                <i class="fa-solid fa-print"></i> Imprimer
+            </button>
+
+            <button id="resetButton" onclick="resetFields()" disabled style="width:100%;display: none;">
+                <i class="fa-solid fa-rotate-right"></i> Réinitialiser
+            </button>-->
+            <!-- DISPLAY 1-->
+
+
+            <!-- DISPLAY 2-->
+
+            <div class="file-container">
+                <div class="file-group">
+                    <input type="file" id="colisageFile" accept=".csv" class="hidden">
+                    <button id="colisageButton" style="width:100%;">
+                        <i class="fa-solid fa-file-import"></i> Ouvrir export.csv
+                    </button>
+                    <span id="fileName" class="hidden"></span>
+                </div>
+                <div class="file-group">
+                    <input type="file" id="produitsFile" accept=".csv" class="hidden">
+                    <button id="produitsButton" style="width:100%;">
+                        <i class="fa-solid fa-file-import"></i> Ouvrir export_xxxxx.csv
+                    </button>
+                    <span id="fileName" class="hidden"></span>
+                </div>
+            </div>
+
+
+
+            <div class="file-container">
+                <div class="file-group">
+            <div class="dropdown" style="width: 100%;">
+                <button  id="colis-button" class="dropbtn" style="width: 100%;">Colis <i class="fa-solid fa-caret-down"></i></button>
+                    <div id="colis-content" class="dropdown-content" style="width: 100%; display: none;">
+                        <a id="0">Colis</a>
+                        <a id="1">Palette</a>
+                    </div>
+            </div>
+                </div>
+                <div class="file-group">
+            <button id="validButton" onclick="generateInvoice()" style="width:100%;">
+                <i class="fa-solid fa-check"></i> Générer la Facture
+            </button>
+                </div>
+            </div>
+
+            <div class="file-container">
+                <div class="file-group">
+                    <button id="printButton" onclick="window.print()" disabled style="width:100%;display: none;">
+                        <i class="fa-solid fa-print"></i> Imprimer
+                    </button>
+                </div>
+                <div class="file-group">
+                    <button id="resetButton" onclick="resetFields()" disabled style="width:100%;display: none;">
+                        <i class="fa-solid fa-rotate-right"></i> Réinitialiser
+                    </button>
+                </div>
+            </div>
+
+
+
+            <!-- DISPLAY 2-->
+
+
+
+
+
+
+        </div>
+
+            <div class="a4-container">
+
+        <div class="print-header">
+            <h2 align="center" style="font-size: 10px;">Commercial INVOICE</h2>
+        </div>
+
+        <div class="container-up">
+
+            <div class="left-section">
+                <img src="https://raw.githubusercontent.com/TOSanthony/tosanthony.github.io/refs/heads/main/icons/logo.png" alt="Logo Société">
+            </div>
+
+            <div class="right-section">
+                <strong style="font-size: 12px;">Date :</strong> <span id="currentDate"></span><br>
+                <label for="proformaNumber" style="font-size: 12px;"><strong>FACTURE N° </strong></label>
+                <input type="text" id="proformaNumber" placeholder="000000">
+            </div>
+        </div>
+
+
+
+        <div class="table-container">
+
+            <table id="company-info-left">
+                <thead>
+                    <tr>
+                        <th>Expéditeur / Sender</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align: left;">
+                            <input type="text" style="border: 0px;text-align: left;" value="1foTeam / 1foTrade" disabled><br>
+                            <input type="text" style="border: 0px;" value="HANEUSE Philippe" disabled><br>
+                            <input type="text" style="border: 0px;" value="91 cours de la république" disabled><br>
+                            <input type="text" style="border: 0px;" value="76600 Le Havre" disabled><br>
+                            <input type="text" style="border: 0px;" value="staff@1fotrade.com" disabled><br>
+                            <input type="text" style="border: 0px;" value="0235533413" disabled><br>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table id="company-info-right">
+                <thead>
+                    <tr>
+                        <th>Destinataire / Consignee</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="text" style="border: 0px;" id="clientSociety" placeholder="Nom de la société" disabled><br>
+                            <input type="text" style="border: 0px;" id="clientName" placeholder="NOM Prénom" disabled><br>
+                            <input type="text" style="border: 0px;" id="clientAddress" placeholder="Adresse" disabled><br>
+                            <input type="text" style="border: 0px;" id="clientPostalCity" placeholder="Code postal Ville" disabled><br>
+                            <input type="text" style="border: 0px;" id="clientEmail" placeholder="Email" disabled><br>
+                            <input type="text" style="border: 0px;" id="clientPhone" placeholder="Téléphone" disabled>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <table id="company-info">
+            <thead>
+                <td>
+                    <h4 id="nombreColis" style="font-size: 10px;">Nombre de colis : </h4>
+                    <div id="colisageContainer" style="font-size: 10px;"></div>
+                    <h4 style="font-size: 10px;">Origin : France</h4>
+                </td>
+            </thead>
+        </table>
+
+        <table>
+            <thead>
+            <tr>
+                <th style="text-align: center;">Mode de livraison / Delivery method</th>
+                <th style="text-align: center;">Quantité totale / Total Quantity</th>
+                <th style="text-align: center;">Poids total / Total Weight</th>
+            </tr>
+                <td style="text-align: center;">Avion, Route / Air, Road</td>
+                <td style="text-align: center;" id="productQuantity"></td>
+                <td style="text-align: center;"><input type="text" style="border: 0px;text-align: center;" id="shippingWeightOne" oninput="updateWeight()" onblur="formatWeight()" onfocus="clearWeight()" placeholder="0.00 Kg"></td>
+            </thead>
+        </table>
+
+        <table id="produitsTable">
+            <thead>
+                <tr>
+                    <th style="text-align: center;width:58%">Description précise et détaillée / Detailled description</th>
+                    <th style="text-align: center;width:9%">HS Code</th>
+                    <th style="text-align: center;width:6%">Origine</th>
+                    <th style="text-align: center;width:8%">Quantité / Quantity</th>
+                    <th style="text-align: center;width:10%">Single Price Without Taxes</th>
+                    <th style="text-align: center;width:9%">Total (€)</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+        <div align="right">
+            <table id="produitsTotal" class="tableTotal">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;width:28%;border: 0px;background-color: transparent;"></th>
+                        <th style="text-align: center;width:10%;border: 0px;background-color: transparent;"></th>
+                        <th style="text-align: center;width:10%;border: 0px;background-color: transparent;"></th>
+                        <th style="text-align: center;width:10%;border: 0px;background-color: transparent;"></th>
+                        <th style="text-align: center;width:33px;border: 1px;background-color: transparent;"></th>
+                        <th style="text-align: center;width:9%;border: 1px;background-color: transparent;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    
+        <p style="width: 100%;text-align: left;font-size: 12px;"><strong>EORI : </strong><span>1foTeam FR44995572300035</span></p>
+        <p style="width: 100%;text-align: left;font-size: 12px;">
+            <strong>EORI : </strong>
+            <span>
+                <input type="text" style="border: 0px;" id="clientEori" placeholder="EORI DU CLIENT" disabled>
+            </span>
+        </p>
+        <p style="width: 100%;text-align: left;font-size: 14px;color: red;"><strong>Incoterm : DAP</strong></p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th width="40%" style="text-align: center;border: 0px;background-color:#FFFFFF"></th>
+                    <th width="20%" style="text-align: center;">Poids Total / Total Weight:</th>
+                    <th width="40%" style="text-align: center;border: 0px;background-color:#FFFFFF"></th>
+                </tr>
+                    <td style="text-align: center;border: 0px;"></td>
+                    <td style="text-align: center;" id="shippingWeightTwo">0.00 Kg</td>
+                    <td style="text-align: center;border: 0px;"></td>
+            </thead>
+        </table>
+
+        <p style="width: 100%;text-align: center;font-size: 10px;"><strong>1foTeam - Le Havre B 449 955 723 - 44995572300035 - 40 000,00 € - Phillipe Hanneuse</strong></p>
+    </div>
+</div>
+
+
+<script>
+
+
+        const dropdownColis = document.querySelectorAll('#colis-content a');
+        const colisButton = document.getElementById('colis-button');
+        const colisContent = document.getElementById('colis-content');
+
+        dropdownColis.forEach(link => {
+            link.addEventListener('click', function() {
+                const clientName = this.textContent;
+                //colisButton.textContent = clientName + ' <i class="fa-solid fa-caret-down"></i>';
+                colisButton.innerHTML = clientName + ' <i class="fa-solid fa-caret-down"></i>';
+                console.log(colisButton.textContent.trim());
+                colisContent.style.display = 'none'; // Masque le dropdown-content
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            colisButton.addEventListener('click', function() {
+                if (colisContent.style.display === 'none' || colisContent.style.display === '') {
+                    colisContent.style.display = 'block';
+                } else {
+                    colisContent.style.display = 'none';
+                }
+            });
+        });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const inputc = document.querySelectorAll('input[id^="client"]');
+    
+    if (inputc.length === 0) {
+        console.log("Aucun input trouvé.");
+    } else {
+        inputc.forEach(input => {
+            console.log(input.id);  // Affiche chaque ID des inputs
+            console.log(input.value.trim());
+
+        if (input.value === '') {
+            input.classList.add('blink_me_loop');
+        } else {
+            input.classList.remove('blink_me_loop');
+        }
+
+
+
+if (document.getElementById('dropdown-button').textContent === "ENTRÉE MANUELLE D'UN CLIENT") {
+
+        if (input.value === '') {
+            input.classList.add('blink_me_loop');
+        } else {
+            input.classList.remove('blink_me_loop');
+        }
+
+        checkInputs();
+
+}
+
+        });
+    }
+});
+
+
+function checkInputs() {
+
+    const inputc = document.querySelectorAll('input[id^="client"]');
+
+    // Fonction pour gérer l'ajout et la suppression de la classe
+    function handleInputChange(input) {
+        if (input.value.trim() === '') {
+            input.classList.add('blink_me_loop');
+        } else {
+            input.classList.remove('blink_me_loop');
+        }
+    }
+
+    // Vérification de l'état du dropdown-button et gestion du style
+    const dropdownButton = document.getElementById('dropdown-button');
+    const isManualEntry = dropdownButton && dropdownButton.textContent === "ENTRÉE MANUELLE D'UN CLIENT";
+
+    // Applique les changements d'apparence pour chaque input
+    inputc.forEach(input => {
+        // Initialisation au chargement de la page : vérification de la valeur actuelle
+        handleInputChange(input);
+
+        // Ajouter un gestionnaire d'événements "input" pour réagir immédiatement pendant la saisie
+        input.addEventListener('input', () => {
+            handleInputChange(input);
+        });
+
+        // Ajouter un gestionnaire d'événements "change" pour s'assurer que la classe soit bien mise à jour
+        input.addEventListener('change', () => {
+            handleInputChange(input);
+        });
+
+        // Ajouter un gestionnaire d'événements "focus" pour réévaluer dès que l'input est focalisé
+        input.addEventListener('focus', () => {
+            handleInputChange(input);
+        });
+
+        // Ajouter un gestionnaire d'événements "blur" pour réévaluer après avoir quitté l'input
+        input.addEventListener('blur', () => {
+            handleInputChange(input);
+        });
+    });
+
+    // Si l'état du dropdown-button est "ENTRÉE MANUELLE D'UN CLIENT", appliquez les styles à tous les champs
+    if (isManualEntry) {
+        inputc.forEach(input => {
+            handleInputChange(input);
+        });
+    }
+}
+
+
+
+
+
+
+
+
+    const colisageInput = document.getElementById('colisageFile');
+    const colisageButton = document.getElementById('colisageButton');
+    const produitsInput = document.getElementById('produitsFile');
+    const produitsButton = document.getElementById('produitsButton');
+    const proformaNumber = document.getElementById('proformaNumber');
+
+    colisageButton.addEventListener('click', () => {
+        colisageInput.click(); // Ouvre l'explorateur de fichiers
+    });
+
+    produitsButton.addEventListener('click', () => {
+        produitsInput.click(); // Ouvre l'explorateur de fichiers
+    });
+
+    colisageInput.addEventListener('change', () => {
+        if (colisageInput.files.length > 0) {
+            const file = event.target.files[0];
+            if (file && file.name !== 'export.csv') {
+                alert('Le fichier doit être export.csv');
+                document.getElementById('colisageButton').classList.add('blink_me_loop');
+                event.target.value = '';
+                colisageButton.textContent = 'Ouvrir export.csv';
+            } else  {
+                colisageButton.textContent =   'Fichier : ' + colisageInput.files[0].name;
+                document.getElementById('colisageButton').classList.remove('blink_me_loop');
+            }
+        } else {
+            colisageButton.textContent = 'Ouvrir export.csv';
+        }
+    });
+
+    produitsInput.addEventListener('change', () => {
+        if (produitsInput.files.length > 0) {
+            const file = event.target.files[0];
+            if (file && file.name == 'export.csv') {
+                alert('Le fichier ne doit pas être export.csv');
+                event.target.value = '';
+                produitsButton.textContent = 'Ouvrir export_xxxxx.csv';
+            } else  {
+                produitsButton.textContent =  'Fichier : ' + produitsInput.files[0].name;
+                document.getElementById('produitsButton').classList.remove('blink_me_loop');
+            }
+        } else {
+            produitsButton.textContent = 'Ouvrir export_xxxxx.csv';
+        }
+    });
+
+proformaNumber.addEventListener('change', () => {
+    if (!proformaNumber.value) {  // Vérifie si la valeur est vide
+        document.getElementById('proformaNumber').classList.add('blink_me_loop');
+        return;
+    } else if (!/^\d{6,}$/.test(proformaNumber.value)) {  // Vérifie si le format est valide
+        document.getElementById('proformaNumber').classList.add('blink_me_loop');
+        return;
+    } else {
+        document.getElementById('proformaNumber').classList.remove('blink_me_loop');
+    }
+});
+
+            const dropdownClients = document.querySelectorAll('#montages-content a');
+            const dropdownButton = document.getElementById('dropdown-button');
+            const dropdownContent = document.getElementById('dropdown-content');
+
+//const dropdownButton = document.getElementById('dropdown-button');
+    //const dropdownContent = document.getElementById('dropdown-content');
+
+
+
+
+
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        function checkAndAddPage() {
+            let a4Container = document.querySelector(".a4-container");
+            let clone;
+        
+            while (a4Container.scrollHeight > a4Container.clientHeight) {
+                if (!clone) {
+                    clone = a4Container.cloneNode(true);
+                    document.body.appendChild(clone);
+                }
+            
+                let lastRow = a4Container.querySelector("#produitsTable tbody tr:last-child");
+                if (lastRow) {
+                    clone.querySelector("#produitsTable tbody").prepend(lastRow);
+                } else {
+                    break;
+                }
+            }
+        }
+        //window.onload = checkAndAddPage;
+        //window.onresize = checkAndAddPage;
+    });
+
+    //window.addEventListener("resize", checkAndAddPage);
+
+    document.getElementById("currentDate").textContent = new Date().toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric"
+    });
+
+    // Fonction pour normaliser les accents
+    function normalizeString(str) {
+        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    }
+
+    function calculerPrixColisage() {
+        const colisageFile = document.getElementById("colisageFile").files[0];
+        const produitsFile = document.getElementById("produitsFile").files[0];
+
+        if (colisageFile && produitsFile) {
+            // Lire les fichiers CSV
+            readCSV(produitsFile, function(produits) {
+                // Créer un objet pour stocker les prix des produits
+                const produitPrix = {};
+
+                // Remplir l'objet produitPrix avec les données de produits
+                produits.slice(1).forEach(row => {
+                    const codeProduit = row[0];
+                    const prixUnitaire = parseFloat(row[4]); // Prix unitaire
+                    produitPrix[codeProduit] = prixUnitaire;
+                });
+
+                // Lire le fichier de colisage
+                readCSV(colisageFile, function(colisage) {
+                    const colisMap = {};
+
+                    // Remplir un objet pour les colis
+                    colisage.slice(1).forEach(row => {
+                        const numColis = row[1]; // Numéro de colis
+                        const codeProduit = row[0]; // Code produit
+                        const quantite = parseInt(row[2], 10); // Quantité du produit dans le colis
+
+                        if (!colisMap[numColis]) {
+                            colisMap[numColis] = [];
+                        }
+
+                        colisMap[numColis].push({
+                            codeProduit,
+                            quantite
+                        });
+                    });
+
+                    // Calculer le prix total pour chaque colis
+                    Object.keys(colisMap).forEach(numColis => {
+                        let totalColis = 0;
+                        colisMap[numColis].forEach(item => {
+                            const prixUnitaire = produitPrix[item.codeProduit];
+                            if (prixUnitaire) {
+                                totalColis += prixUnitaire * item.quantite;
+                            }
+                        });
+
+                        // Afficher le résultat pour ce colis
+                        console.log(`Colis N° ${numColis}: Total Prix = ${totalColis.toFixed(2)} €`);
+                    });
+                });
+            });
+        }
+    }
+
+    function readCSV(file, callback) {
+        const reader = new FileReader();
+        reader.onload = event => {
+            const rows = event.target.result.trim().split("\n").map(row => row.split(";"));
+            callback(rows);
+        };
+        encoding = "UTF-8"
+        encodingOLD = "ISO-8859-15"
+        encodingNew = "ISO-8859-1"
+        reader.readAsText(file, encodingNew);
+    }
+
+    function readCSVencoding(file, callback) {
+        const reader = new FileReader();
+        reader.onload = event => {
+            const rows = event.target.result.trim().split("\n").map(row => row.split(";"));
+            callback(rows);
+        };
+        encoding = "UTF-8"
+        encodingOLD = "ISO-8859-15"
+        encodingNew = "ISO-8859-1"
+        //reader.readAsText(file, encoding);
+        reader.readAsText(file, encodingNew);
+    }
+
+    function readCSVpapa(file, callback) {
+        const reader = new FileReader();
+        reader.onload = event => {
+            Papa.parse(event.target.result, {
+                delimiter: ";",
+                quoteChar: '"',
+                skipEmptyLines: true,
+                complete: function(results) {
+                    callback(results.data);
+                }
+            });
+        };
+    reader.readAsText(file, "ISO-8859-1");
+    }
+       
+    function readCSVtest(file, callback) {
+        const reader = new FileReader();
+        reader.onload = event => {
+            const csv = event.target.result.trim().split("\n").map(line => {
+            // Trouver l'indice du premier point-virgule
+            const firstSemicolonIndex = line.indexOf(";");
+
+            // Extraire le nom du produit avant le premier point-virgule
+            let productName = line.substring(0, firstSemicolonIndex).trim();
+
+            // Supprimer les guillemets s'ils existent
+            productName = productName.replace(/^"(.+)"$/, '$1').trim(); // Si entouré de guillemets
+
+            // Extraire les autres informations après le premier point-virgule
+            const rest = line.substring(firstSemicolonIndex + 1).split(";");
+
+            // Vérification si rest[1] contient des valeurs séparées par des virgules
+            if (rest.length > 1 && rest[1].includes(",")) {
+                rest[1] = rest[1].split(","); // Cela va diviser la chaîne "85285210,asie,1,526,57,526,57" en un tableau
+            }
+
+            //console.log(`PRODUIT: ${productName}, LE RESTE: ${rest}`);
+
+            return [productName, rest];
+        });
+        callback(csv);  // Passer les lignes nettoyées au callback
+    };
+    reader.readAsText(file, "ISO-8859-1");
+    }
+
+    function generateInvoice() {
+        const clientSelect = document.getElementById('dropdown-button');
+        //const clientName = clientSelect.options[clientSelect.selectedIndex].text; // Gets selected option text
+        const clientName = document.getElementById('dropdown-button').textContent;
+        const clientValue = clientSelect.value; // Gets selected option value
+        const proformaNumber = document.getElementById('proformaNumber').value;
+        const colisageFile = document.getElementById("colisageFile").files[0];
+        const produitsFile = document.getElementById("produitsFile").files[0];
+
+        // Réinitialiser les couleurs d'erreur
+        //document.getElementById('proformaNumber').style.backgroundColor = '';
+        document.getElementById('proformaNumber').classList.remove('blink_me_loop');
+
+        //document.getElementById('clientSelect').style.backgroundColor = '';
+        //document.getElementById('clientSelect').classList.remove('blink_me');
+
+        //document.getElementById('colisageButton').style.backgroundColor = '';
+        //document.getElementById('colisageButton').classList.remove('blink_me');
+
+        //document.getElementById('produitsButton').style.backgroundColor = '';
+        document.getElementById('produitsButton').classList.remove('blink_me');
+
+        if (clientName === '-- CHOISIR UN CLIENT --') {
+            //alert('Veuillez choisir un client.');
+            //document.getElementById('clientSelect').style.backgroundColor = 'red';
+            document.getElementById('dropdown-button').classList.add('blink_me_loop');
+            return;
+        }
+
+        if (!colisageFile && !produitsFile) {
+            //alert('Veuillez sélectionner les deux fichiers CSV (colisage et panier) avant de générer la facture.');
+            //document.getElementById('colisageButton').style.backgroundColor = 'red';
+            document.getElementById('colisageButton').classList.add('blink_me_loop');
+            //document.getElementById('produitsButton').style.backgroundColor = 'red';
+            document.getElementById('produitsButton').classList.add('blink_me_loop');
+            return;
+        } else if (!produitsFile) {
+            //alert('Veuillez sélectionner le fichier CSV du panier (export_xxxxx.csv) avant de générer la facture.');
+            //document.getElementById('produitsButton').style.backgroundColor = 'red';
+            document.getElementById('produitsButton').classList.add('blink_me_loop');
+            return;
+        } else if (!colisageFile) {
+            //alert('Veuillez sélectionner le fichier CSV du colisage (export.csv) avant de générer la facture.');
+            //document.getElementById('colisageButton').style.backgroundColor = 'red';
+            document.getElementById('colisageButton').classList.add('blink_me_loop');
+            return;
+        }
+
+        if (!proformaNumber) {
+            //alert('Le numéro de la proforma est vide.');
+            //document.getElementById('proformaNumber').style.backgroundColor = 'red';
+            document.getElementById('proformaNumber').classList.add('blink_me_loop');
+            return;
+        } else if (!/^\d{6,}$/.test(proformaNumber)) {
+            //alert('Le numéro de la proforma doit contenir au moins 6 chiffres.');
+            //document.getElementById('proformaNumber').style.backgroundColor = 'red';
+            document.getElementById('proformaNumber').classList.add('blink_me_loop');
+            return;
+        }
+
+        document.getElementById("colisageButton").style.display = 'none';
+        document.getElementById("produitsButton").style.display = 'none';
+        document.getElementById("validButton").style.display = 'none';
+        document.getElementById("dropdown-button").style.display = 'none';
+        colisButton.style.display = 'none';
+
+//document.getElementById("colisageButton").remove();
+//document.getElementById("produitsButton").remove();
+//document.getElementById("validButton").remove();
+//document.getElementById("clientSelect").remove();
+
+        //document.querySelector("button").style.display = 'none';
+        document.getElementById('InvoiceTitle').textContent = `${clientName} - Facture n°${proformaNumber}`;
+        document.title = `${clientName} - Facture n°${proformaNumber}`;
+        
+        document.getElementById('proformaNumber').classList.add('readonly-input');
+        document.getElementById('proformaNumber').setAttribute('readonly', true);
+
+        if (colisageFile) {
+            readCSV(colisageFile, function(rows) {
+                const colisageContainer = document.getElementById("colisageContainer");
+                colisageContainer.innerHTML = "";
+            
+                let quantite = 0;
+
+                const colisMap = {};
+                rows.forEach(row => {
+                    if (row.length >= 5) {
+                        const [codeProduit, numColis, quantite, ean, nomProduit] = row;
+                        if (!colisMap[numColis]) colisMap[numColis] = [];
+                        colisMap[numColis].push({ codeProduit, numColis, quantite, ean, nomProduit });
+                    }
+                }
+            );
+
+            readCSV(produitsFile, function(produitsRows) {
+                const produitPrixParNom = {};
+                produitsRows.slice(1).forEach(row => {
+                    const [nomProduit, codeDouane, Origine, quantite, prixUnitaire, prixTotal] = row;
+                    const normalizedNomProduit = normalizeString(nomProduit.trim());
+
+                    produitPrixParNom[normalizedNomProduit] = prixUnitaire;
+                    //console.log(`Produit: ${normalizedNomProduit}, Prix: ${prixUnitaire}`);
+                }
+            );
+
+            Object.keys(colisMap).forEach(numColis => {
+                const div = document.createElement("div");
+                const numberColisTotal = document.getElementById("nombreColis");
+                let totalColis = Object.keys(colisMap).length;
+                //numberColisTotal.innerHTML = `Nombre de colis : ${totalColis}`;
+
+                if (colisButton.textContent.trim() === 'Colis') {
+                    numberColisTotal.innerHTML = `Nombre de colis : ${totalColis}`;
+                } else if (colisButton.textContent.trim() === 'Palette') {
+                    numberColisTotal.innerHTML = `Nombre de palette : ${totalColis}`;
+                }
+
+
+
+
+                let totalColisPrix = 0;
+                colisMap[numColis].forEach(prod => {
+                    const normalizedNomProduit = normalizeString(prod.nomProduit.trim());
+                    const prixUnitaire = produitPrixParNom[normalizedNomProduit];  // Recherche du prix par nom normalisé
+
+                    //console.log(`Colis: ${numColis}, Produit: ${prod.nomProduit}, Qté: ${prod.quantite}, Prix: ${prixUnitaire}`);
+
+                    if (prixUnitaire) {
+                        totalColisPrix += prod.quantite * parseFloat(prixUnitaire.replace(",", "."));
+                    } else {
+                        console.log(`Prix non trouvé pour le produit: ${prod.nomProduit}`);
+                    }
+                }
+            );
+
+            //div.innerHTML = `<h4>Colis N° ${numColis} - Prix Total: ${totalColisPrix.toFixed(2)} €</h4>`;
+
+
+            if (colisButton.textContent.trim() === 'Colis') {
+                div.innerHTML = `<h4>Colis N° ${numColis} - Prix Total: ${totalColisPrix.toFixed(2)} €</h4>`;
+            } else if (colisButton.textContent.trim() === 'Palette') {
+                div.innerHTML = `<h4>Palette N° ${numColis} - Prix Total: ${totalColisPrix.toFixed(2)} €</h4>`;
+            }
+
+
+
+            const table = document.createElement("table");
+            colisMap[numColis].forEach(prod => {
+                const p = document.createElement("p");
+                p.innerHTML = `<strong>${prod.quantite}x:</strong> ${prod.nomProduit}`;
+                div.appendChild(p);
+            });
+            div.appendChild(table);
+            colisageContainer.appendChild(div);
+        });
+    });
+    });
+    }
+    
+    if (produitsFile) {
+        readCSVtest(produitsFile, function(rows) {
+            const tableBody = document.getElementById("produitsTable").querySelector("tbody");
+            tableBody.innerHTML = "";
+
+            const tableTotal = document.getElementById("produitsTotal").querySelector("tbody");
+            tableTotal.innerHTML = "";
+
+            let totalQuantity = 0;
+            let totalPrice = 0;
+
+
+            rows.slice(1).forEach(row => {
+
+                //console.log(row); // Vérifier la structure de chaque ligne
+                //console.log(`${row.productName}`)
+
+                const productName = row[0]; // Utilisez le productName ici
+                const data = row.rest;  // Récupérer le reste des données
+
+                // Échapper les guillemets dans productName pour l'injecter proprement dans HTML
+                const escapedProductName = productName.replace(/"/g, "&quot;");
+
+                    console.log(`--- PRODUIT START ---`)
+                    console.log(`Nom : ${row[0]}`)
+                    console.log(`HS code : ${row[1][0]}`)
+                    console.log(`Origine : ${row[1][1]}`)
+                    console.log(`Quantité : ${row[1][2]}`)
+                    console.log(`Prix Unitaire : ${row[1][3]}`)
+                    console.log(`Prix Total : ${row[1][4]}`)
+                    console.log(`--- PRODUIT END ---`)
+                    console.log(``)
+
+
+                //if (row.rest >= 3) {
+                //if (row.rest && Array.isArray(row.rest)) {
+                    totalQuantity += parseInt(row[1][2], 10); 
+                    //const productName = row[0];
+                    //const productName = row.productName; // Utilisez le productName ici
+
+
+
+                    //const data = row.rest;  // Récupérer le reste des données
+    
+                    //const total = (parseFloat(row[3]) * parseFloat(row[4])).toFixed(2);
+                    const capitalized = row[1][1].charAt(0).toUpperCase() + row[1][1].slice(1).toLowerCase();
+                    const prixUnitaire = row[1][3].replace(",", ".").trim();
+                    const total = (parseFloat(row[1][2]) * prixUnitaire).toFixed(2);
+                    totalPrice = Math.round((totalPrice + parseFloat(row[1][2]) * prixUnitaire) * 100) / 100;
+
+
+                    // Encoder le texte en UTF-8
+                    //const encoder = new TextEncoder('ISO-8859-1');  // Crée un objet TextEncoder
+                    //const encodedText = encoder.encode(row[0]);  // Encode le texte dans row[0] en UTF-8
+                    // Décode le tableau d'octets en texte lisible
+                    //const decoder = new TextDecoder('ISO-8859-1');
+                    //const decodedText = decoder.decode(encodedText); 
+
+
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td style="text-align: left;"><input id="Row0" type="text" style="border: 0px;text-align: left;width:100%;" value="${escapedProductName}"></td>
+                        <td style="text-align: right;"><input id="Row1" type="text" style="border: 0px;text-align: right;width:100%;" value="${row[1][0]}"></td>
+                        <td style="text-align: right;"><input id="Row2" type="text" style="border: 0px;text-align: right;width:100%;" value="${capitalized}"></td>
+                        <td style="text-align: right;"><input id="Row3" type="text" style="border: 0px;text-align: right;width:100%;" value="${row[1][2]}"></td>
+                        <td style="text-align: right;"><input id="Row4" type="text" style="border: 0px;text-align: right;width:100%;" value="${prixUnitaire} €"></td>
+                        <td style="text-align: right;"><input id="Row5" type="text" style="border: 0px;text-align: right;width:100%;" value="${total} €"></td>`;
+                    tableBody.appendChild(tr);
+                //}
+            });
+
+            // Ligne Total HT Marchandise
+            const totalWithoutPort = document.createElement("tr");
+            totalWithoutPort.innerHTML = `
+                <td style="border: 0px;text-align: left;">Signature:</td>
+                <td style="border: 0px;text-align: left;"></td>
+                <td style="border: 0px;text-align: left;"></td>
+                <td style="border: 0px;text-align: left;"></td>
+                <td style="text-align: right;font-size: 8px;"><strong>Total HT Marchandise / Total value of products Excluding Taxes</strong></td>
+                <td style="text-align: right;" id="totalPriceWithoutPort">${totalPrice.toFixed(2)} €</td>`;
+            tableTotal.appendChild(totalWithoutPort);
+
+            // Ligne Expédition et manipulation
+            const totalPort = document.createElement("tr");
+            totalPort.innerHTML = `
+                <td style="border: 0px;text-align: left;">Lieu / Place : Le Havre</td>
+                <td style="border: 0px;text-align: right;"></td>
+                <td style="border: 0px;text-align: right;"></td>
+                <td style="border: 0px;text-align: right;"></td>
+                <td style="text-align: right;">Expédition et manipulation / Shipping and Handling</td>
+                <td style="text-align: right;">
+                    <input type="text" id="FdP" style="border: 0px;text-align: right;width:100%;" value="0.00 €" 
+                        oninput="updateTotal()" onfocus="clearFdP()" onblur="formatFdP()">
+                </td>`;
+            tableTotal.appendChild(totalPort);
+
+            // Ligne Total HT
+            const totalWithPort = document.createElement("tr");
+            totalWithPort.innerHTML = `
+                <td style="border: 0px;text-align: left;" id="currentDateSecond">Date / Date : ${new Date().toLocaleDateString("en-US")}</td>
+                <td style="border: 0px;text-align: right;"></td>
+                <td style="border: 0px;text-align: right;"></td>
+                <td style="border: 0px;text-align: right;"></td>
+                <td style="text-align: right;">Total HT / Total value Excluding Taxes</td>
+                <td style="text-align: right;" id="TotalValue">0.00 €</td>`;
+            tableTotal.appendChild(totalWithPort);
+
+            // Met à jour la quantité totale
+            document.getElementById("productQuantity").textContent = totalQuantity;
+        });
+    }
+
+
+
+    const printButton = document.getElementById("printButton");
+    printButton.style.display = 'block';  // Affiche le bouton immédiatement
+    document.getElementById("resetButton").disabled = false;
+    document.getElementById("resetButton").style.display = 'block';  // Affiche le bouton immédiatement
+
+    function checkInputs() {
+        const shippingWeightInput = document.getElementById("shippingWeightOne");
+        const fraisPortInput = document.getElementById("FdP");
+        const inputs = document.querySelectorAll('input[id^="Row"]');
+        const proformaNumber = document.getElementById('proformaNumber');
+
+        if (document.getElementById("shippingWeightOne")) {
+            document.getElementById('shippingWeightOne').classList.remove('blink_me_loop');
+        }
+
+        if (document.getElementById("proformaNumber")) {
+            document.getElementById('proformaNumber').classList.remove('blink_me_loop');
+        }
+
+        if (document.getElementById("FdP")) {
+            document.getElementById('FdP').classList.remove('blink_me_loop');
+        }
+
+        if (document.getElementById('dropdown-button').textContent === "ENTRÉE MANUELLE D'UN CLIENT") {
+            
+        document.querySelectorAll('input[id^="client"]').forEach(el => {
+            //el.style.backgroundColor = '';
+            el.classList.remove('blink_me_loop');
+        });
+
+        }
+
+        document.querySelectorAll('input[id^="Row"]').forEach(el => {
+            //el.style.backgroundColor = '';
+            el.classList.remove('blink_me_loop');
+        });
+
+        let allFilled = true;
+
+
+        if (document.getElementById("FdP")) {
+            if (!shippingWeightInput || !fraisPortInput) {
+                document.getElementById('shippingWeightOne').classList.add('blink_me_loop');
+                return;
+            }
+        }
+
+        const shippingWeight = shippingWeightInput.value.trim();
+        const NumberProforma = proformaNumber.value.trim();
+
+        if (document.getElementById("FdP")) {
+            if (shippingWeight.trim() === '' || shippingWeight === '0.00 Kg') {
+                document.getElementById('shippingWeightOne').classList.add('blink_me_loop');
+                allFilled = false;
+            }
+        }
+
+        if (document.getElementById("FdP")) {
+            const fraisPort = fraisPortInput.value.trim();
+            if (fraisPort.trim() === '' || fraisPort === '0.00 €') {
+                document.getElementById('FdP').classList.add('blink_me_loop');
+                allFilled = false;
+            }
+        }
+
+        if (document.getElementById("FdP")) {
+            if (!/^\d{6,}$/.test(NumberProforma)) {
+                document.getElementById('proformaNumber').classList.add('blink_me_loop');
+                allFilled = false;
+            }
+        }
+
+        if (document.getElementById("FdP")) {
+            inputs.forEach(input => {
+                if (!input || input.value.trim() === '') {
+                    input.classList.add('blink_me_loop');
+                    allFilled = false;
+                }
+            });
+        }
+
+
+
+        if (document.getElementById("FdP")) {
+            const inputc = document.querySelectorAll('input[id^="client"]');
+            inputc.forEach(input => {
+                if (!input || input.value.trim() === '') {
+                    input.classList.add('blink_me_loop');
+                    allFilled = false;
+                }
+            });
+        }
+
+
+        printButton.disabled = !allFilled;  // Active/désactive le bouton en fonction de l'état
+
+        setTimeout(checkInputs, 1000);  // Vérification continue toutes les 500ms
+    }
+
+    setTimeout(checkInputs, 1000);
+
+}
+
+// Fonction pour mettre à jour le total avec les frais de port
+//function updateTotal() {
+    //const shippingCost = parseFloat(document.getElementById("FdP").value.replace(',', '.')) || 0;
+    //const totalWithoutPort = parseFloat(document.getElementById("totalPriceWithoutPort").textContent.replace(' €', '').replace(',', '.')) || 0;
+    //const totalWithPort = totalWithoutPort + shippingCost;
+    //document.getElementById("TotalValue").textContent = `${totalWithPort.toFixed(2)} €`;
+//}
+
+// Supprime le "€" lorsqu'on clique sur le champ
+//function clearFdP() {
+    //let fraisPortInput = document.getElementById("FdP");
+    //fraisPortInput.value = fraisPortInput.value.replace("€", "").trim();
+//}
+
+// Ajoute le "€" lorsqu'on quitte le champ
+//function formatFdP() {
+    //let fraisPortInput = document.getElementById("FdP");
+    //let fraisPort = parseFloat(fraisPortInput.value.replace(',', '.')) || 0;
+    //fraisPortInput.value = fraisPort.toFixed(2) + " €";
+//}
+
+//function updateWeight() {
+    //let poidsInput = document.getElementById("shippingWeightOne");
+    //let poidsValue = parseFloat(poidsInput.value.replace("Kg", "").replace(',', '.').trim()) || 0;
+
+    // Mise à jour de l'affichage du poids
+    //document.getElementById("shippingWeightTwo").textContent = poidsValue.toFixed(2) + " Kg";
+//}
+
+//function formatWeight() {
+    //let poidsInput = document.getElementById("shippingWeightOne");
+    //let poidsValue = parseFloat(poidsInput.value.replace("Kg", "").replace(',', '.').trim()) || 0;
+    //poidsInput.value = poidsValue.toFixed(2) + " Kg"; // Ajoute "Kg" quand l'input perd le focus
+//}
+
+//function clearWeight() {
+    //let poidsInput = document.getElementById("shippingWeightOne");
+    //poidsInput.value = poidsInput.value.replace("Kg", "").trim(); // Supprime "Kg" quand l'input est sélectionné
+//}
+
+
+// Fonction pour mettre à jour le total avec les frais de port
+function updateTotal() {
+    const shippingCost = parseFloat(document.getElementById("FdP").value.replace(',', '.')) || 0;
+    const totalWithoutPort = parseFloat(document.getElementById("totalPriceWithoutPort").textContent.replace(' €', '').replace(',', '.')) || 0;
+    const totalWithPort = totalWithoutPort + shippingCost;
+    document.getElementById("TotalValue").textContent = `${totalWithPort.toFixed(2)} €`;
+}
+
+// Supprime le "€" lorsqu'on clique sur le champ
+function clearFdP() {
+    let fraisPortInput = document.getElementById("FdP");
+    fraisPortInput.value = fraisPortInput.value.replace("€", "").trim();
+}
+
+// Ajoute le "€" lorsqu'on quitte le champ
+function formatFdP() {
+    let fraisPortInput = document.getElementById("FdP");
+    let fraisPort = parseFloat(fraisPortInput.value.replace(',', '.')) || 0;
+    fraisPortInput.value = fraisPort.toFixed(2) + " €";
+}
+
+function updateWeight() {
+    let poidsInput = document.getElementById("shippingWeightOne");
+    let poidsValue = parseFloat(poidsInput.value.replace("Kg", "").replace(',', '.').trim()) || 0;
+
+    // Mise à jour de l'affichage du poids
+    document.getElementById("shippingWeightTwo").textContent = poidsValue.toFixed(2) + " Kg";
+}
+
+function formatWeight() {
+    let poidsInput = document.getElementById("shippingWeightOne");
+    let poidsValue = parseFloat(poidsInput.value.replace("Kg", "").replace(',', '.').trim()) || 0;
+    poidsInput.value = poidsValue.toFixed(2) + " Kg"; // Ajoute "Kg" quand l'input perd le focus
+}
+
+function clearWeight() {
+    let poidsInput = document.getElementById("shippingWeightOne");
+    poidsInput.value = poidsInput.value.replace("Kg", "").trim(); // Supprime "Kg" quand l'input est sélectionné
+}
+
+
+    const clients = {
+        client0: { society: "Entrée manuelle d'un client", eori: "", name: "", address: "", postalcity: "", email: "", phone: "" },
+        client1: { society: "Delbos Informatique", eori: "Delbos FR53185174900014", name: "DELBOS Arnaud", address: "32 RUE JOSEPH SUACOT", postalcity: "97429 PETITE ILE", email: "delbos@delbosinformatique.com", phone: "06.92.60.30.89" },
+        client2: { society: "MyPlace", eori: "MyPlace 81297681900019", name: "CODY Jean Philippe", address: "2 Boulevard VAUBAN ", postalcity: "97400 ST DENIS", email: "administrateur@myplace.re", phone: "06.93.10.15.55" },
+        client3: { society: "CM2I", eori: "CM2I FR94832916400016", name: "CUVELIER Stéphane", address: "1148 CHEMIN MENCIOL", postalcity: "97440 ST ANDRE", email: "achat@cm2i.re", phone: "06.92.56.81.35"},
+        client4: { society: "GAMER'S SMITH", eori: "GAMER'S SMITH FR35982435828", name: "POTHIN Pacha", address: "15 RUE DE VENISE ", postalcity: "97430 LE TAMPON", email: "gamersmith@outlook.fr", phone: "06.92.52.48.21" },
+        client5: { society: "E – Machine", eori: "E – MACHINES FR86804180206", name: "CAZANOVE Alain", address: "98 route de Montée Sano ", postalcity: "97438 STE Marie", email: " e.machines.reunion@gmail.com", phone: "06.92.76.48.68" },
+        client6: { society: "Love games geek", eori: "Love games geek FR43880871118", name: "Delahaye Christine", address: "16 IMPASSE SIMON OGNARD", postalcity: "97410 ST PIERRE", email: "lovegamesgeek@gmail.com", phone: "06.92.43.04.45" }
+
+
+    };
+
+
+    // Trier les clients par ordre alphabétique en fonction de 'society'
+    const sortedClients = Object.entries(clients).sort((a, b) => {
+        return a[1].society.localeCompare(b[1].society);
+    });
+
+    //const select = document.getElementById('clientSelect');
+    //sortedClients.forEach(([key, client]) => {
+        //const option = document.createElement('option');
+        //option.value = key;
+        //option.textContent = client.society;
+        //select.appendChild(option);
+    //});
+//const dropdownButton = document.getElementById('dropdown-button');
+    //const dropdownContent = document.getElementById('dropdown-content');
+    sortedClients.forEach(([key, client]) => {
+        const content = document.createElement('a');
+        content.value = key;
+        content.textContent = client.society.toUpperCase();
+        content.id = key;
+        dropdownContent.appendChild(content);
+    });
+
+    //document.getElementById("clientSelect").addEventListener("change", function () {
+        //const client = clients[this.value] || {};
+        //["Society", "Name", "Address", "PostalCity", "Email", "Phone"].forEach(field =>
+            //document.getElementById("client" + field).value = client[field.toLowerCase()] || "");
+            //document.getElementById("EORIValue").textContent = client.eori || "";
+            //document.getElementById('clientSelect').classList.remove('blink_me_loop');
+    //});
+
+
+// Sélectionne tous les éléments <a> dans le menu dropdown
+const dropdownLinks = document.querySelectorAll('#dropdown-content a');
+//const dropdownButton = document.getElementById('dropdown-button');
+
+// Ajoute un événement de clic à chaque élément
+dropdownLinks.forEach(link => {
+    link.addEventListener('click', function() {
+        const clickedId = this.id;  // Récupère l'ID de l'élément cliqué
+        const client = clients[this.value] || {};
+
+
+        ["Society", "Eori", "Name", "Address", "PostalCity", "Email", "Phone"].forEach(field =>
+            document.getElementById("client" + field).value = client[field.toLowerCase()] || "");
+            //document.getElementById("EORIValue").textContent = client.eori || "";
+            document.getElementById('dropdown-button').classList.remove('blink_me_loop');
+
+        if (this.value === "client0") {
+            document.getElementById('clientSociety').disabled = false;
+            document.getElementById('clientSociety').value = '';
+            document.getElementById('clientName').disabled = false;
+            document.getElementById('clientAddress').disabled = false;
+            document.getElementById('clientPostalCity').disabled = false;
+            document.getElementById('clientEmail').disabled = false;
+            document.getElementById('clientPhone').disabled = false;
+            document.getElementById('clientEori').disabled = false;
+
+            const inputc = document.querySelectorAll('input[id^="client"]');
+
+            // Fonction pour gérer l'ajout et la suppression de la classe
+            function handleInputChange(input) {
+                if (input.value.trim() === '') {
+                    input.classList.add('blink_me_loop');
+                } else {
+                    input.classList.remove('blink_me_loop');
+                }
+            }
+
+            // Vérification de l'état du dropdown-button et gestion du style
+            const dropdownButton = document.getElementById('dropdown-button');
+            const isManualEntry = dropdownButton && dropdownButton.textContent === "ENTRÉE MANUELLE D'UN CLIENT";
+
+            // Applique les changements d'apparence pour chaque input
+            inputc.forEach(input => {
+                // Initialisation au chargement de la page : vérification de la valeur actuelle
+                handleInputChange(input);
+
+                // Ajouter un gestionnaire d'événements "input" pour réagir immédiatement pendant la saisie
+                input.addEventListener('input', () => {
+                    handleInputChange(input);
+                });
+
+                // Ajouter un gestionnaire d'événements "change" pour s'assurer que la classe soit bien mise à jour
+                input.addEventListener('change', () => {
+                    handleInputChange(input);
+                });
+
+                // Ajouter un gestionnaire d'événements "focus" pour réévaluer dès que l'input est focalisé
+                input.addEventListener('focus', () => {
+                    handleInputChange(input);
+                });
+
+                // Ajouter un gestionnaire d'événements "blur" pour réévaluer après avoir quitté l'input
+                input.addEventListener('blur', () => {
+                     handleInputChange(input);
+                });
+            });
+
+        } else {
+
+            const inputc = document.querySelectorAll('input[id^="client"]');
+
+            // Fonction pour gérer l'ajout et la suppression de la classe
+            function handleInputChange(input) {
+                if (input.value.trim() === '') {
+                    input.classList.add('blink_me_loop');
+                } else {
+                    input.classList.remove('blink_me_loop');
+                }
+            }
+
+            // Vérification de l'état du dropdown-button et gestion du style
+            const dropdownButton = document.getElementById('dropdown-button');
+            const isManualEntry = dropdownButton && dropdownButton.textContent === "ENTRÉE MANUELLE D'UN CLIENT";
+
+            // Applique les changements d'apparence pour chaque input
+            inputc.forEach(input => {
+                // Initialisation au chargement de la page : vérification de la valeur actuelle
+                handleInputChange(input);
+
+                // Ajouter un gestionnaire d'événements "input" pour réagir immédiatement pendant la saisie
+                input.addEventListener('input', () => {
+                    handleInputChange(input);
+                });
+
+                // Ajouter un gestionnaire d'événements "change" pour s'assurer que la classe soit bien mise à jour
+                input.addEventListener('change', () => {
+                    handleInputChange(input);
+                });
+
+                // Ajouter un gestionnaire d'événements "focus" pour réévaluer dès que l'input est focalisé
+                input.addEventListener('focus', () => {
+                    handleInputChange(input);
+                });
+
+                // Ajouter un gestionnaire d'événements "blur" pour réévaluer après avoir quitté l'input
+                input.addEventListener('blur', () => {
+                    handleInputChange(input);
+                });
+            });
+
+            document.getElementById('clientSociety').disabled = true;
+            document.getElementById('clientName').disabled = true;
+            document.getElementById('clientAddress').disabled = true;
+            document.getElementById('clientPostalCity').disabled = true;
+            document.getElementById('clientEmail').disabled = true;
+            document.getElementById('clientPhone').disabled = true;
+            document.getElementById('clientEori').disabled = true;
+        }
+
+
+
+        
+
+
+        const clientName = this.textContent;
+        dropdownButton.textContent = clientName;
+        dropdownContent.style.display = 'none';
+    });
+});
+
+
+        ////dropdownClients.forEach(link => {
+            ////link.addEventListener('click', function() {
+                //const clientName = this.textContent;
+                //dropdownButton.textContent = clientName;
+                dropdownContent.style.display = 'none'; // Masque le dropdown-content
+            ////});
+        ////});
+
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            dropdownButton.addEventListener('click', function() {
+                if (dropdownContent.style.display === 'none' || dropdownContent.style.display === '') {
+                    dropdownContent.style.display = 'block';
+                } else {
+                    dropdownContent.style.display = 'none';
+                }
+            });
+        });
+
+
+
+
+
+function resetFields() {
+    // Vider les champs de texte avec un ID spécifique
+    document.getElementById("proformaNumber").value = ""; // Vide le champ "proformaNumber"
+    document.getElementById("clientSociety").value = ""; // Vide le champ "clientSociety"
+    document.getElementById("clientName").value = ""; // Vide le champ "clientName"
+    document.getElementById("clientAddress").value = ""; // Vide le champ "clientAddress"
+    document.getElementById("clientPostalCity").value = ""; // Vide le champ "clientPostalCity"
+    document.getElementById("clientEmail").value = ""; // Vide le champ "clientEmail"
+    document.getElementById("clientPhone").value = ""; // Vide le champ "clientPhone"
+    document.getElementById("clientEori").value = ""; // Vide le champ "EORI"
+
+
+    // Vider le champ Nombre de colis (nombreColis)
+    document.getElementById("nombreColis").innerHTML = "Nombre de colis : "; // Vide le champ "nombreColis"
+
+    // Vider le champ de poids (shippingWeightOne)
+    document.getElementById("shippingWeightOne").value = ""; // Vide le champ "shippingWeightOne"
+    document.getElementById('shippingWeightOne').classList.remove('blink_me_loop');
+
+    // Vider le champ de poids (shippingWeightTwo)
+    document.getElementById("shippingWeightTwo").textContent = "0.00 Kg"; // Vide le champ "shippingWeightOne"
+
+    // Vider le champ quantité (productQuantity)
+    document.getElementById("productQuantity").innerHTML = ""; // Vide le contenu de "productQuantity"
+
+    // Vider le contenu de colisage si nécessaire (colisageContainer)
+    document.getElementById("colisageContainer").innerHTML = ""; // Vide le contenu de "colisageContainer"
+    
+    // Vider la tables des produits
+    const tableBody = document.getElementById("produitsTable").querySelector("tbody");
+    const rowsTable = tableBody.getElementsByTagName("tr");
+
+    while (rowsTable.length > 0) {
+        tableBody.deleteRow(0); // Supprime la première ligne à chaque itération
+    }
+
+    // Vider la tables des totaux
+    const tableTotal = document.getElementById("produitsTotal").querySelector("tbody");
+    const rowsTotal = tableTotal.getElementsByTagName("tr");
+
+    while (rowsTotal.length > 0) {
+        tableTotal.deleteRow(0); // Supprime la première ligne à chaque itération
+    }
+
+    document.getElementById("colisageButton").style.display = 'block';
+    document.getElementById("produitsButton").style.display = 'block';
+    document.getElementById("validButton").style.display = 'block';
+
+    document.getElementById('dropdown-button').textContent = '-- CHOISIR UN CLIENT --';
+    document.getElementById("dropdown-button").style.display = 'block';
+
+    document.getElementById("resetButton").style.display = 'none';
+    document.getElementById("printButton").style.display = 'none';
+    colisButton.style.display = 'block';
+    document.getElementById("printButton").disabled = true;
+    document.getElementById("resetButton").disabled = true;
+
+    document.getElementById('InvoiceTitle').value = `Facture Proforma`;
+    document.getElementById('InvoiceTitle').textContent = `Facture Proforma`;
+    document.title = `Facture Proforma`;
+        
+    document.getElementById('proformaNumber').classList.remove('readonly-input');
+    document.getElementById('proformaNumber').removeAttribute('readonly');
+    document.getElementById('proformaNumber').classList.remove('blink_me_loop');
+
+    document.getElementById('colisageFile').value = '';
+    document.getElementById('produitsFile').value = '';
+    document.getElementById('colisageButton').textContent = 'Ouvrir export.csv';
+    document.getElementById('produitsButton').textContent = 'Ouvrir export_xxxxx.csv';
+
+}
+
+
+
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
