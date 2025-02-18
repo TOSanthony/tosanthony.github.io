@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="icon" type="image/x-icon" href="../icons/favicon.ico">
+  <title>Etiquette</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <!-- Polyfill pour les promesses (si nécessaire) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.2.8/es6-promise.auto.min.js"></script>
+  
+  <!-- Charger html2canvas version 1.4.1 -->
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+  
+  <!-- Charger jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <title>Étiquettes d'expédition</title>
+  <style>
+    body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background-color: #f0f0f0;
+            background: linear-gradient(90deg, #b9deed, #efefef);
+            background: linear-gradient(-45deg, #82B2C0 33%, #B3D1E7 66%, #97B3AE 100%);
+            background: linear-gradient(-45deg, #9200ff 25%, #e73c7e 50%, #23a6d5 75%, #23d5ab 100%);
+            background-size: 400% 400%;
+            animation: gradient 20s ease infinite;
+        }
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+.stripe {
+  height:300px;
+  background: 
+    /* Color                         position     / width height */
+    linear-gradient(#25dbf3,#25dbf3) center right / 30%   70px, 
+   
+    linear-gradient(#1fa2ff,#1fa2ff) bottom left  / 40%   70px,
+    
+    linear-gradient(#5533ff,#5533ff) top left     / 30%   70px,
+    linear-gradient(#4553ff,#4553ff) top left     / 60%   70px,
+    linear-gradient(#4f40ff,#4f40ff) top left     / 100%  70px,
+    /* main background*/
+    linear-gradient(150deg, #53f 15%, #05d5ff 70%, #a6ffcb 94%);
+  background-repeat:no-repeat;
+  transform:skewY(-10deg);
+  transform-origin:left;
+}
+
+    button {
+      padding: 10px 20px;
+      cursor: pointer;
+      background-color: #0056b3;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      margin-top: 10px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.3s, box-shadow 0.3s;
+            background: rgba(0, 0, 0, 0.5);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+        }
+
+    button:disabled {
+      background-color: #d6d6d6;
+      color: #a0a0a0;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    button:hover:not(:disabled) {
+      background-color: #007bff;
+    }
+
+    input {
+      padding: 10px 20px;
+      cursor: pointer;
+      background-color: white;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      text-align: center;
+      margin-top: 10px;
+      height:28px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+      transition: background-color 0.3s, box-shadow 0.3s;
+      background: rgba(0, 0, 0, 0.5);
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+    }
+    input:focus {
+        border: none;
+        outline: none;  /* Pour éviter les contours autour de l'input */
+    }
+    input:hover {
+        border: none;
+        outline: none;  /* Pour éviter les contours autour de l'input */
+        background-color: #007bff;
+    }
+    input::placeholder {
+        color: white; /* Remplace cette couleur par celle de ton choix */
+    }
+
+    select {
+      padding: 10px 20px;
+      cursor: pointer;
+      background-color: white;
+      color: black;
+      border: none;
+      border-radius: 10px;
+      margin-top: 10px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    #client-name {
+      padding: 5px;
+      width: auto;
+    }
+
+    .form-container {
+      margin-bottom: 30px;
+    }
+
+    .form-container input, .form-container button, .form-container select {
+      margin: 10px;
+    }
+
+    .a4-container {
+      width: 297mm;
+      height: 210mm;
+      background-color: #FFFFFF;
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0;
+      padding: 0;
+      display: block;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+      zoom: 0.5;
+    }
+
+    .a4-section {
+      width: 50%;
+      height: 50%;
+      text-align: center;
+      border: 1px solid black;
+      box-sizing: border-box;
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .a4-section p {
+      margin: 0;
+      font-size: 18px;
+    }
+
+  /* Styles par défaut pour 'imprimer papier' */
+  .print-paper .a4-section {
+    border: 1px solid black;
+  }
+
+  /* Styles pour 'imprimer étiquette' */
+  .print-etiquette .a4-section {
+    border: 0px solid black;
+  }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+
+      #labels-container, #labels-container * {
+        visibility: visible;
+      }
+
+      #labels-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 297mm;
+        height: 210mm;
+      }
+
+      .a4-container {
+        display: flex !important;
+        zoom: 1.0;
+      }
+    }
+
+    .nav-buttons {
+      margin-top: 20px;
+      display: none;
+    }
+
+    .print-buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-evenly;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 14px;
+    }
+
+        .floating-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 75px;
+            height: 75px;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.5);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+        }
+
+        .floating-button:hover {
+            background-color: #007bff;
+            transform: scale(1.1);
+        }
+
+        .floating-button svg {
+            width: 35px;
+            height: 35px;
+        }
+
+        .floating-button img {
+            width: 50px;
+            height: 50px;
+        }
+
+        h1 {
+            color: white;
+            /*color: #0056b3;*/
+            justify-content: center;
+            align: center;
+        }
+
+
+.dropbtn {
+  background-color: #04AA6D;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            margin-top: 10px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.3s, box-shadow 0.3s;
+            background: rgba(0, 0, 0, 0.5);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+width: 300px;
+
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  z-index: 2;
+              transition: background-color 0.3s, box-shadow 0.3s;
+            background: rgba(0, 0, 0, 0.5);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            width: 300px;
+            padding: 0px;
+            margin-left: 10px;
+                max-height: 200px; /* Limiter la hauteur du dropdown */
+    overflow-y: auto; /* Ajouter une scrollbar verticale */
+}
+
+.dropdown-content a {
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+    color: black;
+    border-radius: 10px;
+}
+
+.dropdown:hover .dropdown-content {
+  display: none;
+}
+
+.dropdown:click .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+    background-color: #0056b3;
+}
+/* Personnaliser la barre de défilement */
+.dropdown-content::-webkit-scrollbar {
+  width: 12px; /* Largeur de la barre de défilement */
+  height: 12px; /* Hauteur de la barre de défilement horizontal */
+}
+
+/* Style de la piste (l'arrière-plan de la scrollbar) */
+.dropdown-content::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Couleur de fond de la piste */
+  border-radius: 0px 10px 10px 0px; /* Coins arrondis de la piste */
+}
+
+/* Style du "pouce" (la partie qui défile) */
+.dropdown-content::-webkit-scrollbar-thumb {
+  background: #0056b3; /* Couleur du pouce */
+  border-radius: 25px; /* Coins arrondis du pouce */
+  border: 3px solid #f1f1f1; /* Bordure autour du pouce pour le séparer de la piste */
+}
+
+/* Effet au survol du pouce */
+.dropdown-content::-webkit-scrollbar-thumb:hover {
+  background: #007bff; /* Couleur du pouce au survol */
+}
+
+/* Optionnel: Personnaliser le coin de la scrollbar */
+.dropdown-content::-webkit-scrollbar-corner {
+  background: transparent; /* Coin transparent si on utilise la scrollbar horizontale */
+}
+        .blink_me {
+            animation: blinker 1s linear 2;
+        }
+        .blink_me_loop {
+            animation: redBlinker 1s linear infinite;
+        }
+        @keyframes blinker {  
+            0% { background-color: inherit; }
+            50% { background-color: red; }
+            100% { background-color: inherit; } 
+        }
+        @keyframes redBlinker {
+            0% { background-color: inherit; }
+            50% { background-color: red; }
+            100% { background-color: inherit; }
+        }
+    </style>
+</head>
+
+    <a href="../index.html" class="floating-button" title="Retour à l'accueil">
+        <img src="../icons/ic_action_home.png" alt="Home" />
+    </a>
+
+    <div align="center">
+       <h1>Etiquette</h1>
+    </div>
+
+    <div class="form-container">
+        <input type="text" id="client-name" placeholder="Entrez le nom du client" required>
+
+
+            <div class="dropdown">
+                <button  id="colis-button" class="dropbtn" style="width: 150px;">Colis <i class="fa-solid fa-caret-down"></i></button>
+                    <div id="colis-content" class="dropdown-content" style="width: 150px; display: none;">
+                        <a id="0" style="text-align: center;">Colis</a>
+                        <a id="1" style="text-align: center;">Palette</a>
+                    </div>
+            </div>
+
+
+
+        <div class="dropdown">
+            <button  id="palettes-button" class="dropbtn" style="width: 200px;">Quantité : 1</button>
+            <div id="palettes-content" class="dropdown-content" style="width: 200px;">
+                <a id="1" style="text-align: center;">Quantité : 1</a>
+                <a id="2" style="text-align: center;">Quantité : 2</a>
+                <a id="3" style="text-align: center;">Quantité : 3</a>
+                <a id="4" style="text-align: center;">Quantité : 4</a>
+                <a id="5" style="text-align: center;">Quantité : 5</a>
+                <a id="6" style="text-align: center;">Quantité : 6</a>
+                <a id="7" style="text-align: center;">Quantité : 7</a>
+                <a id="8" style="text-align: center;">Quantité : 8</a>
+                <a id="9" style="text-align: center;">Quantité : 9</a>
+                <a id="10" style="text-align: center;">Quantité : 10</a>
+                <a id="11" style="text-align: center;">Quantité : 11</a>
+                <a id="12" style="text-align: center;">Quantité : 12</a>
+                <a id="13" style="text-align: center;">Quantité : 13</a>
+                <a id="14" style="text-align: center;">Quantité : 14</a>
+                <a id="15" style="text-align: center;">Quantité : 15</a>
+                <a id="16" style="text-align: center;">Quantité : 16</a>
+                <a id="17" style="text-align: center;">Quantité : 17</a>
+                <a id="18" style="text-align: center;">Quantité : 18</a>
+                <a id="19" style="text-align: center;">Quantité : 19</a>
+                <a id="20" style="text-align: center;">Quantité : 20</a>
+                <a id="21" style="text-align: center;">Quantité : 21</a>
+                <a id="22" style="text-align: center;">Quantité : 22</a>
+                <a id="23" style="text-align: center;">Quantité : 23</a>
+                <a id="24" style="text-align: center;">Quantité : 24</a>
+                <a id="25" style="text-align: center;">Quantité : 25</a>
+                <a id="26" style="text-align: center;">Quantité : 26</a>
+                <a id="27" style="text-align: center;">Quantité : 27</a>
+                <a id="28" style="text-align: center;">Quantité : 28</a>
+                <a id="29" style="text-align: center;">Quantité : 29</a>
+                <a id="30" style="text-align: center;">Quantité : 30</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button  id="font-button" class="dropbtn" style="width: 150px;">Police : 80</button>
+            <div id="font-content" class="dropdown-content" style="width: 150px;">
+                <a id="100" style="text-align: center;">Police : 100</a>
+                <a id=95 style="text-align: center;">Police : 95</a>
+                <a id="90" style="text-align: center;">Police : 90</a>
+                <a id="85" style="text-align: center;">Police : 85</a>              
+                <a id="80" style="text-align: center;">Police : 80</a>
+                <a id="75" style="text-align: center;">Police : 75</a>
+                <a id="70" style="text-align: center;">Police : 70</a>
+                <a id="65" style="text-align: center;">Police : 65</a>
+                <a id="60" style="text-align: center;">Police : 60</a>
+                <a id="55" style="text-align: center;">Police : 55</a>
+                <a id="50" style="text-align: center;">Police : 50</a>
+                <a id="45" style="text-align: center;">Police : 45</a>
+                <a id="40" style="text-align: center;">Police : 40</a>
+                <a id="35" style="text-align: center;">Police : 35</a>
+                <a id="30" style="text-align: center;">Police : 30</a>
+                <a id="25" style="text-align: center;">Police : 25</a>
+                <a id="20" style="text-align: center;">Police : 20</a>
+                <a id="15" style="text-align: center;">Police : 15</a>
+                <a id="10" style="text-align: center;">Police : 10</a>
+                <a id="5" style="text-align: center;">Police : 5</a>
+            </div>
+        </div>
+
+    
+        <button onclick="generateLabels()"><i class="fa-solid fa-check"></i> Générer</button>
+
+        <div class="error-message" id="error-message"></div>
+            <div class="print-buttons">
+                <button id="nav-precedent" onclick="changePage(-1)"><i class="fa-solid fa-circle-left"></i> Précédente</button>
+                <button id="print-etiquette" onclick="setPrintType('etiquette')"><i class="fa-solid fa-print"></i> Imprimer étiquette</button>
+                <button id="print-papier" onclick="setPrintType('papier')"><i class="fa-solid fa-print"></i> Imprimer papier</button>
+                <button id="nav-suivant" onclick="changePage(1)">Suivante <i class="fa-solid fa-circle-right"></i></button>
+            </div>
+        </div>
+
+        <div id="labels-container" style="display: block;">
+            <div class="a4-container" style="display: flex;">
+            </div>
+        </div>
+    </div>
+    <script>
+
+
+
+
+
+        const dropdownColis = document.querySelectorAll('#colis-content a');
+        const colisButton = document.getElementById('colis-button');
+        const colisContent = document.getElementById('colis-content');
+            
+        dropdownColis.forEach(link => {
+            link.addEventListener('click', function() {
+                const colisType = this.textContent;
+                //colisButton.textContent = clientName + ' <i class="fa-solid fa-caret-down"></i>';
+                colisButton.innerHTML = colisType + ' <i class="fa-solid fa-caret-down"></i>';
+                console.log(colisButton.textContent.trim());
+                colisContent.style.display = 'none'; // Masque le dropdown-content
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const colisButton = document.getElementById('colis-button');
+            const colisContent = document.getElementById('colis-content');
+            colisButton.addEventListener('click', function() {
+                if (colisContent.style.display === 'none' || colisContent.style.display === '') {
+                    colisContent.style.display = 'block';
+                } else {
+                    colisContent.style.display = 'none';
+                }
+            });
+        });
+
+
+        let currentPage = 0;
+        let totalPages = 0;
+        let sizeOfText = 80;
+        let numberOfPalettes = 1;
+
+        const clientName = document.getElementById('client-name').value;
+        const navsuivant = document.getElementById('nav-suivant');
+        const navprecedent = document.getElementById('nav-precedent');
+        const printetiquette = document.getElementById('print-etiquette');
+        const printpapier = document.getElementById('print-papier');
+
+        const dropdownFont = document.querySelectorAll('#font-content a');
+        const fontButton = document.getElementById('font-button');
+        const fontContent = document.getElementById('font-content');
+
+        const dropdownPalettes = document.querySelectorAll('#palettes-content a');
+        const palettesButton = document.getElementById('palettes-button');
+        const palettesContent = document.getElementById('palettes-content');
+
+        // Validation
+        if (!clientName || numberOfPalettes <= 0) {
+            navsuivant.disabled = true;
+            navprecedent.disabled = true;
+            printetiquette.disabled = true;
+            printpapier.disabled = true;
+        }
+
+        dropdownFont.forEach(link => {
+            link.addEventListener('click', function() {
+                const clientName = this.textContent;
+                sizeOfText = this.id;
+                fontButton.textContent = clientName;
+                fontContent.style.display = 'none';
+            });
+        });
+
+        dropdownPalettes.forEach(link => {
+            link.addEventListener('click', function() {
+                const clientName = this.textContent;
+                numberOfPalettes = this.id;
+                palettesButton.textContent = clientName;
+                palettesContent.style.display = 'none'; // Masque le dropdown-content
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const palettesButton = document.getElementById('palettes-button');
+            const palettesContent = document.getElementById('palettes-content');
+            palettesButton.addEventListener('click', function() {
+                if (palettesContent.style.display === 'none' || palettesContent.style.display === '') {
+                    palettesContent.style.display = 'block';
+                } else {
+                    palettesContent.style.display = 'none';
+                }
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const fontButton = document.getElementById('font-button');
+            const fontContent = document.getElementById('font-content');
+            fontButton.addEventListener('click', function() {
+                if (fontContent.style.display === 'none' || fontContent.style.display === '') {
+                    fontContent.style.display = 'block';
+                } else {
+                    fontContent.style.display = 'none';
+                }
+            });
+        });
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const produitsInput = document.getElementById('client-name');
+    
+    // Récupérer la valeur de l'input
+    const clientName = produitsInput.value;  // Utiliser .value pour récupérer le texte de l'input
+    
+    if (!clientName) {
+        produitsInput.classList.add('blink_me_loop');
+    } else {
+        produitsInput.classList.remove('blink_me_loop');
+    }
+
+    // Écouteur d'événements 'input' pour détecter les changements de texte
+    produitsInput.addEventListener('input', function() {
+        const clientName = produitsInput.value;  // Utiliser .value pour récupérer le texte de l'input
+        
+        if (!clientName) {
+            produitsInput.classList.add('blink_me_loop');
+        } else {
+            produitsInput.classList.remove('blink_me_loop');
+        }
+    });
+});
+
+
+
+
+
+// Fonction pour récupérer la valeur de sizeOfText à partir d'une autre fonction
+function getSizeOfText() {
+    return sizeOfText;  // Retourne la valeur actuelle de sizeOfText
+}
+
+    function generateLabels() {
+      const clientName = document.getElementById('client-name').value;
+      const container = document.getElementById('labels-container');
+      const navButtons = document.querySelector('.nav-buttons');
+      const printButtons = document.querySelector('.print-buttons');
+      const errorMessage = document.getElementById('error-message');
+
+
+
+const sizeOfText = getSizeOfText();
+
+// Sélectionne tous les éléments <a> dans le menu dropdown
+const dropdownFont = document.querySelectorAll('#font-content a');
+
+// Ajoute un événement de clic à chaque élément
+dropdownFont.forEach(link => {
+    link.addEventListener('click', function() {
+        //const clickedId = this.id;  // Récupère l'ID de l'élément cliqué
+        //const sizeOfText = this.id
+    });
+});
+
+
+
+
+const produitsInput = document.getElementById('client-name');
+    produitsInput.addEventListener('change', () => {
+        if (!clientName || numberOfPalettes <= 0) {
+            //document.getElementById('client-name').classList.remove('blink_me_loop');
+        } else {
+            //document.getElementById('client-name').classList.add('blink_me_loop');
+        }
+    });
+
+
+
+
+
+
+      // Validation
+      if (!clientName || numberOfPalettes <= 0) {
+        //errorMessage.textContent = "Veuillez remplir tous les champs correctement.";
+        //document.getElementById('client-name').classList.add('blink_me_loop');
+        return;
+      } else {
+        //errorMessage.textContent = ""; // Clear error message
+        //document.getElementById('client-name').classList.remove('blink_me_loop');
+      }
+
+      container.innerHTML = '';
+      totalPages = numberOfPalettes;
+
+      for (let i = 0; i < numberOfPalettes; i++) {
+        const a4 = document.createElement('div');
+        a4.classList.add('a4-container');
+
+        for (let j = 0; j < 4; j++) {
+          const section = document.createElement('div');
+          section.classList.add('a4-section');
+          const paletteText = document.createElement('p');
+
+          if (document.getElementById('colis-button').textContent.trim() === "Colis") {
+            paletteText.innerHTML = `${clientName}<br>Colis ${i + 1}/${numberOfPalettes}`;
+          } else if (document.getElementById('colis-button').textContent.trim() === "Palette") {
+            paletteText.innerHTML = `${clientName}<br>Palette ${i + 1}/${numberOfPalettes}`;
+          }  
+
+
+          section.appendChild(paletteText);
+          paletteText.style.fontSize = sizeOfText + "px";
+          a4.appendChild(section);
+        }
+
+        container.appendChild(a4);
+      }
+
+      showPage(0);
+      // printButtons.style.display = 'block';
+
+      const navsuivant = document.getElementById('nav-suivant');
+      const navprecedent = document.getElementById('nav-precedent');
+
+      if (totalPages > 1) {
+        navsuivant.disabled = false;
+        navprecedent.disabled = false;
+        printetiquette.disabled = false;
+        printpapier.disabled = false;
+      } else {
+        navsuivant.disabled = true;
+        navprecedent.disabled = true;
+        printetiquette.disabled = false;
+        printpapier.disabled = false;
+      }
+    }
+
+    function showPage(pageIndex) {
+      const pages = document.querySelectorAll('.a4-container');
+      if (pageIndex >= 0 && pageIndex < pages.length) {
+        pages.forEach(page => page.style.display = 'none');
+        pages[pageIndex].style.display = 'flex';
+        currentPage = pageIndex;
+      }
+    }
+
+    function changePage(direction) {
+      const newPage = currentPage + direction;
+      if (newPage >= 0 && newPage < totalPages) {
+        showPage(newPage);
+      }
+    }
+
+// Fonction pour définir le type d'impression
+function setPrintType(type) {
+  const container = document.getElementById('labels-container');
+
+  // Nettoyer les anciennes classes
+  container.classList.remove('print-etiquette', 'print-paper');
+
+  // Ajouter la classe en fonction du type sélectionné
+  if (type === 'etiquette') {
+    container.classList.add('print-etiquette');
+  } else if (type === 'papier') {
+    container.classList.add('print-paper');
+  }
+
+  // Afficher la fenêtre d'impression
+  window.print();
+}
+
+//console.log(html2canvas);
+
+function exportToPDF() {
+  const { jsPDF } = window.jspdf; // Initialisation de jsPDF
+  const doc = new jsPDF('l', 'mm', 'a4'); // Créer un document PDF au format A4 paysage
+
+  var width = doc.internal.pageSize.getWidth();
+  var height = doc.internal.pageSize.getHeight();
+
+  // Sélectionner l'élément à exporter
+  const container = document.getElementById('labels-container');
+  
+  // Vérifier que le conteneur existe
+  if (!container) {
+    console.error('Le conteneur avec id "labels-container" n\'a pas été trouvé.');
+    return;
+  }
+
+  // Utiliser html2canvas pour capturer le contenu de l'élément après un délai pour s'assurer qu'il est visible
+  setTimeout(function() {
+    html2canvas(container).then(function(canvas) {
+      // Convertir le canvas en image PNG
+      const imgData = canvas.toDataURL('image/jpg');
+
+       const pdf = new jsPDF({
+          orientation: 'landscape',
+        });
+
+
+        const imgProps= pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        //pdf.addImage(imgData, 'PNG', 0, 0);
+
+      doc.addImage(imgData, 'JPG', 0, 0, pdfWidth, pdfHeight);
+
+      // Sauvegarder le fichier PDF
+      doc.save('etiquettes.pdf');
+    }).catch(function(error) {
+      // Si une erreur se produit dans html2canvas
+      console.error('Erreur dans la capture HTML2Canvas :', error);
+    });
+  }, 1000); // Attendre 1 seconde avant de prendre la capture d'écran
+}
+
+document.addEventListener('wheel', function(event) {
+    // Vérifie si la molette est utilisée pour zoomer (le zoom utilise un facteur de direction)
+    if (event.ctrlKey || event.metaKey) {
+        event.preventDefault(); // Empêche le zoom
+    }
+}, { passive: false });
+  </script>
+
+</body>
+</html>
